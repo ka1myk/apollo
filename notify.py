@@ -1,4 +1,4 @@
-message = ":white_check_mark: VPS and passivbot rebooted"
+message = "VPS and passivbot rebooted"
 
 def telegram_bot_sendtext(bot_message):
    
