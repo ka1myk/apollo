@@ -1,1 +1,2 @@
 tradingview-ta
+telegram
