@@ -9,7 +9,7 @@
           "initial_eprice_ema_dist": 0,
           "initial_qty_pct": 0.1,
           "markup_range": 0,
-          "max_n_entry_orders": 5,
+          "max_n_entry_orders": 2,
           "min_markup": 0,
           "n_close_orders": 1,
           "secondary_allocation": 0.5,
