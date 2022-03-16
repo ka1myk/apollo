@@ -3,7 +3,7 @@
  "long": {"auto_unstuck_ema_dist": 0,
           "auto_unstuck_wallet_exposure_threshold": 0,
           "enabled": true,
-          "eprice_exp_base": 1,
+          "eprice_exp_base": 0,
           "eprice_pprice_diff": 0.00,
           "grid_span": 0.00,
           "initial_eprice_ema_dist": 0,
