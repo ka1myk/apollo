@@ -7,7 +7,7 @@
           "eprice_pprice_diff": 0.00,
           "grid_span": 0.00,
           "initial_eprice_ema_dist": 0,
-          "initial_qty_pct": 0.61,
+          "initial_qty_pct": 1,
           "markup_range": 0,
           "max_n_entry_orders": 1,
           "min_markup": 0,
