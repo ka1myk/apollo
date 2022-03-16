@@ -18,10 +18,10 @@ FTTBUSDPERP_5 = TA_Handler(
 
 while True:
     if FTTBUSDPERP_1.get_analysis().summary['RECOMMENDATION'] in ("STRONG_BUY", "BUY") and FTTBUSDPERP_5.get_analysis().summary['RECOMMENDATION'] in ("STRONG_BUY", "BUY"):
-        l = subprocess.Popen(['python3', 'passivbot.py', 'binance_kalmykov', 'FTTBUSD', 'passivbot_configs/long.json'])
+        l = subprocess.Popen(['python3', 'passivbot.py', 'binance', 'FTTBUSD', 'passivbot_configs/long.json'])
         time.sleep(45)
         l.terminate()
     else:
-        w = subprocess.Popen(['python3', 'passivbot.py', 'binance_kalmykov', 'FTTBUSD', 'passivbot_configs/long.json', '-lm', 'gs'])
+        w = subprocess.Popen(['python3', 'passivbot.py', 'binance', 'FTTBUSD', 'passivbot_configs/long.json', '-lm', 'gs'])
         time.sleep(45)
         w.terminate()
