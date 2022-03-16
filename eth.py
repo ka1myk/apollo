@@ -18,10 +18,10 @@ ETHBUSDPERP_5 = TA_Handler(
 
 while True:
     if ETHBUSDPERP_1.get_analysis().summary['RECOMMENDATION'] in ("STRONG_BUY", "BUY") and ETHBUSDPERP_5.get_analysis().summary['RECOMMENDATION'] in ("STRONG_BUY", "BUY"):
-        l = subprocess.Popen(['python3', 'passivbot.py', 'binance_kalmykov', 'ETHBUSD', 'passivbot_configs/long.json'])
+        l = subprocess.Popen(['python3', 'passivbot.py', 'binance', 'ETHBUSD', 'passivbot_configs/long.json'])
         time.sleep(45)
         l.terminate()
     else:
-        w = subprocess.Popen(['python3', 'passivbot.py', 'binance_kalmykov', 'ETHBUSD', 'passivbot_configs/long.json', '-lm', 'gs'])
+        w = subprocess.Popen(['python3', 'passivbot.py', 'binance', 'ETHBUSD', 'passivbot_configs/long.json', '-lm', 'gs'])
         time.sleep(45)
         w.terminate()
