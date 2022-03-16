@@ -1,4 +1,7 @@
-message = "VPS and passivbot rebooted"
+import platform
+name = platform.node()
+
+message = name + "VPS and passivbot rebooted"
 
 def telegram_bot_sendtext(bot_message):
    
