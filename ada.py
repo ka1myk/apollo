@@ -82,10 +82,10 @@ while True:
         l = subprocess.Popen(
             [
                 "python3",
-                "passivbot.py",
+                "~/passivbot/passivbot.py",
                 "binance",
                 "ADABUSD",
-                "passivbot_configs/long.json",
+                "~/passivbot/long.json",
             ]
         )
         time.sleep(45)
@@ -94,10 +94,10 @@ while True:
         w = subprocess.Popen(
             [
                 "python3",
-                "passivbot.py",
+                "~/passivbot/passivbot.py",
                 "binance",
                 "ADABUSD",
-                "passivbot_configs/long.json",
+                "~/passivbot/long.json",
                 "-lm",
                 "gs",
             ]
