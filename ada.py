@@ -83,7 +83,7 @@ while True:
             [
                 "python3",
                 "~/passivbot/passivbot.py",
-                "binance",
+                "binance_01",
                 "ADABUSD",
                 "passivbot_configs/long.json",
             ]
@@ -95,7 +95,7 @@ while True:
             [
                 "python3",
                 "~/passivbot/passivbot.py",
-                "binance",
+                "binance_01",
                 "ADABUSD",
                 "passivbot_configs/long.json",
                 "-lm",
