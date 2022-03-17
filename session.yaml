@@ -3,23 +3,23 @@ windows:
 - window_name: passiv_long
   layout: even-vertical
   shell_command_before:
-    - cd ~/passivbot_configs
+    - cd 
   panes:
     - shell_command:
-        - python3 ada.py
+        - python3 ~/passivbot_configs/ada.py
     - shell_command:
-        - python3 eth.py
+        - python3 ~/passivbot_configs/eth.py
     - shell_command:
-        - python3 sol.py
+        - python3 ~/passivbot_configs/sol.py
     - shell_command:
-        - python3 xrp.py
+        - python3 ~/passivbot_configs/xrp.py
     - shell_command:
-        - python3 btc.py
+        - python3 ~/passivbot_configs/btc.py
     - shell_command:
-        - python3 bnb.py
+        - python3 ~/passivbot_configs/bnb.py
     - shell_command:
-        - python3 ftt.py
+        - python3 ~/passivbot_configs/ftt.py
     - shell_command:
-        - python3 doge.py
+        - python3 ~/passivbot_configs/doge.py
     - shell_command:
         - cd && cd futuresboard && futuresboard
