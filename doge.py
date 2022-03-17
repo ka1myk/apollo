@@ -95,7 +95,7 @@ while True:
             [
                 "python3",
                 "passivbot.py",
-                "binance",
+                "binance_01",
                 "DOGEBUSD",
                 "/root/passivbot_configs/long.json",
                 "-lm",
