@@ -2,6 +2,8 @@ session_name: passiv_session
 windows:
 - window_name: passiv_long
   layout: even-vertical
+  shell_command_before:
+    - cd ~/passivbot
   panes:
     - shell_command:
         - python3 /root/passivbot_configs/ada.py
