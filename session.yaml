@@ -2,24 +2,22 @@ session_name: passiv_session
 windows:
 - window_name: passiv_long
   layout: even-vertical
-  shell_command_before:
-    - cd 
   panes:
     - shell_command:
-        - python3 ~/passivbot_configs/ada.py
+        - python3 /root/passivbot_configs/ada.py
     - shell_command:
-        - python3 ~/passivbot_configs/eth.py
+        - python3 /root/passivbot_configs/eth.py
     - shell_command:
-        - python3 ~/passivbot_configs/sol.py
+        - python3 /root/passivbot_configs/sol.py
     - shell_command:
-        - python3 ~/passivbot_configs/xrp.py
+        - python3 /root/passivbot_configs/xrp.py
     - shell_command:
-        - python3 ~/passivbot_configs/btc.py
+        - python3 /root/passivbot_configs/btc.py
     - shell_command:
-        - python3 ~/passivbot_configs/bnb.py
+        - python3 /root/passivbot_configs/bnb.py
     - shell_command:
-        - python3 ~/passivbot_configs/ftt.py
+        - python3 /root/passivbot_configs/ftt.py
     - shell_command:
-        - python3 ~/passivbot_configs/doge.py
+        - python3 /root/passivbot_configs/doge.py
     - shell_command:
         - cd && cd futuresboard && futuresboard
