@@ -62,7 +62,7 @@ ADABUSDPERP_1d = TA_Handler(
 while True:
     if (
         ADABUSDPERP_1m.get_analysis().summary["RECOMMENDATION"] 
-        in ("STRONG_BUY", "BUY")
+        in ("STRONG_BUY")
         and ADABUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
         and ADABUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
