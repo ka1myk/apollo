@@ -62,7 +62,7 @@ DOGEBUSDPERP_1d = TA_Handler(
 while True:
     if (
         DOGEBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"] 
-        in ("STRONG_BUY", "BUY")
+        in ("STRONG_BUY")
         and DOGEBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
         and DOGEBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
