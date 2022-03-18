@@ -62,7 +62,7 @@ SOLBUSDPERP_1d = TA_Handler(
 while True:
     if (
         SOLBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"] 
-        in ("STRONG_BUY", "BUY")
+        in ("STRONG_BUY")
         and SOLBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
         and SOLBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
