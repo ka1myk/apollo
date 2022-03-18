@@ -62,7 +62,7 @@ BTCBUSDPERP_1d = TA_Handler(
 while True:
     if (
         BTCBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"] 
-        in ("STRONG_BUY", "BUY")
+        in ("STRONG_BUY")
         and BTCBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
         and BTCBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
