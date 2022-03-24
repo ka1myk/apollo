@@ -61,12 +61,12 @@ ETHBUSDPERP_1d = TA_Handler(
 
 while True:
     if (
-        ETHBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"] 
+        ETHBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY")
         and ETHBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
-        in ("STRONG_BUY", "BUY")
+        in ("STRONG_BUY")
         and ETHBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
-        in ("STRONG_BUY", "BUY")
+        in ("STRONG_BUY")
         and ETHBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
         and ETHBUSDPERP_1h.get_analysis().summary["RECOMMENDATION"]
