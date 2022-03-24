@@ -21,5 +21,3 @@ windows:
         - python3 /root/passivbot_configs/ftt.py
     - shell_command:
         - python3 /root/passivbot_configs/doge.py
-    - shell_command:
-        - cd /root/futuresboard && futuresboard
