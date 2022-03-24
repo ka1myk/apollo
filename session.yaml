@@ -21,5 +21,10 @@ windows:
         - python3 /root/passivbot_configs/ftt.py
     - shell_command:
         - python3 /root/passivbot_configs/doge.py
+- window_name: futuresboard
+  layout: even-vertical
+  shell_command_before:
+    - cd ~/futuresboard
+  panes:
     - shell_command:
-        - cd && cd futuresboard && futuresboard
+        - futuresboard
