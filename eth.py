@@ -9,7 +9,7 @@ import subprocess
 
 while True:
     from variables import rsi_obv_delta, time_to_work
-
+    
     with urllib.request.urlopen(
         "http://10.16.0.1:5000/indicators?exchange=binance&symbol=ETHBUSD&interval=1m"
     ) as url:
@@ -27,18 +27,33 @@ while True:
     ) as url:
         data5m = json.loads(url.read().decode())
         rsi_obv_5m = data5m["rsi_obv"]
-    with urllib.request.urlopen(
+    
+	with urllib.request.urlopen(
         "http://10.16.0.1:5000/indicators?exchange=binance&symbol=ETHBUSD&interval=15m"
     ) as url:
         data15m = json.loads(url.read().decode())
         rsi_obv_15m = data15m["rsi_obv"]
+		
+	with urllib.request.urlopen(
+        "http://10.16.0.1:5000/indicators?exchange=binance&symbol=ETHBUSD&interval=30m"
+    ) as url:
+        data30m = json.loads(url.read().decode())
+        rsi_obv_30m = data30m["rsi_obv"]
+		
+	with urllib.request.urlopen(
+        "http://10.16.0.1:5000/indicators?exchange=binance&symbol=ETHBUSD&interval=1h"
+    ) as url:
+        data1h = json.loads(url.read().decode())
+        rsi_obv_1h = data1h["rsi_obv"]
 
-    average_rsi_obv = (rsi_obv_1m + rsi_obv_3m + rsi_obv_5m + rsi_obv_15m) / 4
+    average_rsi_obv = (rsi_obv_1m + rsi_obv_3m + rsi_obv_5m + rsi_obv_15m + rsi_obv_30m + rsi_obv_1h) / 6
     if (
         abs(rsi_obv_1m - average_rsi_obv) < rsi_obv_delta
         and abs(rsi_obv_3m - average_rsi_obv) < rsi_obv_delta
         and abs(rsi_obv_5m - average_rsi_obv) < rsi_obv_delta
         and abs(rsi_obv_15m - average_rsi_obv) < rsi_obv_delta
+		and abs(rsi_obv_30m - average_rsi_obv) < rsi_obv_delta
+		and abs(rsi_obv_1h - average_rsi_obv) < rsi_obv_delta
     ):
 
         l = subprocess.Popen(
@@ -66,4 +81,4 @@ while True:
             ]
         )
         time.sleep(time_to_work)
-        l.terminate()
+        w.terminate()
