@@ -10,50 +10,62 @@ from variables import rsi_obv_delta, time_to_work
 
 while True:
 
-    with urllib.request.urlopen('https://web-ka1myk.cloud.okteto.net/indicators?exchange=binance&symbol=ADABUSD&interval=1m'
-                                ) as url:
+    with urllib.request.urlopen(
+        "https://web-ka1myk.cloud.okteto.net/indicators?exchange=binance&symbol=ADABUSD&interval=1m"
+    ) as url:
         data1m = json.loads(url.read().decode())
-        rsi_obv_1m = data1m['rsi_obv']
+        rsi_obv_1m = data1m["rsi_obv"]
 
-    with urllib.request.urlopen('https://web-ka1myk.cloud.okteto.net/indicators?exchange=binance&symbol=ADABUSD&interval=3m'
-                                ) as url:
+    with urllib.request.urlopen(
+        "https://web-ka1myk.cloud.okteto.net/indicators?exchange=binance&symbol=ADABUSD&interval=3m"
+    ) as url:
         data3m = json.loads(url.read().decode())
-        rsi_obv_3m = data3m['rsi_obv']
+        rsi_obv_3m = data3m["rsi_obv"]
 
-    with urllib.request.urlopen('https://web-ka1myk.cloud.okteto.net/indicators?exchange=binance&symbol=ADABUSD&interval=5m'
-                                ) as url:
+    with urllib.request.urlopen(
+        "https://web-ka1myk.cloud.okteto.net/indicators?exchange=binance&symbol=ADABUSD&interval=5m"
+    ) as url:
         data5m = json.loads(url.read().decode())
-        rsi_obv_5m = data5m['rsi_obv']
-    with urllib.request.urlopen('https://web-ka1myk.cloud.okteto.net/indicators?exchange=binance&symbol=ADABUSD&interval=15m'
-                                ) as url:
+        rsi_obv_5m = data5m["rsi_obv"]
+    with urllib.request.urlopen(
+        "https://web-ka1myk.cloud.okteto.net/indicators?exchange=binance&symbol=ADABUSD&interval=15m"
+    ) as url:
         data15m = json.loads(url.read().decode())
-        rsi_obv_15m = data15m['rsi_obv']
+        rsi_obv_15m = data15m["rsi_obv"]
 
-    average_rsi_obv = (rsi_obv_1m + rsi_obv_3m + rsi_obv_5m
-                       + rsi_obv_15m) / 4
-    if abs(rsi_obv_1m - average_rsi_obv) < rsi_obv_delta and abs(rsi_obv_3m
-            - average_rsi_obv) < rsi_obv_delta and abs(rsi_obv_5m
-            - average_rsi_obv) < rsi_obv_delta and abs(rsi_obv_15m
-            - average_rsi_obv) < rsi_obv_delta:
+    average_rsi_obv = (rsi_obv_1m + rsi_obv_3m + rsi_obv_5m + rsi_obv_15m) / 4
+    if (
+        abs(rsi_obv_1m - average_rsi_obv) < rsi_obv_delta
+        and abs(rsi_obv_3m - average_rsi_obv) < rsi_obv_delta
+        and abs(rsi_obv_5m - average_rsi_obv) < rsi_obv_delta
+        and abs(rsi_obv_15m - average_rsi_obv) < rsi_obv_delta
+    ):
 
-        l = subprocess.Popen(['python3', 'passivbot.py', 'binance_01',
-                             'ADABUSD',
-                             '/root/passivbot_configs/long.json'])
+        l = subprocess.Popen(
+            [
+                "python3",
+                "passivbot.py",
+                "binance_01",
+                "ADABUSD",
+                "/root/passivbot_configs/long.json",
+            ]
+        )
 
         time.sleep(time_to_work)
         l.terminate()
 
-        w = subprocess.Popen([
-            'python3',
-            'passivbot.py',
-            'binance_01',
-            'ADABUSD',
-            '/root/passivbot_configs/long.json',
-            '-lm',
-            'gs',
-            ])
+        w = subprocess.Popen(
+            [
+                "python3",
+                "passivbot.py",
+                "binance_01",
+                "ADABUSD",
+                "/root/passivbot_configs/long.json",
+                "-lm",
+                "gs",
+            ]
+        )
 
         w.wait()
 
         continue
-
