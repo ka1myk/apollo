@@ -6,9 +6,9 @@ import urllib.request
 import json
 import time
 import subprocess
-from variables import rsi_obv_delta, time_to_work
 
 while True:
+    from variables import rsi_obv_delta, time_to_work
 
     with urllib.request.urlopen(
         "http://10.16.0.1:5000/indicators?exchange=binance&symbol=ETHBUSD&interval=1m"
