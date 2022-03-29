@@ -11,24 +11,24 @@ from variables import rsi_obv_delta, time_to_work
 while True:
 
     with urllib.request.urlopen(
-        "https://web-ka1myk.cloud.okteto.net/indicators?exchange=binance&symbol=ADABUSD&interval=1m"
+        "http://10.16.0.1:5000/indicators?exchange=binance&symbol=ADABUSD&interval=1m"
     ) as url:
         data1m = json.loads(url.read().decode())
         rsi_obv_1m = data1m["rsi_obv"]
 
     with urllib.request.urlopen(
-        "https://web-ka1myk.cloud.okteto.net/indicators?exchange=binance&symbol=ADABUSD&interval=3m"
+        "http://10.16.0.1:5000/indicators?exchange=binance&symbol=ADABUSD&interval=3m"
     ) as url:
         data3m = json.loads(url.read().decode())
         rsi_obv_3m = data3m["rsi_obv"]
 
     with urllib.request.urlopen(
-        "https://web-ka1myk.cloud.okteto.net/indicators?exchange=binance&symbol=ADABUSD&interval=5m"
+        "http://10.16.0.1:5000/indicators?exchange=binance&symbol=ADABUSD&interval=5m"
     ) as url:
         data5m = json.loads(url.read().decode())
         rsi_obv_5m = data5m["rsi_obv"]
     with urllib.request.urlopen(
-        "https://web-ka1myk.cloud.okteto.net/indicators?exchange=binance&symbol=ADABUSD&interval=15m"
+        "http://10.16.0.1:5000/indicators?exchange=binance&symbol=ADABUSD&interval=15m"
     ) as url:
         data15m = json.loads(url.read().decode())
         rsi_obv_15m = data15m["rsi_obv"]
