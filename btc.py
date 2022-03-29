@@ -73,9 +73,9 @@ while True:
         in ("STRONG_BUY", "BUY")
         and BTCBUSDPERP_2h.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
-        and BTCBUSDPERP_1d.get_analysis().summary["RECOMMENDATION"]
+        and BTCBUSDPERP_4h.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
-        and BTCBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
+        and BTCBUSDPERP_1d.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
     ):
 
