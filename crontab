@@ -2,4 +2,3 @@ SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
 @reboot sleep 10; /bin/bash -c /root/passivbot_configs/start.sh
 #*/5 * * * * sh /root/passivbot_configs/git_pull.sh && cd && cd passivbot_configs && chmod +x start.sh git_pull.sh
-*/30 * * * * sh /root/passivbot_configs/restart.sh
