@@ -2,4 +2,4 @@
 # -*- coding: utf-8 -*-
 
 rsi_obv_delta = 10
-time_to_work = 25
+time_to_work = 35
