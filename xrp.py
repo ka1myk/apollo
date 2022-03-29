@@ -73,9 +73,9 @@ while True:
         in ("STRONG_BUY", "BUY")
         and XRPBUSDPERP_2h.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
-        and XRPBUSDPERP_1d.get_analysis().summary["RECOMMENDATION"]
+        and XRPBUSDPERP_4h.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
-        and XRPBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
+        and XRPBUSDPERP_1d.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
     ):
 
