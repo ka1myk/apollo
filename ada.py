@@ -73,9 +73,9 @@ while True:
         in ("STRONG_BUY", "BUY")
         and ADABUSDPERP_2h.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
-        and ADABUSDPERP_1d.get_analysis().summary["RECOMMENDATION"]
+        and ADABUSDPERP_4h.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
-        and ADABUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
+        and ADABUSDPERP_1d.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
     ):
 
