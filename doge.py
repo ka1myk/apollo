@@ -53,7 +53,7 @@ while True:
 
         time.sleep(time_to_work)
         l.terminate()
-
+    else:
         w = subprocess.Popen(
             [
                 "python3",
@@ -65,7 +65,5 @@ while True:
                 "gs",
             ]
         )
-
-        w.wait()
-
-        continue
+        time.sleep(time_to_work)
+        l.terminate()
