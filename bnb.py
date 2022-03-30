@@ -68,7 +68,7 @@ while True:
         and BNBBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY")
         and BNBBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
-        in ("STRONG_BUY", "BUY")
+        in ("STRONG_BUY")
         and BNBBUSDPERP_1h.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
         and BNBBUSDPERP_2h.get_analysis().summary["RECOMMENDATION"]
