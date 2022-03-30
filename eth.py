@@ -68,7 +68,7 @@ while True:
         and ETHBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY")
         and ETHBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
-        in ("STRONG_BUY", "BUY")
+        in ("STRONG_BUY")
         and ETHBUSDPERP_1h.get_analysis().summary["RECOMMENDATION"]
         in ("STRONG_BUY", "BUY")
         and ETHBUSDPERP_2h.get_analysis().summary["RECOMMENDATION"]
