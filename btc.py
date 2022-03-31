@@ -89,7 +89,7 @@ while True:
             ]
         )
         time.sleep(45)
-        l.terminate()
+        l.kill()
     else:
         w = subprocess.Popen(
             [
@@ -102,5 +102,4 @@ while True:
                 "gs",
             ]
         )
-        time.sleep(45)
-        w.terminate()
+        w.wait()
