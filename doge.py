@@ -80,5 +80,4 @@ while True:
                 "gs",
             ]
         )
-        time.sleep(time_to_work)
-        w.kill()
+        w.wait()
