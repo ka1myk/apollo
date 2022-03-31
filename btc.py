@@ -67,7 +67,7 @@ while True:
         )
 
         time.sleep(time_to_work)
-        l.terminate()
+        l.kill()
     else:
         w = subprocess.Popen(
             [
@@ -81,4 +81,4 @@ while True:
             ]
         )
         time.sleep(time_to_work)
-        w.terminate()
+        w.kill()
