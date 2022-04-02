@@ -102,4 +102,5 @@ while True:
                 "gs",
             ]
         )
-        w.wait()
+        time.sleep(45)
+        w.kill()
