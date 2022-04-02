@@ -1,13 +1,12 @@
 from binance.client import Client
 import time
 import json
+from variables import modifier, max_wallet_exposure_limit, delta_time
 
-modifier = 2
-max_wallet_exposure_limit = 2
-delta_time = 87000  # 87000 is 24 hours. From epochconverter.com
+with open('/root/passivbot/api-keys.json') as p:
+    creds = json.load(p)
 
-client = Client('api',
-                'secret')
+client = Client(creds['binance_01']['key'],creds['binance_01']['secret'])
 
 def current_milli_time():
     return round(time.time() * 1000)
