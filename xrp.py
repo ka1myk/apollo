@@ -103,4 +103,4 @@ while True:
             ]
         )
         time.sleep(45)
-        w.wait()
+        w.kill()
