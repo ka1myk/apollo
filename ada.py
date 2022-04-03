@@ -34,6 +34,19 @@ ADABUSDPERP_30m = TA_Handler(
 )
 
 while True:
+
+    w = subprocess.Popen(
+        [
+            "python3",
+            "passivbot.py",
+            "binance_01",
+            "ADABUSD",
+            "/root/passivbot_configs/long.json",
+            "-lm",
+            "gs",
+        ]
+    )
+
     while (
             ADABUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
             in ("STRONG_BUY", "BUY")
@@ -45,31 +58,12 @@ while True:
             in ("STRONG_BUY", "BUY")
     ):
 
-        try:
-            w.kill()
-             l = subprocess.Popen(
-                [
-                    "python3",
-                    "passivbot.py",
-                    "binance_01",
-                    "ADABUSD",
-                    "/root/passivbot_configs/long.json",
-                ]
-            )
-        except Exception as ex:
-            print(ex)
-    try:
-        l.kill()
-        w = subprocess.Popen(
+        l = subprocess.Popen(
             [
                 "python3",
                 "passivbot.py",
                 "binance_01",
                 "ADABUSD",
                 "/root/passivbot_configs/long.json",
-                "-lm",
-                "gs",
             ]
         )
-    except Exception as ex:
-        print(ex)
