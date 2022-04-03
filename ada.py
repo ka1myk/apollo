@@ -46,6 +46,7 @@ while True:
             "gs",
         ]
     )
+    w.wait()
 
     while (
             ADABUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
