@@ -47,8 +47,7 @@ while True:
 
         try:
             w.kill()
-        except Exception as ex:            
-            l = subprocess.Popen(
+             l = subprocess.Popen(
                 [
                     "python3",
                     "passivbot.py",
@@ -57,9 +56,10 @@ while True:
                     "/root/passivbot_configs/long.json",
                 ]
             )
+        except Exception as ex:
+            print(ex)
     try:
         l.kill()
-    except Exception as ex:
         w = subprocess.Popen(
             [
                 "python3",
@@ -71,3 +71,5 @@ while True:
                 "gs",
             ]
         )
+    except Exception as ex:
+        print(ex)
