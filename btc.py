@@ -1,5 +1,5 @@
 from tradingview_ta import TA_Handler, Interval, Exchange
-from variables import time_to_creating_order
+from variables import time_to_create_order, time_to_wait_one_more_check
 import subprocess
 import time
 
@@ -42,14 +42,26 @@ while True:
             and BTCBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
             in ("STRONG_BUY", "BUY")
     ):
-        l = subprocess.Popen(
-            [
-                "python3",
-                "passivbot.py",
-                "binance_01",
-                "BTCBUSD",
-                "/root/passivbot_configs/long.json",
-            ]
-        )
-        time.sleep(time_to_creating_order)
-        l.terminate()
+        time.sleep(time_to_wait_one_more_check)
+        
+        if (
+                BTCBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
+                in ("STRONG_BUY", "BUY")
+                and BTCBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
+                in ("STRONG_BUY", "BUY")
+                and BTCBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
+                in ("STRONG_BUY", "BUY")
+                and BTCBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
+                in ("STRONG_BUY", "BUY")
+        ):
+            l = subprocess.Popen(
+                [
+                    "python3",
+                    "passivbot.py",
+                    "binance_01",
+                    "BTCBUSD",
+                    "/root/passivbot_configs/long.json",
+                ]
+            )
+            time.sleep(time_to_create_order)
+            l.terminate()
