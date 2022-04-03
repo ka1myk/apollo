@@ -34,35 +34,6 @@ BNBBUSDPERP_30m = TA_Handler(
 )
 
 while True:
-    while (
-            BNBBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
-            and BNBBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
-            and BNBBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
-            and BNBBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
-    ):
-
-        try:
-            w.kill()
-        except Exception as ex:
-            print(ex)
-
-        l = subprocess.Popen(
-            [
-                "python3",
-                "passivbot.py",
-                "binance_01",
-                "BNBBUSD",
-                "/root/passivbot_configs/long.json",
-            ]
-        )
-    try:
-        l.kill()
-    except Exception as ex:
-        print(ex)
 
     w = subprocess.Popen(
         [
@@ -75,3 +46,25 @@ while True:
             "gs",
         ]
     )
+    w.wait()
+
+    while (
+            BNBBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
+            in ("STRONG_BUY", "BUY")
+            and BNBBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
+            in ("STRONG_BUY", "BUY")
+            and BNBBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
+            in ("STRONG_BUY", "BUY")
+            and BNBBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
+            in ("STRONG_BUY", "BUY")
+    ):
+
+        l = subprocess.Popen(
+            [
+                "python3",
+                "passivbot.py",
+                "binance_01",
+                "BNBBUSD",
+                "/root/passivbot_configs/long.json",
+            ]
+        )
