@@ -1,9 +1,7 @@
-#!/usr/bin/python
-
-# ['1m', '3m', '5m', '15m', '30m', '1h', '2h', '4h', '6h', '8h', '12h', '1d', '3d', '1w', '1M']
-
 from tradingview_ta import TA_Handler, Interval, Exchange
+from variables import time_to_creating_order
 import subprocess
+import time
 
 FTTBUSDPERP_1m = TA_Handler(
     symbol="FTTBUSDPERP",
@@ -34,7 +32,7 @@ FTTBUSDPERP_30m = TA_Handler(
 )
 
 while True:
-    while (
+    if (
             FTTBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
             in ("STRONG_BUY", "BUY")
             and FTTBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
@@ -44,12 +42,6 @@ while True:
             and FTTBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
             in ("STRONG_BUY", "BUY")
     ):
-
-        try:
-            w.kill()
-        except Exception as ex:
-            print(ex)
-
         l = subprocess.Popen(
             [
                 "python3",
@@ -59,19 +51,5 @@ while True:
                 "/root/passivbot_configs/long.json",
             ]
         )
-    try:
-        l.kill()
-    except Exception as ex:
-        print(ex)
-
-    w = subprocess.Popen(
-        [
-            "python3",
-            "passivbot.py",
-            "binance_01",
-            "FTTBUSD",
-            "/root/passivbot_configs/long.json",
-            "-lm",
-            "gs",
-        ]
-    )
+        time.sleep(time_to_creating_order)
+        l.terminate()
