@@ -1,9 +1,7 @@
-#!/usr/bin/python
-
-# ['1m', '3m', '5m', '15m', '30m', '1h', '2h', '4h', '6h', '8h', '12h', '1d', '3d', '1w', '1M']
-
 from tradingview_ta import TA_Handler, Interval, Exchange
+from variables import time_to_creating_order
 import subprocess
+import time
 
 ADABUSDPERP_1m = TA_Handler(
     symbol="ADABUSDPERP",
@@ -34,21 +32,7 @@ ADABUSDPERP_30m = TA_Handler(
 )
 
 while True:
-
-    w = subprocess.Popen(
-        [
-            "python3",
-            "passivbot.py",
-            "binance_01",
-            "ADABUSD",
-            "/root/passivbot_configs/long.json",
-            "-lm",
-            "gs",
-        ]
-    )
-    w.wait()
-
-    while (
+    if (
             ADABUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
             in ("STRONG_BUY", "BUY")
             and ADABUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
@@ -58,7 +42,6 @@ while True:
             and ADABUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
             in ("STRONG_BUY", "BUY")
     ):
-
         l = subprocess.Popen(
             [
                 "python3",
@@ -68,3 +51,5 @@ while True:
                 "/root/passivbot_configs/long.json",
             ]
         )
+        time.sleep(time_to_creating_order)
+        l.terminate()
