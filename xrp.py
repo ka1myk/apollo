@@ -34,25 +34,25 @@ XRPBUSDPERP_30m = TA_Handler(
 while True:
     if (
             XRPBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
             and XRPBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
             and XRPBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
             and XRPBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
     ):
         time.sleep(time_to_wait_one_more_check)
         
         if (
                 XRPBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
                 and XRPBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
                 and XRPBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
                 and XRPBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
         ):
             l = subprocess.Popen(
                 [
