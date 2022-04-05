@@ -34,25 +34,25 @@ FTTBUSDPERP_30m = TA_Handler(
 while True:
     if (
             FTTBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
             and FTTBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
             and FTTBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
             and FTTBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
     ):
         time.sleep(time_to_wait_one_more_check)
         
         if (
                 FTTBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
                 and FTTBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
                 and FTTBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
                 and FTTBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
         ):
             l = subprocess.Popen(
                 [
