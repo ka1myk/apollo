@@ -34,25 +34,25 @@ BNBBUSDPERP_30m = TA_Handler(
 while True:
     if (
             BNBBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
             and BNBBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
             and BNBBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
             and BNBBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
     ):
         time.sleep(time_to_wait_one_more_check)
         
         if (
                 BNBBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
                 and BNBBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
                 and BNBBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
                 and BNBBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
         ):
             l = subprocess.Popen(
                 [
