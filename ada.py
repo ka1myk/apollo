@@ -34,25 +34,25 @@ ADABUSDPERP_30m = TA_Handler(
 while True:
     if (
             ADABUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
             and ADABUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
             and ADABUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
             and ADABUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
-            in ("STRONG_BUY", "BUY")
+            in ("STRONG_BUY")
     ):
         time.sleep(time_to_wait_one_more_check)
         
         if (
                 ADABUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
                 and ADABUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
                 and ADABUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
                 and ADABUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
+                in ("STRONG_BUY")
         ):
             l = subprocess.Popen(
                 [
