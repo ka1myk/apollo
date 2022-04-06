@@ -43,7 +43,7 @@ while True:
             in ("STRONG_BUY")
     ):
         time.sleep(time_to_wait_one_more_check)
-        
+
         if (
                 BNBBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
                 in ("STRONG_BUY")
@@ -61,7 +61,49 @@ while True:
                     "binance_01",
                     "BNBBUSD",
                     "/root/passivbot_configs/long.json",
+                    "-lm",
+                    "n",
+                    "-sm",
+                    "m"
                 ]
             )
             time.sleep(time_to_create_order)
             l.terminate()
+
+    if (
+            BNBBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
+            in ("STRONG_SELL")
+            and BNBBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
+            in ("STRONG_SELL")
+            and BNBBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
+            in ("STRONG_SELL")
+            and BNBBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
+            in ("STRONG_SELL")
+    ):
+        time.sleep(time_to_wait_one_more_check)
+
+        if (
+                BNBBUSDPERP_1m.get_analysis().summary["RECOMMENDATION"]
+                in ("STRONG_SELL")
+                and BNBBUSDPERP_5m.get_analysis().summary["RECOMMENDATION"]
+                in ("STRONG_SELL")
+                and BNBBUSDPERP_15m.get_analysis().summary["RECOMMENDATION"]
+                in ("STRONG_SELL")
+                and BNBBUSDPERP_30m.get_analysis().summary["RECOMMENDATION"]
+                in ("STRONG_SELL")
+        ):
+            s = subprocess.Popen(
+                [
+                    "python3",
+                    "passivbot.py",
+                    "binance_01",
+                    "BNBBUSD",
+                    "/root/passivbot_configs/long.json",
+                    "-lm",
+                    "m",
+                    "-sm",
+                    "n"
+                ]
+            )
+            time.sleep(time_to_create_order)
+            s.terminate()
