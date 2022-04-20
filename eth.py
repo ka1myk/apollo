@@ -1,5 +1,5 @@
 from tradingview_ta import TA_Handler, Interval, Exchange
-from variables import time_to_create_order, time_to_wait_one_more_check
+from variables import time_to_create_order, time_to_wait_one_more_check, time_to_cool_down
 import subprocess
 import time
 
@@ -61,6 +61,20 @@ ETHBUSDPERP_INTERVAL_1_DAY = TA_Handler(
 
 while True:
 
+    gs_order = subprocess.Popen(
+        [
+            "python3",
+            "passivbot.py",
+            "binance_01",
+            "ETHBUSD",
+            "/root/passivbot_configs/long.json",
+            "-lm",
+            "gs",
+            "-sm",
+            "gs"
+        ]
+    )
+
     if (
             ETHBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
             in ("STRONG_BUY")
@@ -99,6 +113,7 @@ while True:
                 and ETHBUSDPERP_INTERVAL_1_DAY.get_analysis().summary["RECOMMENDATION"]
                 in ("STRONG_BUY", "BUY")
         ):
+            gs_order.kill()
             short_order = subprocess.Popen(
                 [
                     "python3",
@@ -114,6 +129,7 @@ while True:
             )
             time.sleep(time_to_create_order)
             short_order.kill()
+            time.sleep(time_to_cool_down)
 
     if (
             ETHBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
@@ -153,6 +169,7 @@ while True:
                 and ETHBUSDPERP_INTERVAL_1_DAY.get_analysis().summary["RECOMMENDATION"]
                 in ("STRONG_SELL", "SELL")
         ):
+            gs_order.kill()
             long_order = subprocess.Popen(
                 [
                     "python3",
@@ -168,3 +185,4 @@ while True:
             )
             time.sleep(time_to_create_order)
             long_order.kill()
+            time.sleep(time_to_cool_down)
