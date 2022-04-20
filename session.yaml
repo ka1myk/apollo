@@ -1,6 +1,6 @@
 session_name: passiv_session
 windows:
-- window_name: passiv_long
+- window_name: passiv_new_orders
   layout: even-vertical
   shell_command_before:
     - cd ~/passivbot
@@ -21,6 +21,27 @@ windows:
         - python3 /root/passivbot_configs/ftt.py
     - shell_command:
         - python3 /root/passivbot_configs/doge.py
+- window_name: passiv_gs
+  layout: even-vertical
+  shell_command_before:
+    - cd ~/passivbot
+  panes:
+    - shell_command:
+        - python3 /root/passivbot_configs/ada_gs.py
+    - shell_command:
+        - python3 /root/passivbot_configs/eth_gs.py
+    - shell_command:
+        - python3 /root/passivbot_configs/sol_gs.py
+    - shell_command:
+        - python3 /root/passivbot_configs/xrp_gs.py
+    - shell_command:
+        - python3 /root/passivbot_configs/btc_gs.py
+    - shell_command:
+        - python3 /root/passivbot_configs/bnb_gs.py
+    - shell_command:
+        - python3 /root/passivbot_configs/ftt_gs.py
+    - shell_command:
+        - python3 /root/passivbot_configs/doge_gs.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:
