@@ -7,6 +7,9 @@ gs_order = subprocess.Popen(
         "binance_01",
         "BNBBUSD",
         "/root/passivbot_configs/long.json",
-        "-gs"
+        "-lm",
+        "gs",
+        "-sm",
+        "gs"
     ]
 )
