@@ -1,5 +1,5 @@
 from tradingview_ta import TA_Handler, Interval, Exchange
-from variables import time_to_create_order, time_to_wait_one_more_check, time_to_cool_down
+from variables import time_to_create_order, time_to_wait_one_more_check, time_to_cool_down, time_to_create_gs_order
 import subprocess
 import time
 
@@ -74,6 +74,8 @@ while True:
             "gs"
         ]
     )
+    time.sleep(time_to_create_gs_order)
+    gs_order.terminate()
 
     if (
             BNBBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
@@ -113,7 +115,7 @@ while True:
                 and BNBBUSDPERP_INTERVAL_1_DAY.get_analysis().summary["RECOMMENDATION"]
                 in ("STRONG_BUY", "BUY")
         ):
-            gs_order.kill()
+
             short_order = subprocess.Popen(
                 [
                     "python3",
@@ -128,7 +130,7 @@ while True:
                 ]
             )
             time.sleep(time_to_create_order)
-            short_order.kill()
+            short_order.terminate()
             time.sleep(time_to_cool_down)
 
     if (
@@ -169,7 +171,7 @@ while True:
                 and BNBBUSDPERP_INTERVAL_1_DAY.get_analysis().summary["RECOMMENDATION"]
                 in ("STRONG_SELL", "SELL")
         ):
-            gs_order.kill()
+
             long_order = subprocess.Popen(
                 [
                     "python3",
@@ -184,5 +186,5 @@ while True:
                 ]
             )
             time.sleep(time_to_create_order)
-            long_order.kill()
+            long_order.terminate()
             time.sleep(time_to_cool_down)
