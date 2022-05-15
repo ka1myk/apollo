@@ -9,18 +9,6 @@ windows:
         - python3 /root/passivbot_configs/ada.py
     - shell_command:
         - python3 /root/passivbot_configs/eth.py
-    - shell_command:
-        - python3 /root/passivbot_configs/sol.py
-    - shell_command:
-        - python3 /root/passivbot_configs/xrp.py
-    - shell_command:
-        - python3 /root/passivbot_configs/btc.py
-    - shell_command:
-        - python3 /root/passivbot_configs/bnb.py
-    - shell_command:
-        - python3 /root/passivbot_configs/ftt.py
-    - shell_command:
-        - python3 /root/passivbot_configs/doge.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:
