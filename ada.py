@@ -87,8 +87,6 @@ while True:
                         in ("STRONG_BUY", "BUY")
                         and ADABUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_BUY", "BUY")
-                        and ADABUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
-                        in ("STRONG_BUY", "BUY")
                 )
 
                 or
@@ -101,8 +99,6 @@ while True:
                         and ADABUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_SELL", "SELL")
                         and ADABUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                        in ("STRONG_SELL", "SELL")
-                        and ADABUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_SELL", "SELL")
                 )
 
@@ -120,8 +116,6 @@ while True:
                             in ("STRONG_BUY", "BUY")
                             and ADABUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
                             in ("STRONG_BUY", "BUY")
-                            and ADABUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
-                            in ("STRONG_BUY", "BUY")
                     )
 
                     or
@@ -134,8 +128,6 @@ while True:
                             and ADABUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
                             in ("STRONG_SELL", "SELL")
                             and ADABUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                            in ("STRONG_SELL", "SELL")
-                            and ADABUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                             in ("STRONG_SELL", "SELL")
                     )
 
