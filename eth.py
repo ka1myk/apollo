@@ -23,13 +23,14 @@ while True:
         time.sleep(time_to_create_gs_order)
         gs_order.terminate()
 
-        url = requests.get("https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=9", headers=headers)
+        url = requests.get(
+            "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=9",
+            headers=headers)
         text = url.text
         data = json.loads(text)
-        
+
         long_signal = float(data['data'][89]['buyVolUsd'])
         if long_signal > 100000:
-
             long_order = subprocess.Popen(
                 [
                     "python3",
@@ -45,6 +46,25 @@ while True:
             )
             time.sleep(time_to_create_order)
             long_order.terminate()
+            time.sleep(time_to_cool_down)
+
+        short_signal = float(data['data'][89]['sellVolUsd'])
+        if short_signal > 100000:
+            short_order = subprocess.Popen(
+                [
+                    "python3",
+                    "passivbot.py",
+                    "binance_01",
+                    "ETHBUSD",
+                    "/root/passivbot_configs/long.json",
+                    "-lm",
+                    "m",
+                    "-sm",
+                    "n"
+                ]
+            )
+            time.sleep(time_to_create_order)
+            short_order.terminate()
             time.sleep(time_to_cool_down)
 
     except Exception as e:
