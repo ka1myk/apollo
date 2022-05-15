@@ -30,7 +30,7 @@ while True:
         data = json.loads(text)
 
         long_signal = float(data['data'][89]['buyVolUsd'])
-        if long_signal > 100000:
+        if long_signal > 50000:
             long_order = subprocess.Popen(
                 [
                     "python3",
@@ -49,7 +49,7 @@ while True:
             time.sleep(time_to_cool_down)
 
         short_signal = float(data['data'][89]['sellVolUsd'])
-        if short_signal > 100000:
+        if short_signal > 50000:
             short_order = subprocess.Popen(
                 [
                     "python3",
