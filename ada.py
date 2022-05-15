@@ -132,6 +132,7 @@ while True:
                     )
 
             ):
+                print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
                 hedge_order = subprocess.Popen(
                     [
                         "python3",
