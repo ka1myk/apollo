@@ -5,9 +5,6 @@ import time
 
 headers = {'coinglassSecret': '50f90ddcd6a8437992431ab0f1b698c1'}
 
-
-
-
 while True:
     try:
         
@@ -31,7 +28,7 @@ while True:
         time.sleep(time_to_create_gs_order)
         gs_order.terminate()
 
-        long_signal = data['data'][90]['buyVolUsd']
+        long_signal = float(data['data'][90]['buyVolUsd'])
         if long_signal > 1000000:
 
             long_order = subprocess.Popen(
