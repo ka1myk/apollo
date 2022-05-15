@@ -7,11 +7,6 @@ headers = {'coinglassSecret': '50f90ddcd6a8437992431ab0f1b698c1'}
 
 while True:
     try:
-        
-        url = requests.get("https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=10", headers=headers)
-        text = url.text
-        data = json.loads(text)
-        
         gs_order = subprocess.Popen(
             [
                 "python3",
@@ -28,8 +23,12 @@ while True:
         time.sleep(time_to_create_gs_order)
         gs_order.terminate()
 
+        url = requests.get("https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=3", headers=headers)
+        text = url.text
+        data = json.loads(text)
+        
         long_signal = float(data['data'][90]['buyVolUsd'])
-        if long_signal > 1000000:
+        if long_signal > 400000:
 
             long_order = subprocess.Popen(
                 [
