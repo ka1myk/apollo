@@ -23,7 +23,7 @@ while True:
         time.sleep(time_to_create_gs_order)
         gs_order.terminate()
 
-        url = requests.get("https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=3", headers=headers)
+        url = requests.get("https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=9", headers=headers)
         text = url.text
         data = json.loads(text)
         
