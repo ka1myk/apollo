@@ -29,6 +29,7 @@ while True:
         gs_order.terminate()
 
         long_signal = float(data['data'][89]['buyVolUsd'])
+        print(long_signal)
         if long_signal > 50000:
             long_order = subprocess.Popen(
                 [
@@ -48,6 +49,7 @@ while True:
             time.sleep(time_to_cool_down)
 
         short_signal = float(data['data'][89]['sellVolUsd'])
+        print(short_signal)
         if short_signal > 50000:
             short_order = subprocess.Popen(
                 [
