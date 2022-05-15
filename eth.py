@@ -27,7 +27,7 @@ while True:
         text = url.text
         data = json.loads(text)
         
-        long_signal = float(data['data'][90]['buyVolUsd'])
+        long_signal = float(data['data'][89]['buyVolUsd'])
         if long_signal > 400000:
 
             long_order = subprocess.Popen(
