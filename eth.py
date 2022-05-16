@@ -22,7 +22,7 @@ while True:
 
             priceForOpenLongOrder  = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']), '.2f')
             client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
-                                        timeInForce='GTC', price=priceForOpenLongOrder )
+                                        timeInForce='GTX', price=priceForOpenLongOrder )
             time.sleep(1)
 
             priceForCloseLongOrder = format(
@@ -45,7 +45,7 @@ while True:
             # open short order and close short order#
             priceForOpenShortOrder = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']), '.2f')
             client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT', quantity=0.003,
-                                        timeInForce='GTC', price=priceForOpenShortOrder)
+                                        timeInForce='GTX', price=priceForOpenShortOrder)
             time.sleep(1)
 
             priceForCloseShortOrder = format(
