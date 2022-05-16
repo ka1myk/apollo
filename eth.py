@@ -20,20 +20,9 @@ while True:
         if long_signal > 40000:
             print('fire_long')
 
-            price = Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice'])
+            priceForOpenLongOrder = Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice'])
             client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
-                                        timeInForce='GTX', price=price)
-
-            priceForCloseLongOrder = format(
-                Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['entryPrice']), '.2f')
-            amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['positionAmt'])
-
-            print(priceForCloseLongOrder)
-            print(amtForCloseLongOrder)
-
-            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='LONG', type='LIMIT',
-                                        quantity=amtForCloseLongOrder,
-                                        timeInForce='GTX', price=priceForCloseLongOrder)
+                                        timeInForce='GTX', price=priceForOpenLongOrder)
 
             time.sleep(120)
 
@@ -45,13 +34,6 @@ while True:
             client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
                                         timeInForce='GTX',
                                         quantity=0.003, price=priceForOpenShortOrder)
-
-            priceForCloseShortOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['entryPrice'])
-            amtForCloseShortOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['positionAmt'])
-
-            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
-                                        quantity=amtForCloseShortOrder,
-                                        timeInForce='GTX', price=priceForCloseShortOrder)
 
             time.sleep(120)
 
