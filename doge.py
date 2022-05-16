@@ -46,27 +46,6 @@ DOGEBUSDPERP_INTERVAL_1_HOUR = TA_Handler(
     interval=Interval.INTERVAL_1_HOUR
 )
 
-DOGEBUSDPERP_INTERVAL_2_HOURS = TA_Handler(
-    symbol="DOGEBUSDPERP",
-    screener="crypto",
-    exchange="BINANCE",
-    interval=Interval.INTERVAL_2_HOURS
-)
-
-DOGEBUSDPERP_INTERVAL_4_HOURS = TA_Handler(
-    symbol="DOGEBUSDPERP",
-    screener="crypto",
-    exchange="BINANCE",
-    interval=Interval.INTERVAL_4_HOURS
-)
-
-DOGEBUSDPERP_INTERVAL_1_DAY = TA_Handler(
-    symbol="DOGEBUSDPERP",
-    screener="crypto",
-    exchange="BINANCE",
-    interval=Interval.INTERVAL_1_DAY
-)
-
 while True:
     try:
         if (
@@ -98,13 +77,11 @@ while True:
                 # open long order and close long order#
                 priceForOpenLongOrder = format(
                     Decimal(client.futures_coin_ticker(symbol='DOGEUSD_PERP')[0]['lastPrice']), '.5f')
-                try:
-                    client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='LONG', type='LIMIT',
-                                                quantity=60,
-                                                timeInForce='GTX', price=priceForOpenLongOrder)
-                except Exception as e:
-                    print(e)
-                    
+
+                client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='LONG', type='LIMIT',
+                                            quantity=60,
+                                            timeInForce='GTX', price=priceForOpenLongOrder)
+
                 priceForCloseLongOrder = format(
                     Decimal(client.futures_position_information(symbol='DOGEBUSD')[1]['entryPrice']), '.5f')
                 amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='DOGEBUSD')[1]['positionAmt'])
@@ -112,12 +89,10 @@ while True:
                 print("priceForCloseLongOrder", priceForCloseLongOrder)
                 print("amtForCloseLongOrder", amtForCloseLongOrder)
 
-                try:
-                    client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='LONG', type='LIMIT',
-                                                quantity=amtForCloseLongOrder,
-                                                timeInForce='GTX', price=priceForCloseLongOrder)
-                except Exception as e:
-                    print(e)
+                client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='LONG', type='LIMIT',
+                                            quantity=amtForCloseLongOrder,
+                                            timeInForce='GTX', price=priceForCloseLongOrder)
+
                 # -----------------------------------#
 
                 time.sleep(time_to_cool_down)
@@ -152,12 +127,9 @@ while True:
                 priceForOpenShortOrder = format(
                     Decimal(client.futures_coin_ticker(symbol='DOGEUSD_PERP')[0]['lastPrice']), '.5f')
 
-                try:
-                    client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
-                                                quantity=60,
-                                                timeInForce='GTX', price=priceForOpenShortOrder)
-                except Exception as e:
-                    print(e)
+                client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
+                                            quantity=60,
+                                            timeInForce='GTX', price=priceForOpenShortOrder)
 
                 priceForCloseShortOrder = format(
                     Decimal(client.futures_position_information(symbol='DOGEBUSD')[2]['entryPrice']), '.5f')
@@ -167,12 +139,10 @@ while True:
                 print("priceForCloseShortOrder", priceForCloseShortOrder)
                 print("amtForCloseShortOrder", amtForCloseShortOrder)
 
-                try:
-                    client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
-                                                quantity=amtForCloseShortOrder,
-                                                timeInForce='GTX', price=priceForCloseShortOrder)
-                except Exception as e:
-                    print(e)
+                client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
+                                            quantity=amtForCloseShortOrder,
+                                            timeInForce='GTX', price=priceForCloseShortOrder)
+
                 # -----------------------------------#
 
                 time.sleep(time_to_cool_down)
