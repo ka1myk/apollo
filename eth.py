@@ -1,6 +1,7 @@
 from decimal import Decimal
 from binance.client import Client
 import requests, json, time
+from variables import time_to_create_order, time_to_wait_one_more_check, time_to_cool_down, time_to_create_gs_order
 
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
@@ -21,22 +22,28 @@ while True:
             print('fire_long')
 
             priceForOpenLongOrder  = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']), '.2f')
-            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
+            
+            try:
+                client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
                                         timeInForce='GTX', price=priceForOpenLongOrder )
-            time.sleep(1)
-
+            except Exception as e:
+                    print(e)
+            
             priceForCloseLongOrder = format(
                 Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['entryPrice']), '.2f')
             amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['positionAmt'])
 
             print("priceForCloseLongOrder", priceForCloseLongOrder)
             print("amtForCloseLongOrder", amtForCloseLongOrder)
-
-            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='LONG', type='LIMIT',
+            
+            try:
+                client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='LONG', type='LIMIT',
                                         quantity=amtForCloseLongOrder,
                                         timeInForce='GTX', price=priceForCloseLongOrder)
+            except Exception as e:
+                    print(e)
 
-            time.sleep(120)
+            time.sleep(time_to_cool_down)
 
         short_signal = float(data['data'][90]['sellVolUsd'])
         if short_signal > 40000:
@@ -44,9 +51,12 @@ while True:
 
             # open short order and close short order#
             priceForOpenShortOrder = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']), '.2f')
-            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT', quantity=0.003,
+            
+            try:
+                client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT', quantity=0.003,
                                         timeInForce='GTX', price=priceForOpenShortOrder)
-            time.sleep(1)
+            except Exception as e:
+                    print(e)
 
             priceForCloseShortOrder = format(
                 Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['entryPrice']), '.2f')
@@ -55,13 +65,15 @@ while True:
 
             print("priceForCloseShortOrder", priceForCloseShortOrder)
             print("amtForCloseShortOrder", amtForCloseShortOrder)
-
-            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
+            try:
+                client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
                                         quantity=amtForCloseShortOrder,
                                         timeInForce='GTX', price=priceForCloseShortOrder)
+            except Exception as e:
+                    print(e)
             # -----------------------------------#
 
-            time.sleep(120)
+            time.sleep(time_to_cool_down)
 
     except Exception as e:
         print("Function errored out!", e)
