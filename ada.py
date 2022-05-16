@@ -134,11 +134,15 @@ while True:
 
             ):
                 # open long order and close long order#
-                priceForOpenLongOrder = format(Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
-                
-                client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='LIMIT',
-                                            quantity=10,
-                                            timeInForce='GTX', price=priceForOpenLongOrder)
+                priceForOpenLongOrder = format(
+                    Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
+
+                try:
+                    client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='LIMIT',
+                                                quantity=10,
+                                                timeInForce='GTX', price=priceForOpenLongOrder)
+                except Exception as e:
+                    print(e)
 
                 priceForCloseLongOrder = format(
                     Decimal(client.futures_position_information(symbol='ADABUSD')[1]['entryPrice']), '.4f')
@@ -147,16 +151,23 @@ while True:
                 print("priceForCloseLongOrder", priceForCloseLongOrder)
                 print("amtForCloseLongOrder", amtForCloseLongOrder)
 
-                client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='LONG', type='LIMIT',
-                                            quantity=amtForCloseLongOrder,
-                                            timeInForce='GTX', price=priceForCloseLongOrder)
+                try:
+                    client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='LONG', type='LIMIT',
+                                                quantity=amtForCloseLongOrder,
+                                                timeInForce='GTX', price=priceForCloseLongOrder)
+                except Exception as e:
+                    print(e)
                 # -----------------------------------#
 
                 # open short order and close short order#
-                priceForOpenShortOrder = format(Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
-                client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
-                                            quantity=10,
-                                            timeInForce='GTX', price=priceForOpenShortOrder)
+                priceForOpenShortOrder = format(
+                    Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
+                try:
+                    client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
+                                                quantity=10,
+                                                timeInForce='GTX', price=priceForOpenShortOrder)
+                except Exception as e:
+                    print(e)
 
                 priceForCloseShortOrder = format(
                     Decimal(client.futures_position_information(symbol='ADABUSD')[2]['entryPrice']), '.4f')
@@ -165,10 +176,12 @@ while True:
 
                 print("priceForCloseShortOrder", priceForCloseShortOrder)
                 print("amtForCloseShortOrder", amtForCloseShortOrder)
-
-                client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='SHORT', type='LIMIT',
-                                            quantity=amtForCloseShortOrder,
-                                            timeInForce='GTX', price=priceForCloseShortOrder)
+                try:
+                    client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='SHORT', type='LIMIT',
+                                                quantity=amtForCloseShortOrder,
+                                                timeInForce='GTX', price=priceForCloseShortOrder)
+                except Exception as e:
+                    print(e)
                 # -----------------------------------#
 
                 time.sleep(time_to_cool_down)
