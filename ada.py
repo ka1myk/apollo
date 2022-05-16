@@ -138,7 +138,7 @@ while True:
                 
                 client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='LIMIT',
                                             quantity=10,
-                                            timeInForce='GTC', price=priceForOpenLongOrder)
+                                            timeInForce='GTX', price=priceForOpenLongOrder)
                 time.sleep(1)
 
                 priceForCloseLongOrder = format(
@@ -157,7 +157,7 @@ while True:
                 priceForOpenShortOrder = format(Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
                 client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
                                             quantity=10,
-                                            timeInForce='GTC', price=priceForOpenShortOrder)
+                                            timeInForce='GTX', price=priceForOpenShortOrder)
                 time.sleep(1)
 
                 priceForCloseShortOrder = format(
