@@ -99,7 +99,7 @@ while True:
                 priceForOpenLongOrder   = format(Decimal(client.futures_coin_ticker(symbol='DOGEUSD_PERP')[0]['lastPrice']), '.5f')
                 client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='LONG', type='LIMIT',
                                             quantity=60,
-                                            timeInForce='GTC', price=priceForOpenLongOrder)
+                                            timeInForce='GTX', price=priceForOpenLongOrder)
                 time.sleep(1)
 
                 priceForCloseLongOrder = format(
@@ -146,7 +146,7 @@ while True:
                 priceForOpenShortOrder = format(Decimal(client.futures_coin_ticker(symbol='DOGEUSD_PERP')[0]['lastPrice']), '.5f')
                 client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
                                             quantity=60,
-                                            timeInForce='GTC', price=priceForOpenShortOrder )
+                                            timeInForce='GTX', price=priceForOpenShortOrder )
                 time.sleep(1)
 
                 priceForCloseShortOrder = format(
