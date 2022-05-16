@@ -139,7 +139,6 @@ while True:
                 client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='LIMIT',
                                             quantity=10,
                                             timeInForce='GTX', price=priceForOpenLongOrder)
-                time.sleep(1)
 
                 priceForCloseLongOrder = format(
                     Decimal(client.futures_position_information(symbol='ADABUSD')[1]['entryPrice']), '.4f')
@@ -158,7 +157,6 @@ while True:
                 client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
                                             quantity=10,
                                             timeInForce='GTX', price=priceForOpenShortOrder)
-                time.sleep(1)
 
                 priceForCloseShortOrder = format(
                     Decimal(client.futures_position_information(symbol='ADABUSD')[2]['entryPrice']), '.4f')
@@ -173,7 +171,7 @@ while True:
                                             timeInForce='GTX', price=priceForCloseShortOrder)
                 # -----------------------------------#
 
-                time.sleep(time_to_cool_down * 20)
+                time.sleep(time_to_cool_down)
 
     except Exception as e:
         print("Function errored out!", e)
