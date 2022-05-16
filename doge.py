@@ -1,7 +1,15 @@
+import json
+from decimal import Decimal
+
 from tradingview_ta import TA_Handler, Interval, Exchange
 from variables import time_to_create_order, time_to_wait_one_more_check, time_to_cool_down, time_to_create_gs_order
-import subprocess
 import time
+from binance.client import Client
+
+with open('/root/passivbot/api-keys.json') as p:
+    creds = json.load(p)
+
+client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 DOGEBUSDPERP_INTERVAL_1_MINUTE = TA_Handler(
     symbol="DOGEBUSDPERP",
@@ -61,130 +69,99 @@ DOGEBUSDPERP_INTERVAL_1_DAY = TA_Handler(
 
 while True:
     try:
-        gs_order = subprocess.Popen(
-            [
-                "python3",
-                "passivbot.py",
-                "binance_01",
-                "DOGEBUSD",
-                "/root/passivbot_configs/long.json",
-                "-lm",
-                "gs",
-                "-sm",
-                "gs"
-            ]
-        )
-        time.sleep(time_to_create_gs_order)
-        gs_order.terminate()
-
         if (
                 DOGEBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY")
+                in ("STRONG_BUY", "BUY")
                 and DOGEBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY")
+                in ("STRONG_BUY", "BUY")
                 and DOGEBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY")
+                in ("STRONG_BUY", "BUY")
                 and DOGEBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY")
+                in ("STRONG_BUY", "BUY")
                 and DOGEBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
-                and DOGEBUSDPERP_INTERVAL_2_HOURS.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
-                and DOGEBUSDPERP_INTERVAL_4_HOURS.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
-                and DOGEBUSDPERP_INTERVAL_1_DAY.get_analysis().summary["RECOMMENDATION"]
                 in ("STRONG_BUY", "BUY")
         ):
             time.sleep(time_to_wait_one_more_check)
 
             if (
                     DOGEBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY")
+                    in ("STRONG_BUY", "BUY")
                     and DOGEBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY")
+                    in ("STRONG_BUY", "BUY")
                     and DOGEBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY")
+                    in ("STRONG_BUY", "BUY")
                     and DOGEBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY")
+                    in ("STRONG_BUY", "BUY")
                     and DOGEBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_BUY", "BUY")
-                    and DOGEBUSDPERP_INTERVAL_2_HOURS.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY", "BUY")
-                    and DOGEBUSDPERP_INTERVAL_4_HOURS.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY", "BUY")
-                    and DOGEBUSDPERP_INTERVAL_1_DAY.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY", "BUY")
             ):
-                short_order = subprocess.Popen(
-                    [
-                        "python3",
-                        "passivbot.py",
-                        "binance_01",
-                        "DOGEBUSD",
-                        "/root/passivbot_configs/long.json",
-                        "-lm",
-                        "m",
-                        "-sm",
-                        "n"
-                    ]
-                )
-                time.sleep(time_to_create_order)
-                short_order.terminate()
+                # open long order and close long order#
+                priceForOpenLongOrder   = format(Decimal(client.futures_coin_ticker(symbol='DOGEUSD_PERP')[0]['lastPrice']), '.5f')
+                client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='LONG', type='LIMIT',
+                                            quantity=60,
+                                            timeInForce='GTC', price=priceForOpenLongOrder)
+                time.sleep(1)
+
+                priceForCloseLongOrder = format(
+                    Decimal(client.futures_position_information(symbol='DOGEBUSD')[1]['entryPrice']), '.5f')
+                amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='DOGEBUSD')[1]['positionAmt'])
+
+                print("priceForCloseLongOrder", priceForCloseLongOrder)
+                print("amtForCloseLongOrder", amtForCloseLongOrder)
+
+                client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='LONG', type='LIMIT',
+                                            quantity=amtForCloseLongOrder,
+                                            timeInForce='GTX', price=priceForCloseLongOrder)
+                # -----------------------------------#
+
                 time.sleep(time_to_cool_down)
 
         if (
                 DOGEBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL")
+                in ("STRONG_SELL", "SELL")
                 and DOGEBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL")
+                in ("STRONG_SELL", "SELL")
                 and DOGEBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL")
+                in ("STRONG_SELL", "SELL")
                 and DOGEBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL")
+                in ("STRONG_SELL", "SELL")
                 and DOGEBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL", "SELL")
-                and DOGEBUSDPERP_INTERVAL_2_HOURS.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL", "SELL")
-                and DOGEBUSDPERP_INTERVAL_4_HOURS.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL", "SELL")
-                and DOGEBUSDPERP_INTERVAL_1_DAY.get_analysis().summary["RECOMMENDATION"]
                 in ("STRONG_SELL", "SELL")
         ):
             time.sleep(time_to_wait_one_more_check)
 
             if (
                     DOGEBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL")
+                    in ("STRONG_SELL", "SELL")
                     and DOGEBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL")
+                    in ("STRONG_SELL", "SELL")
                     and DOGEBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL")
+                    in ("STRONG_SELL", "SELL")
                     and DOGEBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL")
+                    in ("STRONG_SELL", "SELL")
                     and DOGEBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_SELL", "SELL")
-                    and DOGEBUSDPERP_INTERVAL_2_HOURS.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL", "SELL")
-                    and DOGEBUSDPERP_INTERVAL_4_HOURS.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL", "SELL")
-                    and DOGEBUSDPERP_INTERVAL_1_DAY.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL", "SELL")
             ):
-                long_order = subprocess.Popen(
-                    [
-                        "python3",
-                        "passivbot.py",
-                        "binance_01",
-                        "DOGEBUSD",
-                        "/root/passivbot_configs/long.json",
-                        "-lm",
-                        "n",
-                        "-sm",
-                        "m"
-                    ]
-                )
-                time.sleep(time_to_create_order)
-                long_order.terminate()
+                # open short order and close short order#
+                priceForOpenShortOrder = format(Decimal(client.futures_coin_ticker(symbol='DOGEUSD_PERP')[0]['lastPrice']), '.5f')
+                client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
+                                            quantity=60,
+                                            timeInForce='GTC', price=priceForOpenShortOrder )
+                time.sleep(1)
+
+                priceForCloseShortOrder = format(
+                    Decimal(client.futures_position_information(symbol='DOGEBUSD')[2]['entryPrice']), '.5f')
+                amtForCloseShortOrder = format(
+                    abs(Decimal(client.futures_position_information(symbol='DOGEBUSD')[2]['positionAmt'])))
+
+                print("priceForCloseShortOrder", priceForCloseShortOrder)
+                print("amtForCloseShortOrder", amtForCloseShortOrder)
+
+                client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
+                                            quantity=amtForCloseShortOrder,
+                                            timeInForce='GTX', price=priceForCloseShortOrder)
+                # -----------------------------------#
+
                 time.sleep(time_to_cool_down)
 
     except Exception as e:
