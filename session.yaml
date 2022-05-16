@@ -10,7 +10,7 @@ windows:
     - shell_command:
         - python3 /root/passivbot_configs/ada.py
     - shell_command:
-        - python3 /root/passivbot_configs/ftt.py           
+        - python3 /root/passivbot_configs/doge.py           
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:
