@@ -20,9 +20,21 @@ while True:
         if long_signal > 40000:
             print('fire_long')
 
-            priceForOpenLongOrder = Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice'])
-            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
-                                        timeInForce='GTX', price=priceForOpenLongOrder)
+            price = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']), '.4f')
+            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=10,
+                                        timeInForce='GTC', price=price)
+            time.sleep(1)
+
+            priceForCloseLongOrder = format(
+                Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['entryPrice']), '.4f')
+            amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['positionAmt'])
+
+            print(priceForCloseLongOrder)
+            print(amtForCloseLongOrder)
+
+            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='LONG', type='LIMIT',
+                                        quantity=amtForCloseLongOrder,
+                                        timeInForce='GTX', price=priceForCloseLongOrder)
 
             time.sleep(120)
 
@@ -30,10 +42,24 @@ while True:
         if short_signal > 40000:
             print('fire_short')
 
-            priceForOpenShortOrder = Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice'])
-            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
-                                        timeInForce='GTX',
-                                        quantity=0.003, price=priceForOpenShortOrder)
+            # open short order and close short order#
+            price = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']), '.4f')
+            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT', quantity=10,
+                                        timeInForce='GTC', price=price)
+            time.sleep(1)
+
+            priceForCloseLongOrder = format(
+                Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['entryPrice']), '.4f')
+            amtForCloseLongOrder = format(
+                abs(Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['positionAmt'])))
+
+            print(priceForCloseLongOrder)
+            print(amtForCloseLongOrder)
+
+            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
+                                        quantity=amtForCloseLongOrder,
+                                        timeInForce='GTX', price=priceForCloseLongOrder)
+            # -----------------------------------#
 
             time.sleep(120)
 
