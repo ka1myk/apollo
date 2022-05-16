@@ -3,7 +3,6 @@ from decimal import Decimal
 
 from tradingview_ta import TA_Handler, Interval, Exchange
 from variables import time_to_create_order, time_to_wait_one_more_check, time_to_cool_down, time_to_create_gs_order
-import subprocess
 import time
 from binance.client import Client
 
@@ -70,21 +69,6 @@ ADABUSDPERP_INTERVAL_1_DAY = TA_Handler(
 
 while True:
     try:
-        gs_order = subprocess.Popen(
-            [
-                "python3",
-                "passivbot.py",
-                "binance_01",
-                "ADABUSD",
-                "/root/passivbot_configs/long.json",
-                "-lm",
-                "gs",
-                "-sm",
-                "gs"
-            ]
-        )
-        time.sleep(time_to_create_gs_order)
-        gs_order.terminate()
 
         if (
                 (
@@ -158,6 +142,21 @@ while True:
                 client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
                                             timeInForce='GTX',
                                             quantity=10, price=price)
+
+                priceForCloseLongOrder = Decimal(client.futures_position_information(symbol='ADABUSD')[1]['entryPrice'])
+                amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ADABUSD')[1]['positionAmt'])
+
+                client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='LONG', type='LIMIT',
+                                            quantity=amtForCloseLongOrder,
+                                            timeInForce='GTX', price=priceForCloseLongOrder)
+
+                priceForCloseShortOrder = Decimal(
+                    client.futures_position_information(symbol='ADABUSD')[2]['entryPrice'])
+                amtForCloseShortOrder = Decimal(client.futures_position_information(symbol='ADABUSD')[2]['positionAmt'])
+
+                client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='SHORT', type='LIMIT',
+                                            quantity=amtForCloseShortOrder,
+                                            timeInForce='GTX', price=priceForCloseShortOrder)
 
                 time.sleep(time_to_cool_down * 20)
 
