@@ -1,7 +1,11 @@
-import requests, json
-from variables import time_to_create_order, time_to_wait_one_more_check, time_to_cool_down, time_to_create_gs_order
-import subprocess
-import time
+from decimal import Decimal
+from binance.client import Client
+import requests, json, time
+
+with open('api-keys.json') as p:
+    creds = json.load(p)
+
+client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 while True:
     try:
@@ -12,61 +16,21 @@ while True:
         text = url.text
         data = json.loads(text)
 
-        long_signal = float(data['data'][89]['buyVolUsd'])
-        print(long_signal)
-        if long_signal > 50000:
-            long_order = subprocess.Popen(
-                [
-                    "python3",
-                    "passivbot.py",
-                    "binance_01",
-                    "ETHBUSD",
-                    "/root/passivbot_configs/long.json",
-                    "-lm",
-                    "n",
-                    "-sm",
-                    "m"
-                ]
-            )
-            time.sleep(time_to_create_order)
-            long_order.terminate()
-            time.sleep(time_to_cool_down)
+        long_signal = float(data['data'][90]['buyVolUsd'])
+        if long_signal > 40000:
+            print('fire_long')
+            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
+                                        timeInForce='GTX')
+            time.sleep(120)
 
-        short_signal = float(data['data'][89]['sellVolUsd'])
-        print(short_signal)
-        if short_signal > 50000:
-            short_order = subprocess.Popen(
-                [
-                    "python3",
-                    "passivbot.py",
-                    "binance_01",
-                    "ETHBUSD",
-                    "/root/passivbot_configs/long.json",
-                    "-lm",
-                    "m",
-                    "-sm",
-                    "n"
-                ]
-            )
-            time.sleep(time_to_create_order)
-            short_order.terminate()
-            time.sleep(time_to_cool_down)
-
-        gs_order = subprocess.Popen(
-            [
-                "python3",
-                "passivbot.py",
-                "binance_01",
-                "ETHBUSD",
-                "/root/passivbot_configs/long.json",
-                "-lm",
-                "gs",
-                "-sm",
-                "gs"
-            ]
-        )
-        time.sleep(time_to_create_gs_order)
-        gs_order.terminate()
+        short_signal = float(data['data'][90]['sellVolUsd'])
+        if short_signal > 40000:
+            print('fire_short')
+            price = Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice'])
+            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
+                                        timeInForce='GTX',
+                                        quantity=0.003, price=price)
+            time.sleep(300)
 
     except Exception as e:
         print("Function errored out!", e)
