@@ -46,27 +46,6 @@ ADABUSDPERP_INTERVAL_1_HOUR = TA_Handler(
     interval=Interval.INTERVAL_1_HOUR
 )
 
-ADABUSDPERP_INTERVAL_2_HOURS = TA_Handler(
-    symbol="ADABUSDPERP",
-    screener="crypto",
-    exchange="BINANCE",
-    interval=Interval.INTERVAL_2_HOURS
-)
-
-ADABUSDPERP_INTERVAL_4_HOURS = TA_Handler(
-    symbol="ADABUSDPERP",
-    screener="crypto",
-    exchange="BINANCE",
-    interval=Interval.INTERVAL_4_HOURS
-)
-
-ADABUSDPERP_INTERVAL_1_DAY = TA_Handler(
-    symbol="ADABUSDPERP",
-    screener="crypto",
-    exchange="BINANCE",
-    interval=Interval.INTERVAL_1_DAY
-)
-
 while True:
     try:
 
@@ -137,12 +116,9 @@ while True:
                 priceForOpenLongOrder = format(
                     Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
 
-                try:
-                    client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='LIMIT',
-                                                quantity=10,
-                                                timeInForce='GTX', price=priceForOpenLongOrder)
-                except Exception as e:
-                    print(e)
+                client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='LIMIT',
+                                            quantity=10,
+                                            timeInForce='GTX', price=priceForOpenLongOrder)
 
                 priceForCloseLongOrder = format(
                     Decimal(client.futures_position_information(symbol='ADABUSD')[1]['entryPrice']), '.4f')
@@ -151,23 +127,19 @@ while True:
                 print("priceForCloseLongOrder", priceForCloseLongOrder)
                 print("amtForCloseLongOrder", amtForCloseLongOrder)
 
-                try:
-                    client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='LONG', type='LIMIT',
-                                                quantity=amtForCloseLongOrder,
-                                                timeInForce='GTX', price=priceForCloseLongOrder)
-                except Exception as e:
-                    print(e)
+                client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='LONG', type='LIMIT',
+                                            quantity=amtForCloseLongOrder,
+                                            timeInForce='GTX', price=priceForCloseLongOrder)
+
                 # -----------------------------------#
 
                 # open short order and close short order#
                 priceForOpenShortOrder = format(
                     Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
-                try:
-                    client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
-                                                quantity=10,
-                                                timeInForce='GTX', price=priceForOpenShortOrder)
-                except Exception as e:
-                    print(e)
+
+                client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
+                                            quantity=10,
+                                            timeInForce='GTX', price=priceForOpenShortOrder)
 
                 priceForCloseShortOrder = format(
                     Decimal(client.futures_position_information(symbol='ADABUSD')[2]['entryPrice']), '.4f')
@@ -176,12 +148,11 @@ while True:
 
                 print("priceForCloseShortOrder", priceForCloseShortOrder)
                 print("amtForCloseShortOrder", amtForCloseShortOrder)
-                try:
-                    client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='SHORT', type='LIMIT',
-                                                quantity=amtForCloseShortOrder,
-                                                timeInForce='GTX', price=priceForCloseShortOrder)
-                except Exception as e:
-                    print(e)
+
+                client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='SHORT', type='LIMIT',
+                                            quantity=amtForCloseShortOrder,
+                                            timeInForce='GTX', price=priceForCloseShortOrder)
+
                 # -----------------------------------#
 
                 time.sleep(time_to_cool_down)
