@@ -21,27 +21,22 @@ while True:
         if long_signal > 40000:
             print('fire_long')
 
-            priceForOpenLongOrder  = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']), '.2f')
-            
-            try:
-                client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
-                                        timeInForce='GTX', price=priceForOpenLongOrder )
-            except Exception as e:
-                    print(e)
-            
+            priceForOpenLongOrder = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']),
+                                           '.2f')
+
+            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
+                                        timeInForce='GTX', price=priceForOpenLongOrder)
+
             priceForCloseLongOrder = format(
                 Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['entryPrice']), '.2f')
             amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['positionAmt'])
 
             print("priceForCloseLongOrder", priceForCloseLongOrder)
             print("amtForCloseLongOrder", amtForCloseLongOrder)
-            
-            try:
-                client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='LONG', type='LIMIT',
+
+            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='LONG', type='LIMIT',
                                         quantity=amtForCloseLongOrder,
                                         timeInForce='GTX', price=priceForCloseLongOrder)
-            except Exception as e:
-                    print(e)
 
             time.sleep(time_to_cool_down)
 
@@ -50,13 +45,12 @@ while True:
             print('fire_short')
 
             # open short order and close short order#
-            priceForOpenShortOrder = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']), '.2f')
-            
-            try:
-                client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT', quantity=0.003,
+            priceForOpenShortOrder = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']),
+                                            '.2f')
+
+            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
+                                        quantity=0.003,
                                         timeInForce='GTX', price=priceForOpenShortOrder)
-            except Exception as e:
-                    print(e)
 
             priceForCloseShortOrder = format(
                 Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['entryPrice']), '.2f')
@@ -65,12 +59,11 @@ while True:
 
             print("priceForCloseShortOrder", priceForCloseShortOrder)
             print("amtForCloseShortOrder", amtForCloseShortOrder)
-            try:
-                client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
+
+            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
                                         quantity=amtForCloseShortOrder,
                                         timeInForce='GTX', price=priceForCloseShortOrder)
-            except Exception as e:
-                    print(e)
+
             # -----------------------------------#
 
             time.sleep(time_to_cool_down)
