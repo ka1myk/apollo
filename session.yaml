@@ -6,9 +6,11 @@ windows:
     - cd ~/passivbot
   panes:
     - shell_command:
-        - python3 /root/passivbot_configs/ada.py
+        - python3 /root/passivbot_configs/gs.py
     - shell_command:
         - python3 /root/passivbot_configs/eth.py
+     - shell_command:
+        - python3 /root/passivbot_configs/ada.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:
