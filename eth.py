@@ -44,7 +44,7 @@ while True:
 
             # open short order and close short order#
             price = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']), '.4f')
-            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT', quantity=10,
+            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT', quantity=0.003,
                                         timeInForce='GTC', price=price)
             time.sleep(1)
 
