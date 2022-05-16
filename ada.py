@@ -134,18 +134,19 @@ while True:
 
             ):
                 # open long order and close long order#
-                price = format(Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
+                priceForOpenLongOrder = format(Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
+                
                 client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='LIMIT',
                                             quantity=10,
-                                            timeInForce='GTC', price=price)
+                                            timeInForce='GTC', price=priceForOpenLongOrder)
                 time.sleep(1)
 
                 priceForCloseLongOrder = format(
                     Decimal(client.futures_position_information(symbol='ADABUSD')[1]['entryPrice']), '.4f')
                 amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ADABUSD')[1]['positionAmt'])
 
-                print(priceForCloseLongOrder)
-                print(amtForCloseLongOrder)
+                print("priceForCloseLongOrder", priceForOpenLongOrder)
+                print("amtForCloseLongOrder", amtForCloseLongOrder)
 
                 client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='LONG', type='LIMIT',
                                             quantity=amtForCloseLongOrder,
@@ -153,10 +154,10 @@ while True:
                 # -----------------------------------#
 
                 # open short order and close short order#
-                price = format(Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
+                priceForOpenShortOrder = format(Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
                 client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
                                             quantity=10,
-                                            timeInForce='GTC', price=price)
+                                            timeInForce='GTC', price=priceForOpenShortOrder)
                 time.sleep(1)
 
                 priceForCloseLongOrder = format(
@@ -164,12 +165,12 @@ while True:
                 amtForCloseLongOrder = format(
                     abs(Decimal(client.futures_position_information(symbol='ADABUSD')[2]['positionAmt'])))
 
-                print(priceForCloseLongOrder)
-                print(amtForCloseLongOrder)
+                print("priceForCloseShortOrder", priceForCloseShortOrder)
+                print("amtForCloseShortOrder", amtForCloseShortOrder)
 
                 client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='SHORT', type='LIMIT',
-                                            quantity=amtForCloseLongOrder,
-                                            timeInForce='GTX', price=priceForCloseLongOrder)
+                                            quantity=amtForCloseShortOrder,
+                                            timeInForce='GTX', price=priceForCloseShortOrder)
                 # -----------------------------------#
 
                 time.sleep(time_to_cool_down * 20)
