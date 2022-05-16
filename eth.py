@@ -19,11 +19,17 @@ while True:
         long_signal = float(data['data'][90]['buyVolUsd'])
         if long_signal > 40000:
             print('fire_long')
-            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
-                                        timeInForce='GTX')
 
-            priceForCloseLongOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['entryPrice'])
+            price = Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice'])
+            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
+                                        timeInForce='GTX', price=price)
+
+            priceForCloseLongOrder = format(
+                Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['entryPrice']), '.2f')
             amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['positionAmt'])
+
+            print(priceForCloseLongOrder)
+            print(amtForCloseLongOrder)
 
             client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='LONG', type='LIMIT',
                                         quantity=amtForCloseLongOrder,
@@ -52,4 +58,3 @@ while True:
     except Exception as e:
         print("Function errored out!", e)
         print("Retrying ... ")
-
