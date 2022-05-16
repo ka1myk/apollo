@@ -142,22 +142,6 @@ while True:
                 client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
                                             timeInForce='GTX',
                                             quantity=10, price=price)
-
-                priceForCloseLongOrder = Decimal(client.futures_position_information(symbol='ADABUSD')[1]['entryPrice'])
-                amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ADABUSD')[1]['positionAmt'])
-
-                client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='LONG', type='LIMIT',
-                                            quantity=amtForCloseLongOrder,
-                                            timeInForce='GTX', price=priceForCloseLongOrder)
-
-                priceForCloseShortOrder = Decimal(
-                    client.futures_position_information(symbol='ADABUSD')[2]['entryPrice'])
-                amtForCloseShortOrder = Decimal(client.futures_position_information(symbol='ADABUSD')[2]['positionAmt'])
-
-                client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='SHORT', type='LIMIT',
-                                            quantity=amtForCloseShortOrder,
-                                            timeInForce='GTX', price=priceForCloseShortOrder)
-
                 time.sleep(time_to_cool_down * 20)
 
     except Exception as e:
