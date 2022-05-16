@@ -96,18 +96,18 @@ while True:
                     in ("STRONG_BUY", "BUY")
             ):
                 # open long order and close long order#
-                price = format(Decimal(client.futures_coin_ticker(symbol='FTTUSD_PERP')[0]['lastPrice']), '.3f')
+                priceForOpenLongOrder   = format(Decimal(client.futures_coin_ticker(symbol='FTTUSD_PERP')[0]['lastPrice']), '.3f')
                 client.futures_create_order(symbol='FTTBUSD', side='BUY', positionSide='LONG', type='LIMIT',
                                             quantity=0.2,
-                                            timeInForce='GTC', price=price)
+                                            timeInForce='GTC', price=priceForOpenLongOrder)
                 time.sleep(1)
 
                 priceForCloseLongOrder = format(
                     Decimal(client.futures_position_information(symbol='FTTBUSD')[1]['entryPrice']), '.3f')
                 amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='FTTBUSD')[1]['positionAmt'])
 
-                print(priceForCloseLongOrder)
-                print(amtForCloseLongOrder)
+                print("priceForCloseLongOrder", priceForCloseLongOrder)
+                print("amtForCloseLongOrder", amtForCloseLongOrder)
 
                 client.futures_create_order(symbol='FTTBUSD', side='SELL', positionSide='LONG', type='LIMIT',
                                             quantity=amtForCloseLongOrder,
@@ -143,23 +143,23 @@ while True:
                     in ("STRONG_SELL", "SELL")
             ):
                 # open short order and close short order#
-                price = format(Decimal(client.futures_coin_ticker(symbol='FTTUSD_PERP')[0]['lastPrice']), '.3f')
+                priceForOpenShortOrder = format(Decimal(client.futures_coin_ticker(symbol='FTTUSD_PERP')[0]['lastPrice']), '.3f')
                 client.futures_create_order(symbol='FTTBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
                                             quantity=0.2,
-                                            timeInForce='GTC', price=price)
+                                            timeInForce='GTC', price=priceForOpenShortOrder )
                 time.sleep(1)
 
-                priceForCloseLongOrder = format(
+                priceForCloseShortOrder = format(
                     Decimal(client.futures_position_information(symbol='FTTBUSD')[2]['entryPrice']), '.3f')
-                amtForCloseLongOrder = format(
+                amtForCloseShortOrder = format(
                     abs(Decimal(client.futures_position_information(symbol='FTTBUSD')[2]['positionAmt'])))
 
-                print(priceForCloseLongOrder)
-                print(amtForCloseLongOrder)
+                print("priceForCloseShortOrder", priceForCloseShortOrder)
+                print("amtForCloseShortOrder", amtForCloseShortOrder)
 
                 client.futures_create_order(symbol='FTTBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
-                                            quantity=amtForCloseLongOrder,
-                                            timeInForce='GTX', price=priceForCloseLongOrder)
+                                            quantity=amtForCloseShortOrder,
+                                            timeInForce='GTX', price=priceForCloseShortOrder)
                 # -----------------------------------#
 
                 time.sleep(time_to_cool_down)
