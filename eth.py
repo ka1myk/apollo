@@ -43,7 +43,7 @@ while True:
             priceForCloseShortOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['entryPrice'])
             amtForCloseShortOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['positionAmt'])
 
-            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='LONG', type='LIMIT',
+            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
                                         quantity=amtForCloseShortOrder,
                                         timeInForce='GTX', price=priceForCloseShortOrder)
 
@@ -52,3 +52,4 @@ while True:
     except Exception as e:
         print("Function errored out!", e)
         print("Retrying ... ")
+
