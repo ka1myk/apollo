@@ -2,7 +2,7 @@ from decimal import Decimal
 from binance.client import Client
 import requests, json, time
 
-with open('api-keys.json') as p:
+with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
 
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
