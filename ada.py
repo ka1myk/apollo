@@ -1,7 +1,16 @@
+import json
+from decimal import Decimal
+
 from tradingview_ta import TA_Handler, Interval, Exchange
 from variables import time_to_create_order, time_to_wait_one_more_check, time_to_cool_down, time_to_create_gs_order
 import subprocess
 import time
+from binance.client import Client
+
+with open('/root/passivbot/api-keys.json') as p:
+    creds = json.load(p)
+
+client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 ADABUSDPERP_INTERVAL_1_MINUTE = TA_Handler(
     symbol="ADABUSDPERP",
@@ -87,6 +96,8 @@ while True:
                         in ("STRONG_BUY", "BUY")
                         and ADABUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_BUY", "BUY")
+                        and ADABUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
+                        in ("STRONG_BUY", "BUY")
                 )
 
                 or
@@ -99,6 +110,8 @@ while True:
                         and ADABUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_SELL", "SELL")
                         and ADABUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
+                        in ("STRONG_SELL", "SELL")
+                        and ADABUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_SELL", "SELL")
                 )
 
@@ -116,6 +129,8 @@ while True:
                             in ("STRONG_BUY", "BUY")
                             and ADABUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
                             in ("STRONG_BUY", "BUY")
+                            and ADABUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
+                            in ("STRONG_BUY", "BUY")
                     )
 
                     or
@@ -129,26 +144,22 @@ while True:
                             in ("STRONG_SELL", "SELL")
                             and ADABUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
                             in ("STRONG_SELL", "SELL")
+                            and ADABUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
+                            in ("STRONG_SELL", "SELL")
                     )
 
             ):
-                print("++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-                hedge_order = subprocess.Popen(
-                    [
-                        "python3",
-                        "passivbot.py",
-                        "binance_01",
-                        "ADABUSD",
-                        "/root/passivbot_configs/long.json",
-                        "-lm",
-                        "n",
-                        "-sm",
-                        "n"
-                    ]
-                )
-                time.sleep(time_to_create_order)
-                hedge_order.terminate()
-                time.sleep(time_to_cool_down)
+                client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='LIMIT',
+                                            quantity=10,
+                                            timeInForce='GTX')
+
+                price = Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice'])
+
+                client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
+                                            timeInForce='GTX',
+                                            quantity=10, price=price)
+
+                time.sleep(time_to_cool_down * 20)
 
     except Exception as e:
         print("Function errored out!", e)
