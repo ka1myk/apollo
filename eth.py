@@ -20,13 +20,13 @@ while True:
         if long_signal > 40000:
             print('fire_long')
 
-            price = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']), '.4f')
+            price = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']), '.2f')
             client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
                                         timeInForce='GTC', price=price)
             time.sleep(1)
 
             priceForCloseLongOrder = format(
-                Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['entryPrice']), '.4f')
+                Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['entryPrice']), '.2f')
             amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['positionAmt'])
 
             print(priceForCloseLongOrder)
@@ -43,13 +43,13 @@ while True:
             print('fire_short')
 
             # open short order and close short order#
-            price = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']), '.4f')
+            price = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']), '.2f')
             client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT', quantity=0.003,
                                         timeInForce='GTC', price=price)
             time.sleep(1)
 
             priceForCloseLongOrder = format(
-                Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['entryPrice']), '.4f')
+                Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['entryPrice']), '.2f')
             amtForCloseLongOrder = format(
                 abs(Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['positionAmt'])))
 
