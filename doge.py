@@ -147,7 +147,6 @@ while True:
                 client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
                                             quantity=60,
                                             timeInForce='GTX', price=priceForOpenShortOrder )
-                time.sleep(1)
 
                 priceForCloseShortOrder = format(
                     Decimal(client.futures_position_information(symbol='DOGEBUSD')[2]['entryPrice']), '.5f')
