@@ -1,7 +1,15 @@
+import json
+from decimal import Decimal
+
 from tradingview_ta import TA_Handler, Interval, Exchange
 from variables import time_to_create_order, time_to_wait_one_more_check, time_to_cool_down, time_to_create_gs_order
-import subprocess
 import time
+from binance.client import Client
+
+with open('/root/passivbot/api-keys.json') as p:
+    creds = json.load(p)
+
+client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 FTTBUSDPERP_INTERVAL_1_MINUTE = TA_Handler(
     symbol="FTTBUSDPERP",
@@ -61,130 +69,99 @@ FTTBUSDPERP_INTERVAL_1_DAY = TA_Handler(
 
 while True:
     try:
-        gs_order = subprocess.Popen(
-            [
-                "python3",
-                "passivbot.py",
-                "binance_01",
-                "FTTBUSD",
-                "/root/passivbot_configs/long.json",
-                "-lm",
-                "gs",
-                "-sm",
-                "gs"
-            ]
-        )
-        time.sleep(time_to_create_gs_order)
-        gs_order.terminate()
-
         if (
                 FTTBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY")
+                in ("STRONG_BUY", "BUY")
                 and FTTBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY")
+                in ("STRONG_BUY", "BUY")
                 and FTTBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY")
+                in ("STRONG_BUY", "BUY")
                 and FTTBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY")
+                in ("STRONG_BUY", "BUY")
                 and FTTBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
-                and FTTBUSDPERP_INTERVAL_2_HOURS.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
-                and FTTBUSDPERP_INTERVAL_4_HOURS.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_BUY", "BUY")
-                and FTTBUSDPERP_INTERVAL_1_DAY.get_analysis().summary["RECOMMENDATION"]
                 in ("STRONG_BUY", "BUY")
         ):
             time.sleep(time_to_wait_one_more_check)
 
             if (
                     FTTBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY")
+                    in ("STRONG_BUY", "BUY")
                     and FTTBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY")
+                    in ("STRONG_BUY", "BUY")
                     and FTTBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY")
+                    in ("STRONG_BUY", "BUY")
                     and FTTBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY")
+                    in ("STRONG_BUY", "BUY")
                     and FTTBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_BUY", "BUY")
-                    and FTTBUSDPERP_INTERVAL_2_HOURS.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY", "BUY")
-                    and FTTBUSDPERP_INTERVAL_4_HOURS.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY", "BUY")
-                    and FTTBUSDPERP_INTERVAL_1_DAY.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_BUY", "BUY")
             ):
-                short_order = subprocess.Popen(
-                    [
-                        "python3",
-                        "passivbot.py",
-                        "binance_01",
-                        "FTTBUSD",
-                        "/root/passivbot_configs/long.json",
-                        "-lm",
-                        "m",
-                        "-sm",
-                        "n"
-                    ]
-                )
-                time.sleep(time_to_create_order)
-                short_order.terminate()
+                # open long order and close long order#
+                price = format(Decimal(client.futures_coin_ticker(symbol='FTTUSD_PERP')[0]['lastPrice']), '.4f')
+                client.futures_create_order(symbol='FTTBUSD', side='BUY', positionSide='LONG', type='LIMIT',
+                                            quantity=0.2,
+                                            timeInForce='GTC', price=price)
+                time.sleep(1)
+
+                priceForCloseLongOrder = format(
+                    Decimal(client.futures_position_information(symbol='FTTBUSD')[1]['entryPrice']), '.4f')
+                amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='FTTBUSD')[1]['positionAmt'])
+
+                print(priceForCloseLongOrder)
+                print(amtForCloseLongOrder)
+
+                client.futures_create_order(symbol='FTTBUSD', side='SELL', positionSide='LONG', type='LIMIT',
+                                            quantity=amtForCloseLongOrder,
+                                            timeInForce='GTX', price=priceForCloseLongOrder)
+                # -----------------------------------#
+
                 time.sleep(time_to_cool_down)
 
         if (
                 FTTBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL")
+                in ("STRONG_SELL", "SELL")
                 and FTTBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL")
+                in ("STRONG_SELL", "SELL")
                 and FTTBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL")
+                in ("STRONG_SELL", "SELL")
                 and FTTBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL")
+                in ("STRONG_SELL", "SELL")
                 and FTTBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL", "SELL")
-                and FTTBUSDPERP_INTERVAL_2_HOURS.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL", "SELL")
-                and FTTBUSDPERP_INTERVAL_4_HOURS.get_analysis().summary["RECOMMENDATION"]
-                in ("STRONG_SELL", "SELL")
-                and FTTBUSDPERP_INTERVAL_1_DAY.get_analysis().summary["RECOMMENDATION"]
                 in ("STRONG_SELL", "SELL")
         ):
             time.sleep(time_to_wait_one_more_check)
 
             if (
                     FTTBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL")
+                    in ("STRONG_SELL", "SELL")
                     and FTTBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL")
+                    in ("STRONG_SELL", "SELL")
                     and FTTBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL")
+                    in ("STRONG_SELL", "SELL")
                     and FTTBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL")
+                    in ("STRONG_SELL", "SELL")
                     and FTTBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_SELL", "SELL")
-                    and FTTBUSDPERP_INTERVAL_2_HOURS.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL", "SELL")
-                    and FTTBUSDPERP_INTERVAL_4_HOURS.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL", "SELL")
-                    and FTTBUSDPERP_INTERVAL_1_DAY.get_analysis().summary["RECOMMENDATION"]
-                    in ("STRONG_SELL", "SELL")
             ):
-                long_order = subprocess.Popen(
-                    [
-                        "python3",
-                        "passivbot.py",
-                        "binance_01",
-                        "FTTBUSD",
-                        "/root/passivbot_configs/long.json",
-                        "-lm",
-                        "n",
-                        "-sm",
-                        "m"
-                    ]
-                )
-                time.sleep(time_to_create_order)
-                long_order.terminate()
+                # open short order and close short order#
+                price = format(Decimal(client.futures_coin_ticker(symbol='FTTUSD_PERP')[0]['lastPrice']), '.4f')
+                client.futures_create_order(symbol='FTTBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
+                                            quantity=0.2,
+                                            timeInForce='GTC', price=price)
+                time.sleep(1)
+
+                priceForCloseLongOrder = format(
+                    Decimal(client.futures_position_information(symbol='FTTBUSD')[2]['entryPrice']), '.4f')
+                amtForCloseLongOrder = format(
+                    abs(Decimal(client.futures_position_information(symbol='FTTBUSD')[2]['positionAmt'])))
+
+                print(priceForCloseLongOrder)
+                print(amtForCloseLongOrder)
+
+                client.futures_create_order(symbol='FTTBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
+                                            quantity=amtForCloseLongOrder,
+                                            timeInForce='GTX', price=priceForCloseLongOrder)
+                # -----------------------------------#
+
                 time.sleep(time_to_cool_down)
 
     except Exception as e:
