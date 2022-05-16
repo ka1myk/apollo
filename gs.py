@@ -1,7 +1,9 @@
+import multiprocessing
 import subprocess
 
-while True:
-    eth = subprocess.Popen(
+
+def eth_gs():
+    subprocess.Popen(
         [
             "python3",
             "passivbot.py",
@@ -16,7 +18,9 @@ while True:
         ]
     )
 
-    ada = subprocess.Popen(
+
+def ada_gs():
+    subprocess.Popen(
         [
             "python3",
             "passivbot.py",
@@ -30,3 +34,10 @@ while True:
 
         ]
     )
+
+
+if __name__ == '__main__':
+    p1 = multiprocessing.Process(target=eth_gs)
+    p2 = multiprocessing.Process(target=ada_gs)
+    p1.start()
+    p2.start()
