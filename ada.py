@@ -113,12 +113,15 @@ while True:
 
             ):
                 # open long order and close long order#
-                priceForOpenLongOrder = format(
-                    Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
+                # priceForOpenLongOrder = format(
+                #    Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
 
-                client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='LIMIT',
-                                            quantity=10,
-                                            timeInForce='GTX', price=priceForOpenLongOrder, recvWindow=20000)
+                client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='MARKET',
+                                            quantity=10)
+
+                # client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='LIMIT',
+                #                            quantity=10,
+                #                            timeInForce='GTX', price=priceForOpenLongOrder, recvWindow=20000)
 
                 # priceForCloseLongOrder = format(
                 #     Decimal(client.futures_position_information(symbol='ADABUSD')[1]['entryPrice']), '.4f')
@@ -134,12 +137,15 @@ while True:
                 # -----------------------------------#
 
                 # open short order and close short order#
-                priceForOpenShortOrder = format(
-                    Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
+                # priceForOpenShortOrder = format(
+                #    Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
 
-                client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
-                                            quantity=11,
-                                            timeInForce='GTX', price=priceForOpenShortOrder, recvWindow=20000)
+                client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='MARKET',
+                                            quantity=10)
+
+                # client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
+                #                            quantity=11,
+                #                            timeInForce='GTX', price=priceForOpenShortOrder, recvWindow=20000)
 
                 # priceForCloseShortOrder = format(
                 #     Decimal(client.futures_position_information(symbol='ADABUSD')[2]['entryPrice']), '.4f')
