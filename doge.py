@@ -128,7 +128,7 @@ while True:
                     Decimal(client.futures_coin_ticker(symbol='DOGEUSD_PERP')[0]['lastPrice']), '.5f')
 
                 client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
-                                            quantity=60,
+                                            quantity=61,
                                             timeInForce='GTX', price=priceForOpenShortOrder, recvWindow=20000)
 
                 # priceForCloseShortOrder = format(
