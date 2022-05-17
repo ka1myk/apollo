@@ -49,7 +49,7 @@ while True:
                                             '.2f')
 
             client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
-                                        quantity=0.003,
+                                        quantity=0.004,
                                         timeInForce='GTX', price=priceForOpenShortOrder, recvWindow=20000)
 
             # priceForCloseShortOrder = format(
