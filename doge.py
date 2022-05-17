@@ -75,12 +75,15 @@ while True:
                     in ("STRONG_BUY", "BUY")
             ):
                 # open long order and close long order#
-                priceForOpenLongOrder = format(
-                    Decimal(client.futures_coin_ticker(symbol='DOGEUSD_PERP')[0]['lastPrice']), '.5f')
+                # priceForOpenLongOrder = format(
+                #    Decimal(client.futures_coin_ticker(symbol='DOGEUSD_PERP')[0]['lastPrice']), '.5f')
 
-                client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='LONG', type='LIMIT',
-                                            quantity=60,
-                                            timeInForce='GTX', price=priceForOpenLongOrder, recvWindow=20000)
+                # client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='LONG', type='LIMIT',
+                #                            quantity=60,
+                #                            timeInForce='GTX', price=priceForOpenLongOrder, recvWindow=20000)
+                
+                client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='LONG', type='MARKET',
+                                            quantity=60)
 
                 # priceForCloseLongOrder = format(
                 #     Decimal(client.futures_position_information(symbol='DOGEBUSD')[1]['entryPrice']), '.5f')
@@ -124,12 +127,15 @@ while True:
                     in ("STRONG_SELL", "SELL")
             ):
                 # open short order and close short order#
-                priceForOpenShortOrder = format(
-                    Decimal(client.futures_coin_ticker(symbol='DOGEUSD_PERP')[0]['lastPrice']), '.5f')
+                # priceForOpenShortOrder = format(
+                #    Decimal(client.futures_coin_ticker(symbol='DOGEUSD_PERP')[0]['lastPrice']), '.5f')
 
-                client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
-                                            quantity=61,
-                                            timeInForce='GTX', price=priceForOpenShortOrder, recvWindow=20000)
+                # client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
+                #                            quantity=61,
+                #                            timeInForce='GTX', price=priceForOpenShortOrder, recvWindow=20000)
+                
+                client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='MARKET',
+                                            quantity=60)
 
                 # priceForCloseShortOrder = format(
                 #     Decimal(client.futures_position_information(symbol='DOGEBUSD')[2]['entryPrice']), '.5f')
