@@ -11,9 +11,9 @@ def eth_gs():
             "ETHBUSD",
             "/root/passivbot_configs/long.json",
             "-lm",
-            "gs",
+            "t",
             "-sm",
-            "gs"
+            "t"
 
         ]
     )
@@ -28,9 +28,9 @@ def ada_gs():
             "ADABUSD",
             "/root/passivbot_configs/long.json",
             "-lm",
-            "gs",
+            "t",
             "-sm",
-            "gs"
+            "t"
 
         ]
     )
@@ -45,9 +45,9 @@ def doge_gs():
             "DOGEBUSD",
             "/root/passivbot_configs/long.json",
             "-lm",
-            "gs",
+            "t",
             "-sm",
-            "gs"
+            "t"
 
         ]
     )
