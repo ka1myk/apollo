@@ -118,7 +118,7 @@ while True:
 
                 client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='LIMIT',
                                             quantity=10,
-                                            timeInForce='GTX', price=priceForOpenLongOrder)
+                                            timeInForce='GTX', price=priceForOpenLongOrder, recvWindow=20000)
 
                 # priceForCloseLongOrder = format(
                 #     Decimal(client.futures_position_information(symbol='ADABUSD')[1]['entryPrice']), '.4f')
@@ -139,7 +139,7 @@ while True:
 
                 client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
                                             quantity=11,
-                                            timeInForce='GTX', price=priceForOpenShortOrder)
+                                            timeInForce='GTX', price=priceForOpenShortOrder, recvWindow=20000)
 
                 # priceForCloseShortOrder = format(
                 #     Decimal(client.futures_position_information(symbol='ADABUSD')[2]['entryPrice']), '.4f')
