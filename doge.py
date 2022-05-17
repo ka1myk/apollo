@@ -82,16 +82,16 @@ while True:
                                             quantity=60,
                                             timeInForce='GTX', price=priceForOpenLongOrder)
 
-                priceForCloseLongOrder = format(
-                    Decimal(client.futures_position_information(symbol='DOGEBUSD')[1]['entryPrice']), '.5f')
-                amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='DOGEBUSD')[1]['positionAmt'])
-
-                print("priceForCloseLongOrder", priceForCloseLongOrder)
-                print("amtForCloseLongOrder", amtForCloseLongOrder)
-
-                client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='LONG', type='LIMIT',
-                                            quantity=amtForCloseLongOrder,
-                                            timeInForce='GTX', price=priceForCloseLongOrder)
+                # priceForCloseLongOrder = format(
+                #     Decimal(client.futures_position_information(symbol='DOGEBUSD')[1]['entryPrice']), '.5f')
+                # amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='DOGEBUSD')[1]['positionAmt'])
+                #
+                # print("priceForCloseLongOrder", priceForCloseLongOrder)
+                # print("amtForCloseLongOrder", amtForCloseLongOrder)
+                #
+                # client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='LONG', type='LIMIT',
+                #                             quantity=amtForCloseLongOrder,
+                #                             timeInForce='GTX', price=priceForCloseLongOrder)
 
                 # -----------------------------------#
 
@@ -131,17 +131,17 @@ while True:
                                             quantity=60,
                                             timeInForce='GTX', price=priceForOpenShortOrder)
 
-                priceForCloseShortOrder = format(
-                    Decimal(client.futures_position_information(symbol='DOGEBUSD')[2]['entryPrice']), '.5f')
-                amtForCloseShortOrder = format(
-                    abs(Decimal(client.futures_position_information(symbol='DOGEBUSD')[2]['positionAmt'])))
-
-                print("priceForCloseShortOrder", priceForCloseShortOrder)
-                print("amtForCloseShortOrder", amtForCloseShortOrder)
-
-                client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
-                                            quantity=amtForCloseShortOrder,
-                                            timeInForce='GTX', price=priceForCloseShortOrder)
+                # priceForCloseShortOrder = format(
+                #     Decimal(client.futures_position_information(symbol='DOGEBUSD')[2]['entryPrice']), '.5f')
+                # amtForCloseShortOrder = format(
+                #     abs(Decimal(client.futures_position_information(symbol='DOGEBUSD')[2]['positionAmt'])))
+                #
+                # print("priceForCloseShortOrder", priceForCloseShortOrder)
+                # print("amtForCloseShortOrder", amtForCloseShortOrder)
+                #
+                # client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
+                #                             quantity=amtForCloseShortOrder,
+                #                             timeInForce='GTX', price=priceForCloseShortOrder)
 
                 # -----------------------------------#
 
