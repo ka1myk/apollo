@@ -120,16 +120,16 @@ while True:
                                             quantity=10,
                                             timeInForce='GTX', price=priceForOpenLongOrder)
 
-                priceForCloseLongOrder = format(
-                    Decimal(client.futures_position_information(symbol='ADABUSD')[1]['entryPrice']), '.4f')
-                amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ADABUSD')[1]['positionAmt'])
-
-                print("priceForCloseLongOrder", priceForCloseLongOrder)
-                print("amtForCloseLongOrder", amtForCloseLongOrder)
-
-                client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='LONG', type='LIMIT',
-                                            quantity=amtForCloseLongOrder,
-                                            timeInForce='GTX', price=priceForCloseLongOrder)
+                # priceForCloseLongOrder = format(
+                #     Decimal(client.futures_position_information(symbol='ADABUSD')[1]['entryPrice']), '.4f')
+                # amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ADABUSD')[1]['positionAmt'])
+                # 
+                # print("priceForCloseLongOrder", priceForCloseLongOrder)
+                # print("amtForCloseLongOrder", amtForCloseLongOrder)
+                # 
+                # client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='LONG', type='LIMIT',
+                #                             quantity=amtForCloseLongOrder,
+                #                             timeInForce='GTX', price=priceForCloseLongOrder)
 
                 # -----------------------------------#
 
@@ -141,17 +141,17 @@ while True:
                                             quantity=10,
                                             timeInForce='GTX', price=priceForOpenShortOrder)
 
-                priceForCloseShortOrder = format(
-                    Decimal(client.futures_position_information(symbol='ADABUSD')[2]['entryPrice']), '.4f')
-                amtForCloseShortOrder = format(
-                    abs(Decimal(client.futures_position_information(symbol='ADABUSD')[2]['positionAmt'])))
-
-                print("priceForCloseShortOrder", priceForCloseShortOrder)
-                print("amtForCloseShortOrder", amtForCloseShortOrder)
-
-                client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='SHORT', type='LIMIT',
-                                            quantity=amtForCloseShortOrder,
-                                            timeInForce='GTX', price=priceForCloseShortOrder)
+                # priceForCloseShortOrder = format(
+                #     Decimal(client.futures_position_information(symbol='ADABUSD')[2]['entryPrice']), '.4f')
+                # amtForCloseShortOrder = format(
+                #     abs(Decimal(client.futures_position_information(symbol='ADABUSD')[2]['positionAmt'])))
+                # 
+                # print("priceForCloseShortOrder", priceForCloseShortOrder)
+                # print("amtForCloseShortOrder", amtForCloseShortOrder)
+                # 
+                # client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='SHORT', type='LIMIT',
+                #                             quantity=amtForCloseShortOrder,
+                #                             timeInForce='GTX', price=priceForCloseShortOrder)
 
                 # -----------------------------------#
 
