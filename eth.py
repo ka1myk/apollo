@@ -21,11 +21,13 @@ while True:
         if long_signal > 40000:
             print('fire_long')
 
-            priceForOpenLongOrder = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']),
-                                           '.2f')
+            #priceForOpenLongOrder = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']),
+            #                               '.2f')
 
-            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
-                                        timeInForce='GTX', price=priceForOpenLongOrder, recvWindow=20000)
+            #client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
+            #                            timeInForce='GTX', price=priceForOpenLongOrder, recvWindow=20000)
+            
+            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='MARKET', quantity=0.003)
 
             # priceForCloseLongOrder = format(
             #     Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['entryPrice']), '.2f')
@@ -45,12 +47,14 @@ while True:
             print('fire_short')
 
             # open short order and close short order#
-            priceForOpenShortOrder = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']),
-                                            '.2f')
+            # priceForOpenShortOrder = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']),
+            #                                '.2f')
 
-            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
-                                        quantity=0.004,
-                                        timeInForce='GTX', price=priceForOpenShortOrder, recvWindow=20000)
+            # client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
+            #                            quantity=0.004,
+            #                            timeInForce='GTX', price=priceForOpenShortOrder, recvWindow=20000)
+            
+            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='MARKET', quantity=0.003)
 
             # priceForCloseShortOrder = format(
             #     Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['entryPrice']), '.2f')
