@@ -80,7 +80,7 @@ while True:
 
                 client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='LONG', type='LIMIT',
                                             quantity=60,
-                                            timeInForce='GTX', price=priceForOpenLongOrder)
+                                            timeInForce='GTX', price=priceForOpenLongOrder, recvWindow=20000)
 
                 # priceForCloseLongOrder = format(
                 #     Decimal(client.futures_position_information(symbol='DOGEBUSD')[1]['entryPrice']), '.5f')
@@ -129,7 +129,7 @@ while True:
 
                 client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
                                             quantity=60,
-                                            timeInForce='GTX', price=priceForOpenShortOrder)
+                                            timeInForce='GTX', price=priceForOpenShortOrder, recvWindow=20000)
 
                 # priceForCloseShortOrder = format(
                 #     Decimal(client.futures_position_information(symbol='DOGEBUSD')[2]['entryPrice']), '.5f')
