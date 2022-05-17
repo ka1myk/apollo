@@ -27,16 +27,16 @@ while True:
             client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
                                         timeInForce='GTX', price=priceForOpenLongOrder)
 
-            priceForCloseLongOrder = format(
-                Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['entryPrice']), '.2f')
-            amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['positionAmt'])
-
-            print("priceForCloseLongOrder", priceForCloseLongOrder)
-            print("amtForCloseLongOrder", amtForCloseLongOrder)
-
-            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='LONG', type='LIMIT',
-                                        quantity=amtForCloseLongOrder,
-                                        timeInForce='GTX', price=priceForCloseLongOrder)
+            # priceForCloseLongOrder = format(
+            #     Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['entryPrice']), '.2f')
+            # amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['positionAmt'])
+            #
+            # print("priceForCloseLongOrder", priceForCloseLongOrder)
+            # print("amtForCloseLongOrder", amtForCloseLongOrder)
+            #
+            # client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='LONG', type='LIMIT',
+            #                             quantity=amtForCloseLongOrder,
+            #                             timeInForce='GTX', price=priceForCloseLongOrder)
 
             time.sleep(time_to_cool_down)
 
@@ -52,17 +52,17 @@ while True:
                                         quantity=0.003,
                                         timeInForce='GTX', price=priceForOpenShortOrder)
 
-            priceForCloseShortOrder = format(
-                Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['entryPrice']), '.2f')
-            amtForCloseShortOrder = format(
-                abs(Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['positionAmt'])))
-
-            print("priceForCloseShortOrder", priceForCloseShortOrder)
-            print("amtForCloseShortOrder", amtForCloseShortOrder)
-
-            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
-                                        quantity=amtForCloseShortOrder,
-                                        timeInForce='GTX', price=priceForCloseShortOrder)
+            # priceForCloseShortOrder = format(
+            #     Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['entryPrice']), '.2f')
+            # amtForCloseShortOrder = format(
+            #     abs(Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['positionAmt'])))
+            #
+            # print("priceForCloseShortOrder", priceForCloseShortOrder)
+            # print("amtForCloseShortOrder", amtForCloseShortOrder)
+            #
+            # client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
+            #                             quantity=amtForCloseShortOrder,
+            #                             timeInForce='GTX', price=priceForCloseShortOrder)
 
             # -----------------------------------#
 
