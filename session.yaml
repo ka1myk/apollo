@@ -6,6 +6,8 @@ windows:
     - cd ~/passivbot
   panes:
     - shell_command:
+        - python3 /root/passivbot_configs/gs.py
+    - shell_command:
         - python3 /root/passivbot_configs/eth.py
     - shell_command:
         - python3 /root/passivbot_configs/ada.py
