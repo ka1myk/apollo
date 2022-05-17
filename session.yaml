@@ -12,7 +12,9 @@ windows:
     - shell_command:
         - python3 /root/passivbot_configs/ada.py
     - shell_command:
-        - python3 /root/passivbot_configs/doge.py           
+        - python3 /root/passivbot_configs/doge.py
+    - shell_command:
+        - python3 /root/futures-hero/run.py   
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:
