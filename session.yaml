@@ -24,9 +24,9 @@ windows:
   layout: even-vertical
   panes:
     - shell_command:
-        - python3.8 /root/futures-hero/run.py
+        - /usr/bin/python3.8 /root/futures-hero/run.py
 - window_name: long-term-low-leverage
   layout: even-vertical
   panes:
     - shell_command:
-        - python3.8 /root/long-term-low-leverage/trade_binance.py
+        - /usr/bin/python3.8 /root/long-term-low-leverage/trade_binance.py
