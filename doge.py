@@ -1,9 +1,7 @@
-import json
-from decimal import Decimal
+from variables import time_to_wait_one_more_check, time_to_cool_down
+import requests, json, time
 
 from tradingview_ta import TA_Handler, Interval, Exchange
-from variables import time_to_wait_one_more_check, time_to_cool_down
-import time
 from binance.client import Client
 
 with open('/root/passivbot/api-keys.json') as p:
@@ -74,29 +72,8 @@ while True:
                     and DOGEBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_BUY", "BUY")
             ):
-                # open long order and close long order#
-                # priceForOpenLongOrder = format(
-                #    Decimal(client.futures_coin_ticker(symbol='DOGEUSD_PERP')[0]['lastPrice']), '.5f')
-
-                # client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='LONG', type='LIMIT',
-                #                            quantity=60,
-                #                            timeInForce='GTX', price=priceForOpenLongOrder, recvWindow=20000)
-                
                 client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='LONG', type='MARKET',
                                             quantity=60)
-
-                # priceForCloseLongOrder = format(
-                #     Decimal(client.futures_position_information(symbol='DOGEBUSD')[1]['entryPrice']), '.5f')
-                # amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='DOGEBUSD')[1]['positionAmt'])
-                #
-                # print("priceForCloseLongOrder", priceForCloseLongOrder)
-                # print("amtForCloseLongOrder", amtForCloseLongOrder)
-                #
-                # client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='LONG', type='LIMIT',
-                #                             quantity=amtForCloseLongOrder,
-                #                             timeInForce='GTX', price=priceForCloseLongOrder)
-
-                # -----------------------------------#
 
                 time.sleep(time_to_cool_down)
 
@@ -126,30 +103,8 @@ while True:
                     and DOGEBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_SELL", "SELL")
             ):
-                # open short order and close short order#
-                # priceForOpenShortOrder = format(
-                #    Decimal(client.futures_coin_ticker(symbol='DOGEUSD_PERP')[0]['lastPrice']), '.5f')
-
-                # client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
-                #                            quantity=61,
-                #                            timeInForce='GTX', price=priceForOpenShortOrder, recvWindow=20000)
-                
                 client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='MARKET',
                                             quantity=60)
-
-                # priceForCloseShortOrder = format(
-                #     Decimal(client.futures_position_information(symbol='DOGEBUSD')[2]['entryPrice']), '.5f')
-                # amtForCloseShortOrder = format(
-                #     abs(Decimal(client.futures_position_information(symbol='DOGEBUSD')[2]['positionAmt'])))
-                #
-                # print("priceForCloseShortOrder", priceForCloseShortOrder)
-                # print("amtForCloseShortOrder", amtForCloseShortOrder)
-                #
-                # client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
-                #                             quantity=amtForCloseShortOrder,
-                #                             timeInForce='GTX', price=priceForCloseShortOrder)
-
-                # -----------------------------------#
 
                 time.sleep(time_to_cool_down)
 

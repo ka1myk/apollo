@@ -1,9 +1,9 @@
-import json
-from decimal import Decimal
+from variables import time_to_wait_one_more_check, time_to_cool_down
+import requests, json, time
 
 from tradingview_ta import TA_Handler, Interval, Exchange
-import time
 from binance.client import Client
+
 
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
@@ -46,9 +46,8 @@ ADABUSDPERP_INTERVAL_1_HOUR = TA_Handler(
 )
 
 while True:
-    from variables import time_to_wait_one_more_check, time_to_cool_down
+
     try:
-        print(time_to_cool_down)
         if (
                 (
                         ADABUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
@@ -112,54 +111,11 @@ while True:
                     )
 
             ):
-                # open long order and close long order#
-                # priceForOpenLongOrder = format(
-                #    Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
-
                 client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='MARKET',
                                             quantity=10)
 
-                # client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='LIMIT',
-                #                            quantity=10,
-                #                            timeInForce='GTX', price=priceForOpenLongOrder, recvWindow=20000)
-
-                # priceForCloseLongOrder = format(
-                #     Decimal(client.futures_position_information(symbol='ADABUSD')[1]['entryPrice']), '.4f')
-                # amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ADABUSD')[1]['positionAmt'])
-                # 
-                # print("priceForCloseLongOrder", priceForCloseLongOrder)
-                # print("amtForCloseLongOrder", amtForCloseLongOrder)
-                # 
-                # client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='LONG', type='LIMIT',
-                #                             quantity=amtForCloseLongOrder,
-                #                             timeInForce='GTX', price=priceForCloseLongOrder)
-
-                # -----------------------------------#
-
-                # open short order and close short order#
-                # priceForOpenShortOrder = format(
-                #    Decimal(client.futures_coin_ticker(symbol='ADAUSD_PERP')[0]['lastPrice']), '.4f')
-
                 client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='MARKET',
                                             quantity=10)
-
-                # client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='LIMIT',
-                #                            quantity=11,
-                #                            timeInForce='GTX', price=priceForOpenShortOrder, recvWindow=20000)
-
-                # priceForCloseShortOrder = format(
-                #     Decimal(client.futures_position_information(symbol='ADABUSD')[2]['entryPrice']), '.4f')
-                # amtForCloseShortOrder = format(
-                #     abs(Decimal(client.futures_position_information(symbol='ADABUSD')[2]['positionAmt'])))
-                # 
-                # print("priceForCloseShortOrder", priceForCloseShortOrder)
-                # print("amtForCloseShortOrder", amtForCloseShortOrder)
-                # 
-                # client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='SHORT', type='LIMIT',
-                #                             quantity=amtForCloseShortOrder,
-                #                             timeInForce='GTX', price=priceForCloseShortOrder)
-
-                # -----------------------------------#
 
                 time.sleep(time_to_cool_down)
 

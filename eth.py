@@ -1,7 +1,8 @@
-from decimal import Decimal
-from binance.client import Client
-import requests, json, time
 from variables import time_to_wait_one_more_check, time_to_cool_down
+import requests, json, time
+
+from binance.client import Client
+
 
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
@@ -20,25 +21,8 @@ while True:
         long_signal = float(data['data'][90]['buyVolUsd'])
         if long_signal > 40000:
             print('fire_long')
-
-            #priceForOpenLongOrder = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']),
-            #                               '.2f')
-
-            #client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='LIMIT', quantity=0.003,
-            #                            timeInForce='GTX', price=priceForOpenLongOrder, recvWindow=20000)
-            
-            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='MARKET', quantity=0.003)
-
-            # priceForCloseLongOrder = format(
-            #     Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['entryPrice']), '.2f')
-            # amtForCloseLongOrder = Decimal(client.futures_position_information(symbol='ETHBUSD')[1]['positionAmt'])
-            #
-            # print("priceForCloseLongOrder", priceForCloseLongOrder)
-            # print("amtForCloseLongOrder", amtForCloseLongOrder)
-            #
-            # client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='LONG', type='LIMIT',
-            #                             quantity=amtForCloseLongOrder,
-            #                             timeInForce='GTX', price=priceForCloseLongOrder)
+            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='MARKET',
+                                        quantity=0.003)
 
             time.sleep(time_to_cool_down)
 
@@ -46,29 +30,8 @@ while True:
         if short_signal > 40000:
             print('fire_short')
 
-            # open short order and close short order#
-            # priceForOpenShortOrder = format(Decimal(client.futures_coin_ticker(symbol='ETHUSD_PERP')[0]['lastPrice']),
-            #                                '.2f')
-
-            # client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='LIMIT',
-            #                            quantity=0.004,
-            #                            timeInForce='GTX', price=priceForOpenShortOrder, recvWindow=20000)
-            
-            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='MARKET', quantity=0.003)
-
-            # priceForCloseShortOrder = format(
-            #     Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['entryPrice']), '.2f')
-            # amtForCloseShortOrder = format(
-            #     abs(Decimal(client.futures_position_information(symbol='ETHBUSD')[2]['positionAmt'])))
-            #
-            # print("priceForCloseShortOrder", priceForCloseShortOrder)
-            # print("amtForCloseShortOrder", amtForCloseShortOrder)
-            #
-            # client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='SHORT', type='LIMIT',
-            #                             quantity=amtForCloseShortOrder,
-            #                             timeInForce='GTX', price=priceForCloseShortOrder)
-
-            # -----------------------------------#
+            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='MARKET',
+                                        quantity=0.003)
 
             time.sleep(time_to_cool_down)
 
