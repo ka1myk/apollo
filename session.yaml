@@ -1,5 +1,12 @@
 session_name: passiv_session
 windows:
+- window_name: zyairelai
+  layout: even-vertical
+  shell_command_before:
+    - cd /root/futures-hero
+  panes:
+    - shell_command:
+        - python3.8 run.py
 - window_name: passiv_new_orders
   layout: even-vertical
   shell_command_before:
