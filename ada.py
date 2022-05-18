@@ -48,7 +48,7 @@ ADABUSDPERP_INTERVAL_1_HOUR = TA_Handler(
 while True:
     from variables import time_to_wait_one_more_check, time_to_cool_down
     try:
-
+        print(time_to_cool_down)
         if (
                 (
                         ADABUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
