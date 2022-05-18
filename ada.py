@@ -2,7 +2,6 @@ import json
 from decimal import Decimal
 
 from tradingview_ta import TA_Handler, Interval, Exchange
-from variables import time_to_wait_one_more_check, time_to_cool_down
 import time
 from binance.client import Client
 
@@ -47,6 +46,7 @@ ADABUSDPERP_INTERVAL_1_HOUR = TA_Handler(
 )
 
 while True:
+    from variables import time_to_wait_one_more_check, time_to_cool_down
     try:
 
         if (
