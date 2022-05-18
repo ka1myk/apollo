@@ -2,7 +2,7 @@ import json
 from decimal import Decimal
 
 from tradingview_ta import TA_Handler, Interval, Exchange
-from variables import time_to_wait_one_more_check, time_to_cool_down
+from variables import time_to_create_order, time_to_wait_one_more_check, time_to_cool_down, time_to_create_gs_order
 import time
 from binance.client import Client
 
