@@ -1,5 +1,5 @@
 time_to_wait_one_more_check = 45
-time_to_cool_down = 300
+time_to_cool_down = 180
 
 modifier = 2
 max_wallet_exposure_limit = 2
