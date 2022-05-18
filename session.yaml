@@ -1,12 +1,19 @@
 session_name: passiv_session
 windows:
-- window_name: zyairelai
+- window_name: futures-hero
   layout: even-vertical
   shell_command_before:
     - cd /root/futures-hero
   panes:
     - shell_command:
         - python3.8 run.py
+- window_name: long-term-low-leverage
+  layout: even-vertical
+  shell_command_before:
+    - cd /root/long-term-low-leverage
+  panes:
+    - shell_command:
+        - python3.8 trade_binance.py
 - window_name: passiv_new_orders
   layout: even-vertical
   shell_command_before:
