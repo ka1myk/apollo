@@ -13,10 +13,6 @@ windows:
         - python3 /root/passivbot_configs/ada.py
     - shell_command:
         - python3 /root/passivbot_configs/doge.py
-    - shell_command:
-        - python3.8 /root/futures-hero/run.py
-    - shell_command:
-        - python3.8 /root/long-term-low-leverage/trade_binance.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:
@@ -24,3 +20,17 @@ windows:
   panes:
     - shell_command:
         - futuresboard
+- window_name: futures-hero
+  layout: even-vertical
+  shell_command_before:
+    - cd /root/futures-hero
+  panes:
+    - shell_command:
+        - python3.8 run.py
+- window_name: long-term-low-leverage
+  layout: even-vertical
+  shell_command_before:
+    - cd /root/long-term-low-leverage
+  panes:
+    - shell_command:
+        - python3.8 trade_binance.py
