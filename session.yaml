@@ -8,6 +8,8 @@ windows:
     - shell_command:
         - python3 /root/passivbot_configs/gs.py
     - shell_command:
+        - python3 auto_profit_transfer.py binance_01
+    - shell_command:
         - python3 /root/passivbot_configs/eth.py
     - shell_command:
         - python3 /root/passivbot_configs/ada.py
