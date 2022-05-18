@@ -22,15 +22,11 @@ windows:
         - futuresboard
 - window_name: futures-hero
   layout: even-vertical
-  shell_command_before:
-    - cd /root/futures-hero
   panes:
     - shell_command:
-        - python3.8 run.py
+        - python3.8 /root/futures-hero/run.py
 - window_name: long-term-low-leverage
   layout: even-vertical
-  shell_command_before:
-    - cd /root/long-term-low-leverage
   panes:
     - shell_command:
-        - python3.8 trade_binance.py
+        - python3.8 /root/long-term-low-leverage/trade_binance.py
