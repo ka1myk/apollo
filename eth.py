@@ -1,7 +1,7 @@
 from decimal import Decimal
 from binance.client import Client
 import requests, json, time
-from variables import time_to_create_order, time_to_wait_one_more_check, time_to_cool_down, time_to_create_gs_order
+from variables import time_to_wait_one_more_check, time_to_cool_down
 
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
