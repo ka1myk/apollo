@@ -20,10 +20,3 @@ windows:
   panes:
     - shell_command:
         - futuresboard
-- window_name: futures-hero
-  layout: even-vertical
-  shell_command_before:
-    - cd /root/futures-hero
-  panes:
-    - shell_command:
-        - python3 run.py
