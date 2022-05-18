@@ -20,13 +20,3 @@ windows:
   panes:
     - shell_command:
         - futuresboard
-- window_name: futures-hero
-  layout: even-vertical
-  panes:
-    - shell_command:
-        - /usr/bin/python3.8 /root/futures-hero/run.py
-- window_name: long-term-low-leverage
-  layout: even-vertical
-  panes:
-    - shell_command:
-        - /usr/bin/python3.8 /root/long-term-low-leverage/trade_binance.py
