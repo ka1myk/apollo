@@ -14,9 +14,9 @@ windows:
     - shell_command:
         - python3 /root/passivbot_configs/doge.py
     - shell_command:
-        - python3 /root/futures-hero/run.py
+        - cd .. && cd /root/futures-hero && python3 run.py
     - shell_command:
-        - python3 /root/long-term-low-leverage/trade_binance.py
+        - cd .. && cd /root/long-term-low-leverage && python3 trade_binance.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:
