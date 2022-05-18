@@ -1,6 +1,3 @@
-time_to_create_order = 45
-time_to_create_gs_order = 30
-
 time_to_wait_one_more_check = 45
 time_to_cool_down = 300
 
