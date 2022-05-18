@@ -2,7 +2,7 @@ import multiprocessing
 import subprocess
 
 
-def futures-hero():
+def futures_hero():
     subprocess.Popen(
         [
             "python3.8",
@@ -11,7 +11,7 @@ def futures-hero():
     )
 
 
-def long-term-low-leverage():
+def long_term_low_leverage():
     subprocess.Popen(
         [
             "python3.8",
@@ -21,7 +21,7 @@ def long-term-low-leverage():
 
 
 if __name__ == '__main__':
-    p1 = multiprocessing.Process(target=futures-hero)
-    p2 = multiprocessing.Process(target=long-term-low-leverage)
+    p1 = multiprocessing.Process(target=futures_hero)
+    p2 = multiprocessing.Process(target=long_term_low_leverage)
     p1.start()
     p2.start()
