@@ -19,17 +19,14 @@ while True:
         data = json.loads(text)
 
         long_signal = float(data['data'][90]['buyVolUsd'])
-        if long_signal > 40000:
-            print('fire_long')
+        if long_signal > 100000:
             client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='MARKET',
                                         quantity=0.003)
 
             time.sleep(time_to_cool_down)
 
         short_signal = float(data['data'][90]['sellVolUsd'])
-        if short_signal > 40000:
-            print('fire_short')
-
+        if short_signal > 100000:
             client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='MARKET',
                                         quantity=0.003)
 
