@@ -30,7 +30,7 @@ while True:
             with open('/root/passivbot_configs/variables.json', 'w') as f:
                 f.write(json.dumps(d))
 
-            subprocess.call(['sh', './root/passivbot_configs/restart.sh'])
+            subprocess.call(['sh', '/root/passivbot_configs/restart.sh'])
 
         if 0.74 > ratio > 0.51 and d['time_to_cool_down'] != 120:
             d['time_to_cool_down'] = 120
@@ -38,7 +38,7 @@ while True:
             with open('/root/passivbot_configs/variables.json', 'w') as f:
                 f.write(json.dumps(d))
 
-            subprocess.call(['sh', './root/passivbot_configs/restart.sh'])
+            subprocess.call(['sh', '/root/passivbot_configs/restart.sh'])
 
         if 0.51 > ratio > 0.33 and d['time_to_cool_down'] != 360:
             d['time_to_cool_down'] = 360
@@ -46,14 +46,14 @@ while True:
             with open('/root/passivbot_configs/variables.json', 'w') as f:
                 f.write(json.dumps(d))
 
-            subprocess.call(['sh', './root/passivbot_configs/restart.sh'])
+            subprocess.call(['sh', '/root/passivbot_configs/restart.sh'])
         if 0.32 > ratio and d['time_to_cool_down'] != 43200:
             d['time_to_cool_down'] = 43200
 
             with open('/root/passivbot_configs/variables.json', 'w') as f:
                 f.write(json.dumps(d))
 
-            subprocess.call(['sh', './root/passivbot_configs/restart.sh'])
+            subprocess.call(['sh', '/root/passivbot_configs/restart.sh'])
 
         time.sleep(time_to_wait_one_more_check)
     except Exception as e:
