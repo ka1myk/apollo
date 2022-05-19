@@ -8,7 +8,7 @@ with open('variables.json') as v:
 
 time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
 
-with open('api-keys.json') as p:
+with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
 
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
