@@ -1,4 +1,4 @@
-session_name: passiv_session
+session_name: profit_only
 windows:
 - window_name: futures-hero
   layout: even-vertical
@@ -19,8 +19,6 @@ windows:
   shell_command_before:
     - cd ~/passivbot
   panes:
-    - shell_command:
-        - python3 /root/passivbot_configs/variables_editor.py
     - shell_command:
         - python3 /root/passivbot_configs/gs.py
     - shell_command:
