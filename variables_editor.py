@@ -15,10 +15,6 @@ client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 while True:
     try:
 
-        eth = subprocess.Popen(["python3", "/root/passivbot_configs/eth.py"])
-        ada = subprocess.Popen(["python3", "/root/passivbot_configs/ada.py"])
-        doge = subprocess.Popen(["python3", "/root/passivbot_configs/doge.py"])
-
         withdrawAvailable = float(client.futures_account_balance()[9]["withdrawAvailable"])
         balance = float(client.futures_account_balance()[9]["balance"])
         ratio = withdrawAvailable / balance
@@ -35,12 +31,7 @@ while True:
             with open('/root/passivbot_configs/variables.json', 'w') as f:
                 json.dump(d, f)
 
-            eth.kill()
-            ada.kill()
-            doge.kill()
-            eth
-            ada
-            doge
+            subprocess.run(["sh", "/root/passivbot_configs/restart.sh"])
 
         if 0.74 > ratio > 0.51 and d['time_to_cool_down'] != 120:
             d['time_to_cool_down'] = 120
@@ -48,12 +39,7 @@ while True:
             with open('/root/passivbot_configs/variables.json', 'w') as f:
                 json.dump(d, f)
 
-            eth.kill()
-            ada.kill()
-            doge.kill()
-            eth
-            ada
-            doge
+            subprocess.run(["sh", "/root/passivbot_configs/restart.sh"])
 
         if 0.51 > ratio > 0.33 and d['time_to_cool_down'] != 540:
             d['time_to_cool_down'] = 540
@@ -61,12 +47,7 @@ while True:
             with open('/root/passivbot_configs/variables.json', 'w') as f:
                 json.dump(d, f)
 
-            eth.kill()
-            ada.kill()
-            doge.kill()
-            eth
-            ada
-            doge
+            subprocess.run(["sh", "/root/passivbot_configs/restart.sh"])
 
         if 0.32 > ratio and d['time_to_cool_down'] != 43200:
             d['time_to_cool_down'] = 43200
@@ -74,12 +55,7 @@ while True:
             with open('/root/passivbot_configs/variables.json', 'w') as f:
                 json.dump(d, f)
 
-            eth.kill()
-            ada.kill()
-            doge.kill()
-            eth
-            ada
-            doge
+            subprocess.run(["sh", "/root/passivbot_configs/restart.sh"])
 
         time.sleep(time_to_wait_one_more_check)
     except Exception as e:
