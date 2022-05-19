@@ -20,8 +20,6 @@ windows:
     - cd ~/passivbot
   panes:
     - shell_command:
-        - python3 /root/passivbot_configs/variables_editor.py
-    - shell_command:
         - python3 /root/passivbot_configs/gs.py
     - shell_command:
         - python3 auto_profit_transfer.py binance_01 -p 0.3
