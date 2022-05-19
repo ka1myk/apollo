@@ -40,7 +40,7 @@ while True:
 
             subprocess.call(['sh', './restart.sh'])
 
-        if 0.51 > ratio > 0.33 and d['time_to_cool_down'] != 120:
+        if 0.51 > ratio > 0.33 and d['time_to_cool_down'] != 360:
             d['time_to_cool_down'] = 360
 
             with open('variables.json', 'w') as f:
