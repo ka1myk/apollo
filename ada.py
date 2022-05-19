@@ -1,9 +1,13 @@
-from variables import time_to_wait_one_more_check, time_to_cool_down
-import requests, json, time
-
 from tradingview_ta import TA_Handler, Interval, Exchange
 from binance.client import Client
 
+import requests, json, time
+
+with open('variables.json') as v:
+    variables = json.load(v)
+
+time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
+time_to_cool_down = variables['time_to_cool_down']
 
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)

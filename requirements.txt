@@ -1,5 +1,4 @@
 tradingview-ta
 telegram
 python-binance
-
 requests~=2.27.1

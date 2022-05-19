@@ -1,8 +1,13 @@
-from variables import time_to_wait_one_more_check, time_to_cool_down
-import requests, json, time
-
 from binance.client import Client
 
+import requests, json, time
+
+with open('variables.json') as v:
+    variables = json.load(v)
+
+time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
+time_to_cool_down = variables['time_to_cool_down']
+liquidations_in_USD = variables['liquidations_in_USD']
 
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
@@ -19,14 +24,14 @@ while True:
         data = json.loads(text)
 
         long_signal = float(data['data'][90]['buyVolUsd'])
-        if long_signal > 100000:
+        if long_signal > liquidations_in_USD:
             client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='MARKET',
                                         quantity=0.003)
 
             time.sleep(time_to_cool_down)
 
         short_signal = float(data['data'][90]['sellVolUsd'])
-        if short_signal > 100000:
+        if short_signal > liquidations_in_USD:
             client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='MARKET',
                                         quantity=0.003)
 
