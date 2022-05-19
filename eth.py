@@ -2,7 +2,7 @@ from binance.client import Client
 
 import requests, json, time
 
-with open('variables.json') as v:
+with open('/root/passivbot_configs/variables.json') as v:
     variables = json.load(v)
 
 time_to_wait_one_more_check = variables['time_to_wait_one_more_check']

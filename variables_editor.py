@@ -3,7 +3,7 @@ import time
 import json
 import subprocess
 
-with open('variables.json') as v:
+with open('/root/passivbot_configs/variables.json') as v:
     variables = json.load(v)
 
 time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
@@ -20,40 +20,40 @@ while True:
         print(ratio)
 
         # Read in the file
-        with open('variables.json', 'r') as f:
+        with open('/root/passivbot_configs/variables.json', 'r') as f:
             data = f.read()
         d = json.loads(data)
 
         if 1 > ratio > 0.75 and d['time_to_cool_down'] != 60:
             d['time_to_cool_down'] = 60
 
-            with open('variables.json', 'w') as f:
+            with open('/root/passivbot_configs/variables.json', 'w') as f:
                 f.write(json.dumps(d))
 
-            subprocess.call(['sh', './restart.sh'])
+            subprocess.call(['sh', './root/passivbot_configs/restart.sh'])
 
         if 0.74 > ratio > 0.51 and d['time_to_cool_down'] != 120:
             d['time_to_cool_down'] = 120
 
-            with open('variables.json', 'w') as f:
+            with open('/root/passivbot_configs/variables.json', 'w') as f:
                 f.write(json.dumps(d))
 
-            subprocess.call(['sh', './restart.sh'])
+            subprocess.call(['sh', './root/passivbot_configs/restart.sh'])
 
         if 0.51 > ratio > 0.33 and d['time_to_cool_down'] != 360:
             d['time_to_cool_down'] = 360
 
-            with open('variables.json', 'w') as f:
+            with open('/root/passivbot_configs/variables.json', 'w') as f:
                 f.write(json.dumps(d))
 
-            subprocess.call(['sh', './restart.sh'])
+            subprocess.call(['sh', './root/passivbot_configs/restart.sh'])
         if 0.32 > ratio and d['time_to_cool_down'] != 43200:
             d['time_to_cool_down'] = 43200
 
-            with open('variables.json', 'w') as f:
+            with open('/root/passivbot_configs/variables.json', 'w') as f:
                 f.write(json.dumps(d))
 
-            subprocess.call(['sh', './restart.sh'])
+            subprocess.call(['sh', './root/passivbot_configs/restart.sh'])
 
         time.sleep(time_to_wait_one_more_check)
     except Exception as e:
