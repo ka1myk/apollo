@@ -33,6 +33,8 @@ windows:
         - python3 /root/passivbot_configs/doge.py
     - shell_command:
         - python3 /root/passivbot_configs/sol.py
+    - shell_command:
+        - python3 /root/passivbot_configs/btc.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:

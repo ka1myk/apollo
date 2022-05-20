@@ -69,13 +69,31 @@ def sol_gs():
         ]
     )
 
+def btc_gs():
+    subprocess.Popen(
+        [
+            "python3",
+            "passivbot.py",
+            "binance_01",
+            "BTCBUSD",
+            "/root/passivbot_configs/long.json",
+            "-lm",
+            "gs",
+            "-sm",
+            "gs"
+
+        ]
+    )
+
 
 if __name__ == '__main__':
     p1 = multiprocessing.Process(target=eth_gs)
     p2 = multiprocessing.Process(target=ada_gs)
     p3 = multiprocessing.Process(target=doge_gs)
     p4 = multiprocessing.Process(target=sol_gs)
+    p5 = multiprocessing.Process(target=btc_gs)
     p1.start()
     p2.start()
     p3.start()
     p4.start()
+    p5.start()
