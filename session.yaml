@@ -31,6 +31,8 @@ windows:
         - python3 /root/passivbot_configs/ada.py
     - shell_command:
         - python3 /root/passivbot_configs/doge.py
+    - shell_command:
+        - python3 /root/passivbot_configs/sol.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:
