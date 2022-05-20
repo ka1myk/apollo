@@ -1,5 +1,4 @@
 from binance.client import Client
-import time
 import json
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
@@ -11,7 +10,6 @@ while True:
         with open('/root/passivbot_configs/variables.json') as v:
             variables = json.load(v)
 
-        time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
         withdrawAvailable = float(client.futures_account_balance()[9]["withdrawAvailable"])
         balance = float(client.futures_account_balance()[9]["balance"])
         ratio = withdrawAvailable / balance
@@ -45,7 +43,6 @@ while True:
             with open('/root/passivbot_configs/variables.json', 'w') as f:
                 json.dump(d, f)
 
-        time.sleep(time_to_wait_one_more_check)
     except Exception as e:
         print("Function errored out!", e)
         print("Retrying ... ")
