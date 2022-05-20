@@ -1,5 +1,4 @@
 from binance.client import Client
-
 import requests, json, time
 
 with open('/root/passivbot/api-keys.json') as p:

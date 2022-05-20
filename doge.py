@@ -1,6 +1,5 @@
 from tradingview_ta import TA_Handler, Interval, Exchange
 from binance.client import Client
-
 import requests, json, time
 
 with open('/root/passivbot/api-keys.json') as p:
@@ -78,9 +77,7 @@ while True:
                     and DOGEBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_BUY", "BUY")
             ):
-                client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='LONG', type='MARKET',
-                                            quantity=60)
-
+                client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='LONG', type='MARKET', quantity=60)
                 time.sleep(time_to_cool_down)
 
         if (
@@ -109,9 +106,7 @@ while True:
                     and DOGEBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_SELL", "SELL")
             ):
-                client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='MARKET',
-                                            quantity=60)
-
+                client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='MARKET', quantity=60)
                 time.sleep(time_to_cool_down)
 
     except Exception as e:

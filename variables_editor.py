@@ -1,7 +1,6 @@
 from binance.client import Client
 import time
 import json
-import subprocess
 
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
@@ -18,7 +17,6 @@ while True:
         withdrawAvailable = float(client.futures_account_balance()[9]["withdrawAvailable"])
         balance = float(client.futures_account_balance()[9]["balance"])
         ratio = withdrawAvailable / balance
-        print(ratio)
 
         # Read in the file
         with open('/root/passivbot_configs/variables.json', 'r') as f:
