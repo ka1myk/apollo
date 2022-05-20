@@ -3,12 +3,6 @@ from binance.client import Client
 
 import requests, json, time
 
-with open('/root/passivbot_configs/variables.json') as v:
-    variables = json.load(v)
-
-time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
-time_to_cool_down = variables['time_to_cool_down']
-
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
 
@@ -52,6 +46,13 @@ ADABUSDPERP_INTERVAL_1_HOUR = TA_Handler(
 while True:
 
     try:
+
+        with open('/root/passivbot_configs/variables.json') as v:
+            variables = json.load(v)
+
+        time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
+        time_to_cool_down = variables['time_to_cool_down']
+
         if (
                 (
                         ADABUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]

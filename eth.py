@@ -2,13 +2,6 @@ from binance.client import Client
 
 import requests, json, time
 
-with open('/root/passivbot_configs/variables.json') as v:
-    variables = json.load(v)
-
-time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
-time_to_cool_down = variables['time_to_cool_down']
-liquidations_in_USD = variables['liquidations_in_USD']
-
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
 
@@ -16,6 +9,14 @@ client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 while True:
     try:
+
+        with open('/root/passivbot_configs/variables.json') as v:
+            variables = json.load(v)
+
+        time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
+        time_to_cool_down = variables['time_to_cool_down']
+        liquidations_in_USD = variables['liquidations_in_USD']
+
         headers = {'coinglassSecret': '50f90ddcd6a8437992431ab0f1b698c1'}
         url = requests.get(
             "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=9",

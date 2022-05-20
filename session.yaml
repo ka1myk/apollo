@@ -14,11 +14,13 @@ windows:
   panes:
     - shell_command:
         - python3.8 trade_binance.py
-- window_name: passiv_new_orders
+- window_name: custom_code
   layout: even-vertical
   shell_command_before:
     - cd ~/passivbot
   panes:
+    - shell_command:
+          - python3 /root/passivbot_configs/variables_editor.py
     - shell_command:
         - python3 /root/passivbot_configs/gs.py
     - shell_command:
