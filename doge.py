@@ -1,10 +1,8 @@
 from tradingview_ta import TA_Handler, Interval, Exchange
 from binance.client import Client
 import requests, json, time
-
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
-
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 DOGEBUSDPERP_INTERVAL_1_MINUTE = TA_Handler(

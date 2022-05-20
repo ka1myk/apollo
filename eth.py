@@ -1,9 +1,7 @@
 from binance.client import Client
 import requests, json, time
-
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
-
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 while True:
@@ -25,16 +23,12 @@ while True:
 
         long_signal = float(data['data'][90]['buyVolUsd'])
         if long_signal > liquidations_in_USD:
-            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='MARKET',
-                                        quantity=0.003)
-
+            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='MARKET', quantity=0.003)
             time.sleep(time_to_cool_down)
 
         short_signal = float(data['data'][90]['sellVolUsd'])
         if short_signal > liquidations_in_USD:
-            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='MARKET',
-                                        quantity=0.003)
-
+            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='MARKET', quantity=0.003)
             time.sleep(time_to_cool_down)
 
     except Exception as e:

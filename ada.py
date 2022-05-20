@@ -1,10 +1,8 @@
 from tradingview_ta import TA_Handler, Interval, Exchange
 from binance.client import Client
 import requests, json, time
-
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
-
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 ADABUSDPERP_INTERVAL_1_MINUTE = TA_Handler(
@@ -117,7 +115,6 @@ while True:
             ):
                 client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='MARKET', quantity=10)
                 client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='MARKET', quantity=10)
-
                 time.sleep(time_to_cool_down)
 
     except Exception as e:

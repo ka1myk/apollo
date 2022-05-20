@@ -1,11 +1,10 @@
 from binance.client import Client
 import time
 import json
-
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
-
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
+
 while True:
     try:
 
@@ -13,7 +12,6 @@ while True:
             variables = json.load(v)
 
         time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
-
         withdrawAvailable = float(client.futures_account_balance()[9]["withdrawAvailable"])
         balance = float(client.futures_account_balance()[9]["balance"])
         ratio = withdrawAvailable / balance
