@@ -19,25 +19,25 @@ while True:
             data = f.read()
         d = json.loads(data)
 
-        if 1 > ratio > 0.75 and d['time_to_cool_down'] != 60:
+        if 1 > ratio > 0.80 and d['time_to_cool_down'] != 60:
             d['time_to_cool_down'] = 60
 
             with open('/root/passivbot_configs/variables.json', 'w') as f:
                 json.dump(d, f)
 
-        if 0.74 > ratio > 0.51 and d['time_to_cool_down'] != 120:
+        if 0.79 > ratio > 0.60 and d['time_to_cool_down'] != 120:
             d['time_to_cool_down'] = 120
 
             with open('/root/passivbot_configs/variables.json', 'w') as f:
                 json.dump(d, f)
 
-        if 0.51 > ratio > 0.33 and d['time_to_cool_down'] != 540:
+        if 0.59 > ratio > 0.40 and d['time_to_cool_down'] != 540:
             d['time_to_cool_down'] = 540
 
             with open('/root/passivbot_configs/variables.json', 'w') as f:
                 json.dump(d, f)
 
-        if 0.32 > ratio and d['time_to_cool_down'] != 43200:
+        if 0.40 > ratio and d['time_to_cool_down'] != 43200:
             d['time_to_cool_down'] = 43200
 
             with open('/root/passivbot_configs/variables.json', 'w') as f:
