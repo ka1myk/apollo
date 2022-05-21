@@ -53,13 +53,13 @@ def doge_gs():
     )
 
 
-def sol_gs():
+def gmt_gs():
     subprocess.Popen(
         [
             "python3",
             "passivbot.py",
             "binance_01",
-            "SOLBUSD",
+            "GMTBUSD",
             "/root/passivbot_configs/long.json",
             "-lm",
             "gs",
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     p1 = multiprocessing.Process(target=eth_gs)
     p2 = multiprocessing.Process(target=ada_gs)
     p3 = multiprocessing.Process(target=doge_gs)
-    p4 = multiprocessing.Process(target=sol_gs)
+    p4 = multiprocessing.Process(target=gmt_gs)
     p5 = multiprocessing.Process(target=btc_gs)
     p1.start()
     p2.start()
