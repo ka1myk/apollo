@@ -69,6 +69,7 @@ def gmt_gs():
         ]
     )
 
+
 def btc_gs():
     subprocess.Popen(
         [
@@ -86,14 +87,52 @@ def btc_gs():
     )
 
 
+def xrp_gs():
+    subprocess.Popen(
+        [
+            "python3",
+            "passivbot.py",
+            "binance_01",
+            "XRPBUSD",
+            "/root/passivbot_configs/long.json",
+            "-lm",
+            "gs",
+            "-sm",
+            "gs"
+
+        ]
+    )
+
+
+def bnb_gs():
+    subprocess.Popen(
+        [
+            "python3",
+            "passivbot.py",
+            "binance_01",
+            "BNBBUSD",
+            "/root/passivbot_configs/long.json",
+            "-lm",
+            "gs",
+            "-sm",
+            "gs"
+
+        ]
+    )
+
+
 if __name__ == '__main__':
     p1 = multiprocessing.Process(target=eth_gs)
     p2 = multiprocessing.Process(target=ada_gs)
     p3 = multiprocessing.Process(target=doge_gs)
     p4 = multiprocessing.Process(target=gmt_gs)
     p5 = multiprocessing.Process(target=btc_gs)
+    p6 = multiprocessing.Process(target=xrp_gs)
+    p7 = multiprocessing.Process(target=bnb_gs)
     p1.start()
     p2.start()
     p3.start()
     p4.start()
     p5.start()
+    p6.start()
+    p7.start()
