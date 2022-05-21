@@ -6,36 +6,36 @@ with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
-SOLBUSDPERP_INTERVAL_1_MINUTE = TA_Handler(
-    symbol="SOLBUSDPERP",
+GMTBUSDPERP_INTERVAL_1_MINUTE = TA_Handler(
+    symbol="GMTBUSDPERP",
     screener="crypto",
     exchange="BINANCE",
     interval=Interval.INTERVAL_1_MINUTE
 )
 
-SOLBUSDPERP_INTERVAL_5_MINUTES = TA_Handler(
-    symbol="SOLBUSDPERP",
+GMTBUSDPERP_INTERVAL_5_MINUTES = TA_Handler(
+    symbol="GMTBUSDPERP",
     screener="crypto",
     exchange="BINANCE",
     interval=Interval.INTERVAL_5_MINUTES
 )
 
-SOLBUSDPERP_INTERVAL_15_MINUTES = TA_Handler(
-    symbol="SOLBUSDPERP",
+GMTBUSDPERP_INTERVAL_15_MINUTES = TA_Handler(
+    symbol="GMTBUSDPERP",
     screener="crypto",
     exchange="BINANCE",
     interval=Interval.INTERVAL_15_MINUTES
 )
 
-SOLBUSDPERP_INTERVAL_30_MINUTES = TA_Handler(
-    symbol="SOLBUSDPERP",
+GMTBUSDPERP_INTERVAL_30_MINUTES = TA_Handler(
+    symbol="GMTBUSDPERP",
     screener="crypto",
     exchange="BINANCE",
     interval=Interval.INTERVAL_30_MINUTES
 )
 
-SOLBUSDPERP_INTERVAL_1_HOUR = TA_Handler(
-    symbol="SOLBUSDPERP",
+GMTBUSDPERP_INTERVAL_1_HOUR = TA_Handler(
+    symbol="GMTBUSDPERP",
     screener="crypto",
     exchange="BINANCE",
     interval=Interval.INTERVAL_1_HOUR
@@ -51,36 +51,36 @@ while True:
 
         if (
                 (
-                        SOLBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
+                        GMTBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_BUY", "BUY")
-                        and SOLBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
+                        and GMTBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_BUY", "BUY")
-                        and SOLBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
+                        and GMTBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_BUY", "BUY")
-                        and SOLBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
+                        and GMTBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_BUY", "BUY")
-                        and SOLBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
+                        and GMTBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_BUY", "BUY")
                 )
 
                 or
 
                 (
-                        SOLBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
+                        GMTBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_SELL", "SELL")
-                        and SOLBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
+                        and GMTBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_SELL", "SELL")
-                        and SOLBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
+                        and GMTBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_SELL", "SELL")
-                        and SOLBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
+                        and GMTBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_SELL", "SELL")
-                        and SOLBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
+                        and GMTBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                         in ("STRONG_SELL", "SELL")
                 )
 
         ):
-            client.futures_create_order(symbol='SOLBUSD', side='BUY', positionSide='LONG', type='MARKET', quantity=1)
-            client.futures_create_order(symbol='SOLBUSD', side='SELL', positionSide='SHORT', type='MARKET', quantity=1)
+            client.futures_create_order(symbol='GMTBUSD', side='BUY', positionSide='LONG', type='MARKET', quantity=3.7)
+            client.futures_create_order(symbol='GMTBUSD', side='SELL', positionSide='SHORT', type='MARKET', quantity=3.7)
             time.sleep(time_to_cool_down)
 
     except Exception as e:

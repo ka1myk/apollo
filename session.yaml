@@ -32,7 +32,7 @@ windows:
     - shell_command:
         - python3 /root/passivbot_configs/doge.py
     - shell_command:
-        - python3 /root/passivbot_configs/sol.py
+        - python3 /root/passivbot_configs/gmt.py
     - shell_command:
         - python3 /root/passivbot_configs/btc.py
 - window_name: futuresboard
