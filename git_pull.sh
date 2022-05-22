@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cd && cd passivbot_configs && git stash && git pull https://github.com/ka1myk/passivbot_configs.git dev && chmod +x *.sh
+cd && cd binance_strategies && git stash && git pull https://github.com/ka1myk/binance_strategies.git dev && chmod +x *.sh

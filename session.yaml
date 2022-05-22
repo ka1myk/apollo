@@ -6,25 +6,25 @@ windows:
     - cd ~/passivbot
   panes:
     - shell_command:
-        - python3 /root/passivbot_configs/variables_editor.py
+        - python3 /root/binance_strategies/variables_editor.py
     - shell_command:
-        - python3 /root/passivbot_configs/gs.py
+        - python3 /root/binance_strategies/gs.py
     - shell_command:
         - python3 auto_profit_transfer.py binance_01 -p 0.1
     - shell_command:
-        - python3 /root/passivbot_configs/eth.py
+        - python3 /root/binance_strategies/eth.py
     - shell_command:
-        - python3 /root/passivbot_configs/ada.py
+        - python3 /root/binance_strategies/ada.py
     - shell_command:
-        - python3 /root/passivbot_configs/doge.py
+        - python3 /root/binance_strategies/doge.py
     - shell_command:
-        - python3 /root/passivbot_configs/gmt.py
+        - python3 /root/binance_strategies/gmt.py
     - shell_command:
-        - python3 /root/passivbot_configs/btc.py
+        - python3 /root/binance_strategies/btc.py
     - shell_command:
-        - python3 /root/passivbot_configs/xrp.py
+        - python3 /root/binance_strategies/xrp.py
     - shell_command:
-        - python3 /root/passivbot_configs/bnb.py
+        - python3 /root/binance_strategies/bnb.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:

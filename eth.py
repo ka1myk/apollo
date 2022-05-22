@@ -7,7 +7,7 @@ client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 while True:
     try:
 
-        with open('/root/passivbot_configs/variables.json') as v:
+        with open('/root/binance_strategies/variables.json') as v:
             variables = json.load(v)
 
         time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
