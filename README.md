@@ -1,4 +1,29 @@
-Guide:
+-DONE-
+btc - 	math random and fix delay 											   -> open long OR short
+eth - 	liquidation 														   -> open long OR short
+gmt - 	check STRONG BUY or STRONG SELL 									   -> open long AND short
+doge - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL -> open long OR short
+ada - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL -> open long AND short
+xrp - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL -> open REVERSE long OR REVERSE short
+bnb - 	check STRONG BUY or STRONG SELL (NASDAQ-IXIC)						   -> open REVERSE long OR REVERSE short
+
+-TODO-
+near - 	math random and random delay										   -> open long OR short
+avax -  arbitrage 
+sol -   taker Buy/Sell Volume
+1) change leverage dynamically 
+2) trailing stop profit
+3) change min_markup dynamically
+4) open (MARKET) and close orders (GTX) in batch with get position and profit percent from variables.json
+
+https://docs.glassnode.com/api/transactions#percent-volume-in-profit
+https://coinglass.github.io/API-Reference/#exchange-open-interest
+https://alternative.me/crypto/
+https://www.coingecko.com/en/api
+https://www.cryptometer.io/liquidation-data
+
+-------
+Guide to deploy:
 https://www.futuresboard.xyz/guides.html
 --------
 Commands:

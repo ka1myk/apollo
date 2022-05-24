@@ -1,7 +1,8 @@
 import multiprocessing
 import subprocess
 
-def gs():
+
+def gs2():
     subprocess.Popen(
         [
             "python3",
@@ -47,21 +48,7 @@ def gs():
         ]
     )
 
-    subprocess.Popen(
-        [
-            "python3",
-            "passivbot.py",
-            "binance_01",
-            "GMTBUSD",
-            "/root/binance_strategies/long.json",
-            "-lm",
-            "gs",
-            "-sm",
-            "gs"
-
-        ]
-    )
 
 if __name__ == '__main__':
-    p1 = multiprocessing.Process(target=gs)
+    p1 = multiprocessing.Process(target=gs2)
     p1.start()

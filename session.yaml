@@ -10,6 +10,8 @@ windows:
     - shell_command:
         - python3 /root/binance_strategies/gs.py
     - shell_command:
+        - python3 /root/binance_strategies/gs2.py
+    - shell_command:
         - python3 /root/binance_strategies/eth.py
     - shell_command:
         - python3 /root/binance_strategies/ada.py
