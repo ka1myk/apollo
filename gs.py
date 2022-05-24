@@ -2,7 +2,7 @@ import multiprocessing
 import subprocess
 
 
-def eth_gs():
+def gs():
     subprocess.Popen(
         [
             "python3",
@@ -18,8 +18,6 @@ def eth_gs():
         ]
     )
 
-
-def ada_gs():
     subprocess.Popen(
         [
             "python3",
@@ -35,8 +33,6 @@ def ada_gs():
         ]
     )
 
-
-def doge_gs():
     subprocess.Popen(
         [
             "python3",
@@ -52,8 +48,6 @@ def doge_gs():
         ]
     )
 
-
-def gmt_gs():
     subprocess.Popen(
         [
             "python3",
@@ -68,9 +62,6 @@ def gmt_gs():
 
         ]
     )
-
-
-def btc_gs():
     subprocess.Popen(
         [
             "python3",
@@ -86,8 +77,6 @@ def btc_gs():
         ]
     )
 
-
-def xrp_gs():
     subprocess.Popen(
         [
             "python3",
@@ -103,8 +92,6 @@ def xrp_gs():
         ]
     )
 
-
-def bnb_gs():
     subprocess.Popen(
         [
             "python3",
@@ -122,17 +109,5 @@ def bnb_gs():
 
 
 if __name__ == '__main__':
-    p1 = multiprocessing.Process(target=eth_gs)
-    p2 = multiprocessing.Process(target=ada_gs)
-    p3 = multiprocessing.Process(target=doge_gs)
-    p4 = multiprocessing.Process(target=gmt_gs)
-    p5 = multiprocessing.Process(target=btc_gs)
-    p6 = multiprocessing.Process(target=xrp_gs)
-    p7 = multiprocessing.Process(target=bnb_gs)
+    p1 = multiprocessing.Process(target=gs)
     p1.start()
-    p2.start()
-    p3.start()
-    p4.start()
-    p5.start()
-    p6.start()
-    p7.start()
