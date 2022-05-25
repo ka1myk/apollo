@@ -51,12 +51,14 @@ while True:
 
         symbol = 'ADABUSD'
         pricePrecision = 4
+        min_amount = 10
 
         time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
         time_to_cool_down = variables['time_to_cool_down']
         long_profit_percent = variables['long_profit_percent']
         short_profit_percent = variables['short_profit_percent']
         leverage = variables['leverage']
+        multiplier = variables['multiplier']
 
         if (
                 (
@@ -126,16 +128,16 @@ while True:
                                             side='BUY',
                                             positionSide='LONG',
                                             type='MARKET',
-                                            leverage='leverage',
-                                            quantity=10)
+                                            leverage=leverage,
+                                            quantity=min_amount*multiplier)
 
                 # create open short order market #
                 client.futures_create_order(symbol=symbol,
                                             side='SELL',
                                             positionSide='SHORT',
                                             type='MARKET',
-                                            leverage='leverage',
-                                            quantity=10)
+                                            leverage=leverage,
+                                            quantity=min_amount*multiplier)
 
                 # do not modify! #
                 time.sleep(1)
