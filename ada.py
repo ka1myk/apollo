@@ -1,8 +1,10 @@
 from tradingview_ta import TA_Handler, Interval, Exchange
 from binance.client import Client
 import requests, json, time
-with open('/root/passivbot/api-keys.json') as p:
+
+with open('api-keys.json') as p:
     creds = json.load(p)
+
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 ADABUSDPERP_INTERVAL_1_MINUTE = TA_Handler(
@@ -44,11 +46,17 @@ while True:
 
     try:
 
-        with open('/root/binance_strategies/variables.json') as v:
+        with open('variables.json') as v:
             variables = json.load(v)
+
+        symbol = 'ADABUSD'
+        pricePrecision = 4
 
         time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
         time_to_cool_down = variables['time_to_cool_down']
+        long_profit_percent = variables['long_profit_percent']
+        short_profit_percent = variables['short_profit_percent']
+        leverage = variables['leverage']
 
         if (
                 (
@@ -113,8 +121,50 @@ while True:
                     )
 
             ):
-                client.futures_create_order(symbol='ADABUSD', side='BUY', positionSide='LONG', type='MARKET', quantity=10)
-                client.futures_create_order(symbol='ADABUSD', side='SELL', positionSide='SHORT', type='MARKET', quantity=10)
+                # create open long order market #
+                client.futures_create_order(symbol=symbol,
+                                            side='BUY',
+                                            positionSide='LONG',
+                                            type='MARKET',
+                                            leverage='leverage',
+                                            quantity=10)
+
+                # create open short order market #
+                client.futures_create_order(symbol=symbol,
+                                            side='SELL',
+                                            positionSide='SHORT',
+                                            type='MARKET',
+                                            leverage='leverage',
+                                            quantity=10)
+
+                # do not modify! #
+                time.sleep(1)
+
+                # cancel all orders by symbol to create new #
+                client.futures_cancel_all_open_orders(symbol=symbol)
+
+                # create close long order with profit long_profit_percent #
+                client.futures_create_order(symbol=symbol, side='SELL', positionSide='LONG', type='LIMIT',
+                                            timeInForce='GTC',
+                                            price=round(abs(float(
+                                                client.futures_position_information(symbol=symbol)[1].get(
+                                                    'entryPrice'))) * long_profit_percent,
+                                                        pricePrecision),
+                                            quantity=abs(
+                                                float(client.futures_position_information(symbol=symbol)[1].get(
+                                                    'positionAmt'))))
+
+                # create close long order with profit short_profit_percent#
+                client.futures_create_order(symbol=symbol, side='BUY', positionSide='SHORT', type='LIMIT',
+                                            timeInForce='GTC',
+                                            price=round(abs(float(
+                                                client.futures_position_information(symbol=symbol)[2].get(
+                                                    'entryPrice'))) * short_profit_percent,
+                                                        pricePrecision),
+                                            quantity=abs(
+                                                float(client.futures_position_information(symbol=symbol)[2].get(
+                                                    'positionAmt'))))
+
                 time.sleep(time_to_cool_down)
 
     except Exception as e:
