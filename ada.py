@@ -129,7 +129,7 @@ while True:
                                             positionSide='LONG',
                                             type='MARKET',
                                             leverage=leverage,
-                                            quantity=min_amount*multiplier)
+                                            quantity=min_amount * multiplier)
 
                 # create open short order market #
                 client.futures_create_order(symbol=symbol,
@@ -137,7 +137,7 @@ while True:
                                             positionSide='SHORT',
                                             type='MARKET',
                                             leverage=leverage,
-                                            quantity=min_amount*multiplier)
+                                            quantity=min_amount * multiplier)
 
                 # do not modify! #
                 time.sleep(1)
