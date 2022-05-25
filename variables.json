@@ -4,5 +4,5 @@
   "liquidations_in_USD": 1000000,
   "long_profit_percent": 1.005,
   "short_profit_percent": 0.995,
-  "leverage": 1
+  "leverage": 7
 }
