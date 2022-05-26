@@ -1,17 +1,27 @@
 from binance.client import Client
 import requests, json, time
-with open('/root/passivbot/api-keys.json') as p:
+
+with open('api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 while True:
     try:
 
-        with open('/root/binance_strategies/variables.json') as v:
+        with open('variables.json') as v:
             variables = json.load(v)
+
+        symbol = 'ETHBUSD'
+        pricePrecision = 3
+        min_amount = 0.003
 
         time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
         time_to_cool_down = variables['time_to_cool_down']
+        long_profit_percent = variables['long_profit_percent']
+        short_profit_percent = variables['short_profit_percent']
+        leverage = variables['leverage']
+        multiplier = variables['multiplier']
+
         liquidations_in_USD = variables['liquidations_in_USD']
 
         headers = {'coinglassSecret': '50f90ddcd6a8437992431ab0f1b698c1'}
@@ -23,13 +33,52 @@ while True:
 
         long_signal = float(data['data'][90]['buyVolUsd'])
         if long_signal > liquidations_in_USD:
-            client.futures_create_order(symbol='ETHBUSD', side='BUY', positionSide='LONG', type='MARKET', quantity=0.003)
-            time.sleep(time_to_cool_down)
+            client.futures_create_order(symbol=symbol,
+                                        side='BUY',
+                                        positionSide='LONG',
+                                        type='MARKET',
+                                        leverage=leverage,
+                                        quantity=min_amount * multiplier)
 
         short_signal = float(data['data'][90]['sellVolUsd'])
         if short_signal > liquidations_in_USD:
-            client.futures_create_order(symbol='ETHBUSD', side='SELL', positionSide='SHORT', type='MARKET', quantity=0.003)
-            time.sleep(time_to_cool_down)
+            client.futures_create_order(symbol=symbol,
+                                        side='SELL',
+                                        positionSide='SHORT',
+                                        type='MARKET',
+                                        leverage=leverage,
+                                        quantity=min_amount * multiplier)
+
+        # do not modify! #
+        time.sleep(1)
+
+        # cancel all orders by symbol to create new #
+        client.futures_cancel_all_open_orders(symbol=symbol)
+
+        # create close long order with profit long_profit_percent #
+        client.futures_create_order(symbol=symbol, side='SELL', positionSide='LONG', type='LIMIT',
+                                    timeInForce='GTC',
+                                    price=round(abs(float(
+                                        client.futures_position_information(symbol=symbol)[1].get(
+                                            'entryPrice'))) * long_profit_percent,
+                                                pricePrecision),
+                                    quantity=abs(
+                                        float(client.futures_position_information(symbol=symbol)[1].get(
+                                            'positionAmt'))))
+
+        # create close long order with profit short_profit_percent#
+        client.futures_create_order(symbol=symbol, side='BUY', positionSide='SHORT', type='LIMIT',
+                                    timeInForce='GTC',
+                                    price=round(abs(float(
+                                        client.futures_position_information(symbol=symbol)[2].get(
+                                            'entryPrice'))) * short_profit_percent,
+                                                pricePrecision),
+                                    quantity=abs(
+                                        float(client.futures_position_information(symbol=symbol)[2].get(
+                                            'positionAmt'))))
+
+        time.sleep(time_to_cool_down)
+
 
     except Exception as e:
         print("Function errored out!", e)

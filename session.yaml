@@ -7,6 +7,8 @@ windows:
         - python3 /root/binance_strategies/variables_editor.py
     - shell_command:
         - python3 /root/binance_strategies/ada.py
+    - shell_command:
+        - python3 /root/binance_strategies/eth.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:
