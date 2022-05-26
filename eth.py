@@ -50,7 +50,7 @@ while True:
                                         quantity=min_amount * multiplier)
 
         # do not modify! #
-        time.sleep(1)
+        time.sleep(1.5)
 
         # cancel all orders by symbol to create new #
         client.futures_cancel_all_open_orders(symbol=symbol)
