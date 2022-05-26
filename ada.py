@@ -156,7 +156,7 @@ while True:
                                                 float(client.futures_position_information(symbol=symbol)[1].get(
                                                     'positionAmt'))))
 
-                # create close long order with profit short_profit_percent#
+                # create close long order with profit short_profit_percent #
                 client.futures_create_order(symbol=symbol, side='BUY', positionSide='SHORT', type='LIMIT',
                                             timeInForce='GTC',
                                             price=round(abs(float(
