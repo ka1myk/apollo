@@ -12,7 +12,7 @@ while True:
             variables = json.load(v)
 
         symbol = 'ETHBUSD'
-        pricePrecision = 3
+        pricePrecision = 2
         min_amount = 0.003
 
         time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
@@ -55,31 +55,51 @@ while True:
         # cancel all orders by symbol to create new #
         client.futures_cancel_all_open_orders(symbol=symbol)
 
-        # create close long order with profit long_profit_percent #
-        client.futures_create_order(symbol=symbol, side='SELL', positionSide='LONG', type='LIMIT',
-                                    timeInForce='GTC',
-                                    price=round(abs(float(
-                                        client.futures_position_information(symbol=symbol)[1].get(
-                                            'entryPrice'))) * long_profit_percent,
-                                                pricePrecision),
-                                    quantity=abs(
-                                        float(client.futures_position_information(symbol=symbol)[1].get(
-                                            'positionAmt'))))
+        if abs(float(client.futures_position_information(symbol=symbol)[1].get(
+                'positionAmt'))) < 0:
+            # create close long order with profit long_profit_percent #
+            client.futures_create_order(symbol=symbol, side='SELL', positionSide='LONG', type='LIMIT',
+                                        timeInForce='GTC',
+                                        price=round(abs(float(
+                                            client.futures_position_information(symbol=symbol)[1].get(
+                                                'entryPrice'))) * long_profit_percent,
+                                                    pricePrecision),
+                                        quantity=abs(
+                                            float(client.futures_position_information(symbol=symbol)[1].get(
+                                                'positionAmt'))))
 
-        # create close long order with profit short_profit_percent#
-        client.futures_create_order(symbol=symbol, side='BUY', positionSide='SHORT', type='LIMIT',
-                                    timeInForce='GTC',
-                                    price=round(abs(float(
-                                        client.futures_position_information(symbol=symbol)[2].get(
-                                            'entryPrice'))) * short_profit_percent,
-                                                pricePrecision),
-                                    quantity=abs(
-                                        float(client.futures_position_information(symbol=symbol)[2].get(
-                                            'positionAmt'))))
+        if abs(float(client.futures_position_information(symbol=symbol)[2].get(
+                'positionAmt'))) < 0:
+            # create close long order with profit short_profit_percent#
+            client.futures_create_order(symbol=symbol, side='BUY', positionSide='SHORT', type='LIMIT',
+                                        timeInForce='GTC',
+                                        price=round(abs(float(
+                                            client.futures_position_information(symbol=symbol)[2].get(
+                                                'entryPrice'))) * short_profit_percent,
+                                                    pricePrecision),
+                                        quantity=abs(
+                                            float(client.futures_position_information(symbol=symbol)[2].get(
+                                                'positionAmt'))))
 
         time.sleep(time_to_cool_down)
 
 
+
     except Exception as e:
         print("Function errored out!", e)
+
+        message = symbol + e
+
+        def telegram_bot_sendtext(bot_message):
+
+            import requests
+
+            bot_token = "1919249173:AAHLjSdJUUtnieEjYPlzPdfxf4gqldSg35I"
+            bot_chatID = "203161038"
+            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+            response = requests.get(send_text)
+            return response.json()
+
+        telegram_bot_sendtext(message)
+
         print("Retrying ... ")

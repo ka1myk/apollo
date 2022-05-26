@@ -51,7 +51,7 @@ while True:
 
         symbol = 'ADABUSD'
         pricePrecision = 4
-        min_amount = 10
+        minNotional = 11
 
         time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
         time_to_cool_down = variables['time_to_cool_down']
@@ -129,7 +129,7 @@ while True:
                                             positionSide='LONG',
                                             type='MARKET',
                                             leverage=leverage,
-                                            quantity=min_amount * multiplier)
+                                            quantity=minNotional * multiplier)
 
                 # create open short order market #
                 client.futures_create_order(symbol=symbol,
@@ -137,10 +137,10 @@ while True:
                                             positionSide='SHORT',
                                             type='MARKET',
                                             leverage=leverage,
-                                            quantity=min_amount * multiplier)
+                                            quantity=minNotional * multiplier)
 
                 # do not modify! #
-                time.sleep(1.5)
+                time.sleep(1)
 
                 # cancel all orders by symbol to create new #
                 client.futures_cancel_all_open_orders(symbol=symbol)
@@ -171,4 +171,22 @@ while True:
 
     except Exception as e:
         print("Function errored out!", e)
+
+        message = symbol + e
+
+
+        def telegram_bot_sendtext(bot_message):
+
+            import requests
+
+            bot_token = "1919249173:AAHLjSdJUUtnieEjYPlzPdfxf4gqldSg35I"
+            bot_chatID = "203161038"
+
+            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + bot_chatID + '&parse_mode=Markdown&text=' + bot_message
+            response = requests.get(send_text)
+            return response.json()
+
+
+        telegram_bot_sendtext(message)
+
         print("Retrying ... ")
