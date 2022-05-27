@@ -39,7 +39,7 @@ while True:
                                         leverage=leverage,
                                         quantity=quantity)
 
-        time.sleep(time_to_cool_down)
+        time.sleep(time_to_cool_down*4)
 
     except Exception as e:
         print("Function errored out!", e)
