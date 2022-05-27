@@ -1,7 +1,7 @@
 {
   "time_to_cool_down": 900,
   "time_to_wait_one_more_check": 45,
-  "liquidations_in_USD": 1000000,
+  "liquidations_in_USD": 500000,
   "long_profit_percent": 1.008,
   "short_profit_percent": 0.998,
   "leverage": 7,

@@ -31,7 +31,7 @@ while True:
         text = url.text
         data = json.loads(text)
 
-        long_signal = float(data['data'][90]['buyVolUsd'])
+        long_signal = float(data['data'][89]['list'][0]['buyVolUsd'])
         if long_signal > liquidations_in_USD:
             client.futures_create_order(symbol=symbol,
                                         side='BUY',
@@ -40,7 +40,7 @@ while True:
                                         leverage=leverage,
                                         quantity=quantity)
 
-        short_signal = float(data['data'][90]['sellVolUsd'])
+        short_signal = float(data['data'][89]['list'][0]['sellVolUsd'])
         if short_signal > liquidations_in_USD:
             client.futures_create_order(symbol=symbol,
                                         side='SELL',
