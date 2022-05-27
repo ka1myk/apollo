@@ -122,7 +122,7 @@ def xrp_gs():
 
 
 if __name__ == '__main__':
-    p1 = multiprocessing.Process(target=eth_gs)
+    p1 = multiprocessing.Process(target=ada_gs)
     p2 = multiprocessing.Process(target=bnb_gs)
     p3 = multiprocessing.Process(target=btc_gs)
     p4 = multiprocessing.Process(target=doge_gs)
