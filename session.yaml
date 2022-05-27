@@ -2,13 +2,27 @@ session_name: profit_only
 windows:
 - window_name: custom_code
   layout: even-vertical
+  shell_command_before:
+    - cd ~/passivbot
   panes:
     - shell_command:
         - python3 /root/binance_strategies/variables_editor.py
     - shell_command:
+        - python3 /root/binance_strategies/gs.py
+    - shell_command:
         - python3 /root/binance_strategies/ada.py
     - shell_command:
+        - python3 /root/binance_strategies/bnb.py
+    - shell_command:
+        - python3 /root/binance_strategies/btc.py
+    - shell_command:
+        - python3 /root/binance_strategies/doge.py
+    - shell_command:
         - python3 /root/binance_strategies/eth.py
+    - shell_command:
+        - python3 /root/binance_strategies/gmt.py
+    - shell_command:
+        - python3 /root/binance_strategies/xrp.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:

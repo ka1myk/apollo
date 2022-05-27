@@ -49,6 +49,14 @@ while True:
 
         time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
         time_to_cool_down = variables['time_to_cool_down']
+        leverage = variables['leverage']
+        multiplier = variables['multiplier']
+
+        symbol = 'BNBBUSD'
+        pricePrecision = 2
+        quantityPrecision = 2
+        minNotional = 0.02
+        quantity = round(minNotional * multiplier, quantityPrecision)
 
         if (
                 IXIC_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
@@ -76,8 +84,14 @@ while True:
                     and IXIC_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_BUY", "BUY")
             ):
-                client.futures_create_order(symbol='BNBBUSD', side='SELL', positionSide='SHORT', type='MARKET',
-                                            quantity=0.02)
+                # create open short order market #
+                client.futures_create_order(symbol=symbol,
+                                            side='SELL',
+                                            positionSide='SHORT',
+                                            type='MARKET',
+                                            leverage=leverage,
+                                            quantity=quantity)
+
                 time.sleep(time_to_cool_down)
 
         if (
@@ -106,8 +120,14 @@ while True:
                     and IXIC_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_SELL", "SELL")
             ):
-                client.futures_create_order(symbol='BNBBUSD', side='BUY', positionSide='LONG', type='MARKET',
-                                            quantity=0.02)
+                # create open long order market #
+                client.futures_create_order(symbol=symbol,
+                                            side='BUY',
+                                            positionSide='LONG',
+                                            type='MARKET',
+                                            leverage=leverage,
+                                            quantity=quantity)
+
                 time.sleep(time_to_cool_down)
 
     except Exception as e:

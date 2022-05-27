@@ -47,7 +47,17 @@ while True:
 
         with open('/root/binance_strategies/variables.json') as v:
             variables = json.load(v)
+
+        time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
         time_to_cool_down = variables['time_to_cool_down']
+        leverage = variables['leverage']
+        multiplier = variables['multiplier']
+
+        symbol = 'GMTBUSD'
+        pricePrecision = 4
+        quantityPrecision = 1
+        minNotional = 5.5
+        quantity = round(minNotional * multiplier, quantityPrecision)
 
         if (
                 (
@@ -79,8 +89,22 @@ while True:
                 )
 
         ):
-            client.futures_create_order(symbol='GMTBUSD', side='BUY', positionSide='LONG', type='MARKET', quantity=3.7)
-            client.futures_create_order(symbol='GMTBUSD', side='SELL', positionSide='SHORT', type='MARKET', quantity=3.7)
+            # create open long order market #
+            client.futures_create_order(symbol=symbol,
+                                        side='BUY',
+                                        positionSide='LONG',
+                                        type='MARKET',
+                                        leverage=leverage,
+                                        quantity=quantity)
+
+            # create open short order market #
+            client.futures_create_order(symbol=symbol,
+                                        side='SELL',
+                                        positionSide='SHORT',
+                                        type='MARKET',
+                                        leverage=leverage,
+                                        quantity=quantity)
+
             time.sleep(time_to_cool_down)
 
     except Exception as e:

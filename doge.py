@@ -1,6 +1,7 @@
 from tradingview_ta import TA_Handler, Interval, Exchange
 from binance.client import Client
 import requests, json, time
+
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
@@ -48,6 +49,14 @@ while True:
 
         time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
         time_to_cool_down = variables['time_to_cool_down']
+        leverage = variables['leverage']
+        multiplier = variables['multiplier']
+
+        symbol = 'DOGEBUSD'
+        pricePrecision = 5
+        quantityPrecision = 0
+        minNotional = 65
+        quantity = round(minNotional * multiplier, quantityPrecision)
 
         if (
                 DOGEBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
@@ -75,7 +84,13 @@ while True:
                     and DOGEBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_BUY", "BUY")
             ):
-                client.futures_create_order(symbol='DOGEBUSD', side='BUY', positionSide='LONG', type='MARKET', quantity=60)
+                client.futures_create_order(symbol=symbol,
+                                            side='BUY',
+                                            positionSide='LONG',
+                                            type='MARKET',
+                                            leverage=leverage,
+                                            quantity=quantity)
+
                 time.sleep(time_to_cool_down)
 
         if (
@@ -104,7 +119,13 @@ while True:
                     and DOGEBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_SELL", "SELL")
             ):
-                client.futures_create_order(symbol='DOGEBUSD', side='SELL', positionSide='SHORT', type='MARKET', quantity=60)
+                client.futures_create_order(symbol=symbol,
+                                            side='SELL',
+                                            positionSide='SHORT',
+                                            type='MARKET',
+                                            leverage=leverage,
+                                            quantity=quantity)
+
                 time.sleep(time_to_cool_down)
 
     except Exception as e:

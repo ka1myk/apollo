@@ -49,6 +49,14 @@ while True:
 
         time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
         time_to_cool_down = variables['time_to_cool_down']
+        leverage = variables['leverage']
+        multiplier = variables['multiplier']
+
+        symbol = 'XRPBUSD'
+        pricePrecision = 4
+        quantityPrecision = 0
+        minNotional = 13
+        quantity = round(minNotional * multiplier, quantityPrecision)
 
         if (
                 XRPBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
@@ -76,7 +84,13 @@ while True:
                     and XRPBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_BUY", "BUY")
             ):
-                client.futures_create_order(symbol='XRPBUSD', side='SELL', positionSide='SHORT', type='MARKET', quantity=13)
+                client.futures_create_order(symbol=symbol,
+                                            side='SELL',
+                                            positionSide='SHORT',
+                                            type='MARKET',
+                                            leverage=leverage,
+                                            quantity=quantity)
+
                 time.sleep(time_to_cool_down)
 
         if (
@@ -105,7 +119,13 @@ while True:
                     and XRPBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_SELL", "SELL")
             ):
-                client.futures_create_order(symbol='XRPBUSD', side='BUY', positionSide='LONG', type='MARKET', quantity=13)
+                client.futures_create_order(symbol=symbol,
+                                            side='BUY',
+                                            positionSide='LONG',
+                                            type='MARKET',
+                                            leverage=leverage,
+                                            quantity=quantity)
+
                 time.sleep(time_to_cool_down)
 
     except Exception as e:
