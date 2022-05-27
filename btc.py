@@ -24,6 +24,8 @@ while True:
         minNotional = 0.001
         quantity = round(minNotional * multiplier, quantityPrecision)
 
+        time.sleep(time_to_cool_down * 4)
+
         if randbelow(2) == 1:
             client.futures_create_order(symbol=symbol,
                                         side='BUY',
@@ -39,7 +41,7 @@ while True:
                                         leverage=leverage,
                                         quantity=quantity)
 
-        time.sleep(time_to_cool_down*4)
+
 
     except Exception as e:
         print("Function errored out!", e)
