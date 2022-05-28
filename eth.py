@@ -11,13 +11,11 @@ while True:
         with open('/root/binance_strategies/variables.json') as v:
             variables = json.load(v)
 
-        time_to_wait_one_more_check = variables['time_to_wait_one_more_check']
         time_to_cool_down = variables['time_to_cool_down']
         leverage = variables['leverage']
         multiplier = variables['multiplier']
 
         symbol = 'ETHBUSD'
-        pricePrecision = 2
         quantityPrecision = 3
         minNotional = 0.003
         quantity = round(minNotional * multiplier, quantityPrecision)
@@ -49,40 +47,7 @@ while True:
                                         leverage=leverage,
                                         quantity=quantity)
 
-        # # do not modify! #
-        # time.sleep(1.5)
-        #
-        # # cancel all orders by symbol to create new #
-        # client.futures_cancel_all_open_orders(symbol=symbol)
-        #
-        # if abs(float(client.futures_position_information(symbol=symbol)[1].get(
-        #         'positionAmt'))) < 0:
-        #     # create close long order with profit long_profit_percent #
-        #     client.futures_create_order(symbol=symbol, side='SELL', positionSide='LONG', type='LIMIT',
-        #                                 timeInForce='GTC',
-        #                                 price=round(abs(float(
-        #                                     client.futures_position_information(symbol=symbol)[1].get(
-        #                                         'entryPrice'))) * long_profit_percent,
-        #                                             pricePrecision),
-        #                                 quantity=abs(
-        #                                     float(client.futures_position_information(symbol=symbol)[1].get(
-        #                                         'positionAmt'))))
-        #
-        # if abs(float(client.futures_position_information(symbol=symbol)[2].get(
-        #         'positionAmt'))) < 0:
-        #     # create close long order with profit short_profit_percent#
-        #     client.futures_create_order(symbol=symbol, side='BUY', positionSide='SHORT', type='LIMIT',
-        #                                 timeInForce='GTC',
-        #                                 price=round(abs(float(
-        #                                     client.futures_position_information(symbol=symbol)[2].get(
-        #                                         'entryPrice'))) * short_profit_percent,
-        #                                             pricePrecision),
-        #                                 quantity=abs(
-        #                                     float(client.futures_position_information(symbol=symbol)[2].get(
-        #                                         'positionAmt'))))
         time.sleep(time_to_cool_down)
-
-
 
     except Exception as e:
         print("Function errored out!", e)

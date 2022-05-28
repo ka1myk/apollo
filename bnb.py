@@ -1,6 +1,6 @@
 from tradingview_ta import TA_Handler, Interval, Exchange
 from binance.client import Client
-import requests, json, time
+import json, time
 
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
@@ -53,7 +53,6 @@ while True:
         multiplier = variables['multiplier']
 
         symbol = 'BNBBUSD'
-        pricePrecision = 2
         quantityPrecision = 2
         minNotional = 0.02
         quantity = round(minNotional * multiplier, quantityPrecision)
@@ -84,7 +83,6 @@ while True:
                     and IXIC_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_BUY", "BUY")
             ):
-                # create open short order market #
                 client.futures_create_order(symbol=symbol,
                                             side='SELL',
                                             positionSide='SHORT',
@@ -120,7 +118,6 @@ while True:
                     and IXIC_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
                     in ("STRONG_SELL", "SELL")
             ):
-                # create open long order market #
                 client.futures_create_order(symbol=symbol,
                                             side='BUY',
                                             positionSide='LONG',

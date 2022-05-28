@@ -1,6 +1,6 @@
 from tradingview_ta import TA_Handler, Interval, Exchange
 from binance.client import Client
-import requests, json, time
+import json, time
 
 with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
@@ -53,7 +53,6 @@ while True:
         multiplier = variables['multiplier']
 
         symbol = 'DOGEBUSD'
-        pricePrecision = 5
         quantityPrecision = 0
         minNotional = 65
         quantity = round(minNotional * multiplier, quantityPrecision)

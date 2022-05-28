@@ -1,6 +1,6 @@
 from tradingview_ta import TA_Handler, Interval, Exchange
 from binance.client import Client
-import requests, json, time
+import json, time
 
 with open('/root/binance_strategies/api-keys.json') as p:
     creds = json.load(p)
@@ -55,7 +55,6 @@ while True:
         multiplier = variables['multiplier']
 
         symbol = 'ADABUSD'
-        pricePrecision = 4
         quantityPrecision = 0
         minNotional = 11
         quantity = round(minNotional * multiplier, quantityPrecision)
@@ -123,7 +122,6 @@ while True:
                     )
 
             ):
-                # create open long order market #
                 client.futures_create_order(symbol=symbol,
                                             side='BUY',
                                             positionSide='LONG',
@@ -131,41 +129,12 @@ while True:
                                             leverage=leverage,
                                             quantity=quantity)
 
-                # create open short order market #
                 client.futures_create_order(symbol=symbol,
                                             side='SELL',
                                             positionSide='SHORT',
                                             type='MARKET',
                                             leverage=leverage,
                                             quantity=quantity)
-
-                # # do not modify! #
-                # time.sleep(1)
-                #
-                # # cancel all orders by symbol to create new #
-                # client.futures_cancel_all_open_orders(symbol=symbol)
-                #
-                # # create close long order with profit long_profit_percent #
-                # client.futures_create_order(symbol=symbol, side='SELL', positionSide='LONG', type='LIMIT',
-                #                             timeInForce='GTC',
-                #                             price=round(abs(float(
-                #                                 client.futures_position_information(symbol=symbol)[1].get(
-                #                                     'entryPrice'))) * long_profit_percent,
-                #                                         pricePrecision),
-                #                             quantity=abs(
-                #                                 float(client.futures_position_information(symbol=symbol)[1].get(
-                #                                     'positionAmt'))))
-                #
-                # # create close long order with profit short_profit_percent #
-                # client.futures_create_order(symbol=symbol, side='BUY', positionSide='SHORT', type='LIMIT',
-                #                             timeInForce='GTC',
-                #                             price=round(abs(float(
-                #                                 client.futures_position_information(symbol=symbol)[2].get(
-                #                                     'entryPrice'))) * short_profit_percent,
-                #                                         pricePrecision),
-                #                             quantity=abs(
-                #                                 float(client.futures_position_information(symbol=symbol)[2].get(
-                #                                     'positionAmt'))))
 
                 time.sleep(time_to_cool_down)
 

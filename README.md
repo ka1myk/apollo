@@ -1,14 +1,14 @@
 -DONE-
-btc - 	math random and fix delay 											   -> open long OR short
-eth - 	liquidation 														   -> open long OR short
-gmt - 	check STRONG BUY or STRONG SELL 									   -> open long AND short
-doge - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL -> open long OR short
-ada - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL -> open long AND short
-xrp - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL -> open REVERSE long OR REVERSE short
-bnb - 	check STRONG BUY or STRONG SELL (NASDAQ-IXIC)						   -> open REVERSE long OR REVERSE short
+btc - 	math random and fix delay 										    	   -> open long OR short
+eth - 	liquidation by coinglass 	            						    	   -> open long OR short
+gmt - 	check STRONG BUY or STRONG SELL 									       -> open long AND short
+doge - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL     -> open long OR short
+ada - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL     -> open long AND short
+xrp - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL     -> open REVERSE long OR REVERSE short
+bnb - 	check STRONG BUY or STRONG SELL (NASDAQ-IXIC)						       -> open REVERSE long OR REVERSE short
 
 -TODO-
-near - 	math random and random delay										   -> open long OR short
+near - 	math random and random delay										       -> open long OR short
 avax -  arbitrage 
 sol -   taker Buy/Sell Volume
 1) change leverage dynamically 
@@ -22,7 +22,6 @@ https://alternative.me/crypto/
 https://www.coingecko.com/en/api
 https://www.cryptometer.io/liquidation-data
 https://sammchardy.github.io/binance-order-filters/
-
 -------
 Guide to deploy:
 https://www.futuresboard.xyz/guides.html
@@ -49,7 +48,9 @@ git clone https://github.com/ka1myk/binance_strategies.git &&
 cd binance_strategies && pip3 install -r requirements.txt &&
 git pull https://github.com/ka1myk/binance_strategies.git
 --------
+crontab -e
+--------
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
 @reboot sleep 10; /bin/bash -c /root/binance_strategies/start.sh
-#*/5 * * * * sh /root/binance_strategies/git_pull.sh && cd && cd binance_strategies && chmod +x start.sh git_pull.sh
+0 */3 * * * /bin/bash -c /root/binance_strategies/restart.sh
