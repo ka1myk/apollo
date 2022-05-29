@@ -14,8 +14,6 @@ windows:
     - shell_command:
         - python3 /root/binance_strategies/bnb.py
     - shell_command:
-        - python3 /root/binance_strategies/btc.py
-    - shell_command:
         - python3 /root/binance_strategies/doge.py
     - shell_command:
         - python3 /root/binance_strategies/eth.py
