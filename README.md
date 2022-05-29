@@ -1,14 +1,14 @@
 -DONE-
-btc - 	math random and fix delay 										    	   -> open long OR short
+ftt - 	math random and fix delay 										    	   -> open long OR short
 eth - 	liquidation by coinglass 	            						    	   -> open long OR short
 gmt - 	check STRONG BUY or STRONG SELL 									       -> open long AND short
 doge - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL     -> open long OR short
 ada - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL     -> open long AND short
 xrp - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL     -> open REVERSE long OR REVERSE short
 bnb - 	check STRONG BUY or STRONG SELL (NASDAQ-IXIC)						       -> open REVERSE long OR REVERSE short
+near - 	math random and random delay										       -> open long OR short
 
 -TODO-
-near - 	math random and random delay										       -> open long OR short
 avax -  arbitrage 
 sol -   taker Buy/Sell Volume
 1) change leverage dynamically 

@@ -24,12 +24,12 @@ while True:
 
         headers = {'coinglassSecret': '50f90ddcd6a8437992431ab0f1b698c1'}
         url = requests.get(
-            "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=9",
+            "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=3",
             headers=headers)
         text = url.text
         data = json.loads(text)
 
-        long_signal = float(data['data'][89]['list'][0]['buyVolUsd'])
+        long_signal = float(data['data'][89]['buyVolUsd'])
         if long_signal > liquidations_in_USD:
             client.futures_create_order(symbol=symbol,
                                         side='BUY',
@@ -38,7 +38,7 @@ while True:
                                         leverage=leverage,
                                         quantity=quantity)
 
-        short_signal = float(data['data'][89]['list'][0]['sellVolUsd'])
+        short_signal = float(data['data'][89]['sellVolUsd'])
         if short_signal > liquidations_in_USD:
             client.futures_create_order(symbol=symbol,
                                         side='SELL',

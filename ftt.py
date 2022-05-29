@@ -16,12 +16,10 @@ while True:
         leverage = variables['leverage']
         multiplier = variables['multiplier']
 
-        symbol = 'BTCBUSD'
+        symbol = 'FTTBUSD'
         quantityPrecision = 3
-        minNotional = 0.001
+        minNotional = 0.2
         quantity = round(minNotional * multiplier, quantityPrecision)
-
-        time.sleep(time_to_cool_down * 4)
 
         if randbelow(2) == 1:
             client.futures_create_order(symbol=symbol,
@@ -37,6 +35,8 @@ while True:
                                         type='MARKET',
                                         leverage=leverage,
                                         quantity=quantity)
+
+        time.sleep(time_to_cool_down)
 
     except Exception as e:
         print("Function errored out!", e)
