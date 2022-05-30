@@ -1,21 +1,24 @@
 -DONE-
-ftt - 	math random and fix delay 										    	   -> open long OR short
 eth - 	liquidation by coinglass 	            						    	   -> open long OR short
-gmt - 	check STRONG BUY or STRONG SELL 									       -> open long AND short
+ftt - 	math random and fix delay 										    	   -> open long OR short
+near - 	math random and random delay										       -> open long OR short
 doge - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL     -> open long OR short
-ada - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL     -> open long AND short
+
 xrp - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL     -> open REVERSE long OR REVERSE short
 bnb - 	check STRONG BUY or STRONG SELL (NASDAQ-IXIC)						       -> open REVERSE long OR REVERSE short
-near - 	math random and random delay										       -> open long OR short
+
+ada - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL     -> open long AND short
+gmt - 	check STRONG BUY or STRONG SELL 									       -> open long AND short
 
 -TODO-
+carousel of strategies and symbols 
 avax -  arbitrage 
 sol -   taker Buy/Sell Volume
-1) change leverage dynamically 
-2) trailing stop profit
-3) change min_markup dynamically
-4) open (MARKET) and close orders (GTX) in batch with get position and profit percent from variables.json
-
+change leverage dynamically 
+trailing stop profit
+change min_markup dynamically
+open (MARKET) and close orders (GTX) in batch with get position and profit percent from variables.json
+-------
 https://docs.glassnode.com/api/transactions#percent-volume-in-profit
 https://coinglass.github.io/API-Reference/#exchange-open-interest
 https://alternative.me/crypto/
@@ -53,4 +56,4 @@ crontab -e
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
 @reboot sleep 10; /bin/bash -c /root/binance_strategies/start.sh
-0 */3 * * * /bin/bash -c /root/binance_strategies/restart.sh
+0 */12 * * * /bin/bash -c /root/binance_strategies/restart.sh
