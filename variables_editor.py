@@ -20,30 +20,30 @@ while True:
             data = f.read()
         d = json.loads(data)
 
-        if (1 > ratio > 0.90) and d['time_to_cool_down'] != 300 and d['multiplier'] != 1:
+        if (1 > ratio > 0.85) and d['time_to_cool_down'] != 300 and d['multiplier'] != 1:
             d['time_to_cool_down'] = 300
             d['multiplier'] = 1
 
             with open('/root/binance_strategies/variables.json', 'w') as f:
                 json.dump(d, f)
 
-        if (0.89 > ratio > 0.76) and d['time_to_cool_down'] != 900 and d['multiplier'] != 1.3:
+        if (0.84 > ratio > 0.70) and d['time_to_cool_down'] != 900 and d['multiplier'] != 1:
             d['time_to_cool_down'] = 900
-            d['multiplier'] = 1.3
+            d['multiplier'] = 1
 
             with open('/root/binance_strategies/variables.json', 'w') as f:
                 json.dump(d, f)
 
-        if (0.75 > ratio > 0.60) and d['time_to_cool_down'] != 1800 and d['multiplier'] != 1.5:
+        if (0.69 > ratio > 0.50) and d['time_to_cool_down'] != 1800 and d['multiplier'] != 1:
             d['time_to_cool_down'] = 1800
-            d['multiplier'] = 1.5
+            d['multiplier'] = 1
 
             with open('/root/binance_strategies/variables.json', 'w') as f:
                 json.dump(d, f)
 
-        if (0.59 > ratio) and d['time_to_cool_down'] != 43200 and d['multiplier'] != 2:
-            d['time_to_cool_down'] = 43200
-            d['multiplier'] = 2
+        if (0.49 > ratio) and d['time_to_cool_down'] != 3600 and d['multiplier'] != 1:
+            d['time_to_cool_down'] = 3600
+            d['multiplier'] = 1
 
             with open('/root/binance_strategies/variables.json', 'w') as f:
                 json.dump(d, f)
