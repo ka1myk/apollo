@@ -20,14 +20,14 @@ while True:
             data = f.read()
         d = json.loads(data)
 
-        if (1 > ratio > 0.85) and d['time_to_cool_down'] != 300 and d['multiplier'] != 1:
+        if (1 > ratio > 0.90) and d['time_to_cool_down'] != 300 and d['multiplier'] != 1:
             d['time_to_cool_down'] = 300
             d['multiplier'] = 1
 
             with open('/root/binance_strategies/variables.json', 'w') as f:
                 json.dump(d, f)
 
-        if (0.84 > ratio > 0.70) and d['time_to_cool_down'] != 900 and d['multiplier'] != 1:
+        if (0.89 > ratio > 0.70) and d['time_to_cool_down'] != 900 and d['multiplier'] != 1:
             d['time_to_cool_down'] = 900
             d['multiplier'] = 1
 
