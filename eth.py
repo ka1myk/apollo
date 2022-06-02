@@ -17,7 +17,7 @@ while True:
 
         symbol = 'ETHBUSD'
         quantityPrecision = 3
-        minNotional = 0.003
+        minNotional = 0.003 * 3
         quantity = round(minNotional * multiplier, quantityPrecision)
 
         liquidations_in_USD = variables['liquidations_in_USD']
