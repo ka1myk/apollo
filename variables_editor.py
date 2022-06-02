@@ -15,7 +15,6 @@ while True:
         balance = float(client.futures_account_balance()[9]["balance"])
         ratio = withdrawAvailable / balance
 
-        # Read in the file
         with open('/root/binance_strategies/variables.json', 'r') as f:
             data = f.read()
         d = json.loads(data)
