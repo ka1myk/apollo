@@ -91,14 +91,12 @@ while True:
                                         side='BUY',
                                         positionSide='LONG',
                                         type='MARKET',
-                                        leverage=leverage,
                                         quantity=quantity)
 
             client.futures_create_order(symbol=symbol,
                                         side='SELL',
                                         positionSide='SHORT',
                                         type='MARKET',
-                                        leverage=leverage,
                                         quantity=quantity)
 
             time.sleep(time_to_cool_down)

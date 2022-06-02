@@ -35,7 +35,6 @@ while True:
                                         side='BUY',
                                         positionSide='LONG',
                                         type='MARKET',
-                                        leverage=leverage,
                                         quantity=quantity)
 
         short_signal = float(data['data'][89]['sellVolUsd'])
@@ -44,7 +43,6 @@ while True:
                                         side='SELL',
                                         positionSide='SHORT',
                                         type='MARKET',
-                                        leverage=leverage,
                                         quantity=quantity)
 
         time.sleep(time_to_cool_down)
