@@ -25,6 +25,8 @@ windows:
         - python3 /root/binance_strategies/ftt.py
     - shell_command:
         - python3 /root/binance_strategies/near.py
+    - shell_command:
+        - python3 /root/binance_strategies/btc.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:

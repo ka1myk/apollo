@@ -120,6 +120,7 @@ def xrp_gs():
         ]
     )
 
+
 def near_gs():
     subprocess.Popen(
         [
@@ -136,6 +137,24 @@ def near_gs():
         ]
     )
 
+
+def btc_gs():
+    subprocess.Popen(
+        [
+            "python3",
+            "passivbot.py",
+            "binance_01",
+            "BTCBUSD",
+            "/root/binance_strategies/long.json",
+            "-lm",
+            "gs",
+            "-sm",
+            "gs"
+
+        ]
+    )
+
+
 if __name__ == '__main__':
     p1 = multiprocessing.Process(target=ada_gs)
     p2 = multiprocessing.Process(target=bnb_gs)
@@ -145,6 +164,7 @@ if __name__ == '__main__':
     p6 = multiprocessing.Process(target=gmt_gs)
     p7 = multiprocessing.Process(target=xrp_gs)
     p8 = multiprocessing.Process(target=near_gs)
+    p9 = multiprocessing.Process(target=btc_gs)
     p1.start()
     p2.start()
     p3.start()
@@ -153,3 +173,4 @@ if __name__ == '__main__':
     p6.start()
     p7.start()
     p8.start()
+    p9.start()

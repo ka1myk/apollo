@@ -1,17 +1,18 @@
--DONE-
 eth - 	liquidation by coinglass 	            						    	   -> open long OR short
 ftt - 	math random and fix delay 										    	   -> open long OR short
 near - 	math random and random delay										       -> open long OR short
-doge - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL     -> open long OR short
 
-xrp - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL     -> open REVERSE long OR REVERSE short
-bnb - 	check STRONG BUY or STRONG SELL (NASDAQ-IXIC)						       -> open REVERSE long OR REVERSE short
+doge - 	check BUY or SELL, wait, check BUY or SELL                                 -> open long OR short
+btc  -  check STRONG BUY or STRONG SELL                                            -> open long OR short
 
-ada - 	check STRONG BUY or STRONG SELL, wait, check STRONG BUY or STRONG SELL     -> open long AND short
+xrp - 	check BUY or SELL, wait, check BUY or SELL                                 -> open REVERSE long OR REVERSE short
+bnb - 	check STRONG BUY or STRONG SELL             						       -> open REVERSE long OR REVERSE short
+
+ada - 	check BUY or SELL, wait, check BUY or SELL                                 -> open long AND short
 gmt - 	check STRONG BUY or STRONG SELL 									       -> open long AND short
 
 -TODO-
-carousel of strategies and symbols 
+carousel of strategies and symbols (BTC, ETH, SOL, XRP, ADA, BNB)
 avax -  arbitrage 
 sol -   taker Buy/Sell Volume
 change leverage dynamically 

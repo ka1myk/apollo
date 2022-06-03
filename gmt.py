@@ -60,30 +60,30 @@ while True:
         if (
                 (
                         GMTBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
-                        in ("STRONG_BUY", "BUY")
+                        in ("STRONG_BUY")
                         and GMTBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                        in ("STRONG_BUY", "BUY")
+                        in ("STRONG_BUY")
                         and GMTBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                        in ("STRONG_BUY", "BUY")
+                        in ("STRONG_BUY")
                         and GMTBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                        in ("STRONG_BUY", "BUY")
+                        in ("STRONG_BUY")
                         and GMTBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
-                        in ("STRONG_BUY", "BUY")
+                        in ("STRONG_BUY")
                 )
 
                 or
 
                 (
                         GMTBUSDPERP_INTERVAL_1_MINUTE.get_analysis().summary["RECOMMENDATION"]
-                        in ("STRONG_SELL", "SELL")
+                        in ("STRONG_SELL")
                         and GMTBUSDPERP_INTERVAL_5_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                        in ("STRONG_SELL", "SELL")
+                        in ("STRONG_SELL")
                         and GMTBUSDPERP_INTERVAL_15_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                        in ("STRONG_SELL", "SELL")
+                        in ("STRONG_SELL")
                         and GMTBUSDPERP_INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"]
-                        in ("STRONG_SELL", "SELL")
+                        in ("STRONG_SELL")
                         and GMTBUSDPERP_INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"]
-                        in ("STRONG_SELL", "SELL")
+                        in ("STRONG_SELL")
                 )
 
         ):
