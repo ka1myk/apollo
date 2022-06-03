@@ -3,19 +3,26 @@ ftt - 	math random and fix delay 										    	   -> open long OR short
 near - 	math random and random delay										       -> open long OR short
 
 doge - 	check BUY or SELL, wait, check BUY or SELL                                 -> open long OR short
-btc  -  check STRONG BUY or STRONG SELL                                            -> open long OR short
+!btc  -  check STRONG BUY or STRONG SELL                                            -> open long OR short
 
 xrp - 	check BUY or SELL, wait, check BUY or SELL                                 -> open REVERSE long OR REVERSE short
-bnb - 	check STRONG BUY or STRONG SELL             						       -> open REVERSE long OR REVERSE short
+!bnb - 	check STRONG BUY or STRONG SELL             						       -> open REVERSE long OR REVERSE short
 
 ada - 	check BUY or SELL, wait, check BUY or SELL                                 -> open long AND short
 gmt - 	check STRONG BUY or STRONG SELL 									       -> open long AND short
 
 -TODO-
-carousel of strategies and symbols (BTC, ETH, SOL, XRP, ADA, BNB)
-avax -  arbitrage 
-sol -   taker Buy/Sell Volume
-change leverage dynamically 
+20 BUSD pairs
+[BTC, ETH, SOL, XRP, ADA, BNB, DOGE, FTT, AVAX, NEAR, GMT, APE, GAL, FTM, DODO, ANC, GALA, TRX, 1000LUNC, LUNA2]
+BTC, ETH, SOL, XRP, ADA, BNB - coinglass liquidation
+DOGE, FTT, AVAX, NEAR, GMT, APE - tradingview signals
+GAL, FTM, DODO, ANC, GALA, TRX, 1000LUNC, LUNA2 - math random and other strategies
+-------
+calculate liquidation automatically
+carousel of strategies and symbols
+arbitrage
+taker Buy/Sell Volume
+change leverage dynamically
 trailing stop profit
 change min_markup dynamically
 open (MARKET) and close orders (GTX) in batch with get position and profit percent from variables.json

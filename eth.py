@@ -12,7 +12,6 @@ while True:
             variables = json.load(v)
 
         time_to_cool_down = variables['time_to_cool_down']
-        leverage = variables['leverage']
         multiplier = variables['multiplier']
 
         symbol = 'ETHBUSD'
@@ -36,6 +35,7 @@ while True:
                                         positionSide='LONG',
                                         type='MARKET',
                                         quantity=quantity)
+            time.sleep(time_to_cool_down / 10)
 
         short_signal = float(data['data'][89]['sellVolUsd'])
         if short_signal > liquidations_in_USD:
@@ -44,8 +44,7 @@ while True:
                                         positionSide='SHORT',
                                         type='MARKET',
                                         quantity=quantity)
-
-        time.sleep(time_to_cool_down)
+            time.sleep(time_to_cool_down / 10)
 
     except Exception as e:
         print("Function errored out!", e)
