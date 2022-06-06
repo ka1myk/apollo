@@ -6,32 +6,42 @@ windows:
     - cd /root/binance_strategies
   panes:
     - shell_command:
-        - python3 variables_editor.py
+        - python3 coinglass/ada.py
     - shell_command:
-        - python3 ada.py
+        - python3 coinglass/bnb.py
     - shell_command:
-        - python3 bnb.py
-    - shell_command:
-        - python3 doge.py
+        - python3 coinglass/btc.py
     - shell_command:
         - python3 coinglass/eth.py
     - shell_command:
-        - python3 gmt.py
+        - python3 coinglass/sol.py
     - shell_command:
-        - python3 xrp.py
+        - python3 coinglass/xrp.py
     - shell_command:
-        - python3 ftt.py
+        - python3 random/ftm.py
     - shell_command:
-        - python3 near.py
+        - python3 random/gal.py
     - shell_command:
-        - python3 btc.py
-- window_name: passivbot_gs
+        - python3 tradingview/ape.py
+    - shell_command:
+        - python3 tradingview/avax.py
+    - shell_command:
+        - python3 tradingview/doge.py
+    - shell_command:
+        - python3 tradingview/ftt.py
+    - shell_command:
+        - python3 tradingview/gmt.py
+    - shell_command:
+        - python3 tradingview/near.py
+- window_name: editor_and_gs
   layout: even-vertical
   shell_command_before:
-    - cd /root/passivbot
+    - cd /root/binance_strategies
   panes:
     - shell_command:
-        - python3 /root/binance_strategies/gs.py
+        - python3 gs.py
+    - shell_command:
+        - python3 variables_editor.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:
