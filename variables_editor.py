@@ -1,5 +1,7 @@
-from binance.client import Client
 import json
+import time
+from datetime import datetime
+from binance.client import Client
 
 with open('/root/binance_strategies/api-keys.json') as p:
     creds = json.load(p)
@@ -7,10 +9,12 @@ client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 while True:
     try:
+        timestamp = datetime.now().strftime("%d.%m.%y %H:%M:%S")
 
         with open('/root/binance_strategies/variables.json') as v:
             variables = json.load(v)
 
+        exception_cool_down = variables['exception_cool_down']
         withdrawAvailable = float(client.futures_account_balance()[9]["withdrawAvailable"])
         balance = float(client.futures_account_balance()[9]["balance"])
         ratio = withdrawAvailable / balance
@@ -62,5 +66,5 @@ while True:
                 json.dump(d, f)
 
     except Exception as e:
-        print("Function errored out!", e)
-        print("Retrying ... ")
+        print(timestamp, "Function errored out!", e)
+        time.sleep(exception_cool_down)

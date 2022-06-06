@@ -1,32 +1,37 @@
 session_name: profit_only
 windows:
-- window_name: custom_code
+- window_name: strategies
   layout: even-vertical
   shell_command_before:
-    - cd ~/passivbot
+    - cd /root/binance_strategies
   panes:
     - shell_command:
-        - python3 /root/binance_strategies/variables_editor.py
+        - python3 variables_editor.py
+    - shell_command:
+        - python3 ada.py
+    - shell_command:
+        - python3 bnb.py
+    - shell_command:
+        - python3 doge.py
+    - shell_command:
+        - python3 coinglass/eth.py
+    - shell_command:
+        - python3 gmt.py
+    - shell_command:
+        - python3 xrp.py
+    - shell_command:
+        - python3 ftt.py
+    - shell_command:
+        - python3 near.py
+    - shell_command:
+        - python3 btc.py
+- window_name: passivbot_gs
+  layout: even-vertical
+  shell_command_before:
+    - cd /root/passivbot
+  panes:
     - shell_command:
         - python3 /root/binance_strategies/gs.py
-    - shell_command:
-        - python3 /root/binance_strategies/ada.py
-    - shell_command:
-        - python3 /root/binance_strategies/bnb.py
-    - shell_command:
-        - python3 /root/binance_strategies/doge.py
-    - shell_command:
-        - python3 /root/binance_strategies/eth.py
-    - shell_command:
-        - python3 /root/binance_strategies/gmt.py
-    - shell_command:
-        - python3 /root/binance_strategies/xrp.py
-    - shell_command:
-        - python3 /root/binance_strategies/ftt.py
-    - shell_command:
-        - python3 /root/binance_strategies/near.py
-    - shell_command:
-        - python3 /root/binance_strategies/btc.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:

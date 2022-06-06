@@ -1,21 +1,22 @@
+AS IS 04.06.22
 eth - 	liquidation by coinglass 	            						    	   -> open long OR short
 ftt - 	math random and fix delay 										    	   -> open long OR short
 near - 	math random and random delay										       -> open long OR short
 
 doge - 	check BUY or SELL, wait, check BUY or SELL                                 -> open long OR short
-!btc  -  check STRONG BUY or STRONG SELL                                            -> open long OR short
+btc  -  check STRONG BUY or STRONG SELL                                            -> open long OR short
 
 xrp - 	check BUY or SELL, wait, check BUY or SELL                                 -> open REVERSE long OR REVERSE short
-!bnb - 	check STRONG BUY or STRONG SELL             						       -> open REVERSE long OR REVERSE short
+bnb - 	check STRONG BUY or STRONG SELL             						       -> open REVERSE long OR REVERSE short
 
 ada - 	check BUY or SELL, wait, check BUY or SELL                                 -> open long AND short
 gmt - 	check STRONG BUY or STRONG SELL 									       -> open long AND short
 
--TODO-
-20 BUSD pairs
-[BTC, ETH, SOL, XRP, ADA, BNB, DOGE, FTT, AVAX, NEAR, GMT, APE, GAL, FTM, DODO, ANC, GALA, TRX, 1000LUNC, LUNA2]
+TO BE 05.06.22
 BTC, ETH, SOL, XRP, ADA, BNB - coinglass liquidation
 DOGE, FTT, AVAX, NEAR, GMT, APE - tradingview signals
+
+-TODO-
 GAL, FTM, DODO, ANC, GALA, TRX, 1000LUNC, LUNA2 - math random and other strategies
 -------
 calculate liquidation automatically
