@@ -36,12 +36,12 @@ windows:
 - window_name: editor_and_gs
   layout: even-vertical
   shell_command_before:
-    - cd /root/binance_strategies
+    - cd /root/passivbot
   panes:
     - shell_command:
-        - python3 gs.py
+        - python3 /root/binance_strategies/gs.py
     - shell_command:
-        - python3 variables_editor.py
+        - python3 /root/binance_strategies/variables_editor.py
 - window_name: futuresboard
   layout: even-vertical
   shell_command_before:
