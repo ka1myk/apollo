@@ -1,33 +1,17 @@
-AS IS 04.06.22
-eth - 	liquidation by coinglass 	            						    	   -> open long OR short
-ftt - 	math random and fix delay 										    	   -> open long OR short
-near - 	math random and random delay										       -> open long OR short
-
-doge - 	check BUY or SELL, wait, check BUY or SELL                                 -> open long OR short
-btc  -  check STRONG BUY or STRONG SELL                                            -> open long OR short
-
-xrp - 	check BUY or SELL, wait, check BUY or SELL                                 -> open REVERSE long OR REVERSE short
-bnb - 	check STRONG BUY or STRONG SELL             						       -> open REVERSE long OR REVERSE short
-
-ada - 	check BUY or SELL, wait, check BUY or SELL                                 -> open long AND short
-gmt - 	check STRONG BUY or STRONG SELL 									       -> open long AND short
-
-TO BE 05.06.22
+AS IS 07.06.22
+-------
 BTC, ETH, SOL, XRP, ADA, BNB - coinglass liquidation
 FTM, GAl - random
 DOGE, FTT, AVAX, NEAR, APE, GMT - tradingview signals
 -------
-DOGE - 	check BUY or SELL, wait, check BUY or SELL                                 -> open long OR short
-FTT  -  check STRONG BUY or STRONG SELL                                            -> open long OR short
-
-AVAX - 	check BUY or SELL, wait, check BUY or SELL                                 -> open REVERSE long OR REVERSE short
-NEAR - 	check STRONG BUY or STRONG SELL             						       -> open REVERSE long OR REVERSE short
-
-APE - 	check BUY or SELL, wait, check BUY or SELL                                 -> open long AND short
-GMT - 	check STRONG BUY or STRONG SELL 									       -> open long AND short
-
+DOGE - 	check BUY or SELL, wait, check BUY or SELL      -> open long OR short
+FTT  -  check STRONG BUY or STRONG SELL                 -> open long OR short
+AVAX - 	check BUY or SELL, wait, check BUY or SELL      -> open REVERSE long OR REVERSE short
+NEAR - 	check STRONG BUY or STRONG SELL             	-> open REVERSE long OR REVERSE short
+APE - 	check BUY or SELL, wait, check BUY or SELL      -> open long AND short
+GMT - 	check STRONG BUY or STRONG SELL 			    -> open long AND short
 -TODO-
-GAL, FTM, DODO, ANC, GALA, TRX, 1000LUNC, LUNA2 - math random and other strategies
+DODO, ANC, GALA, TRX, 1000LUNC, LUNA2 - other strategies
 -------
 calculate liquidation automatically
 carousel of strategies and symbols
