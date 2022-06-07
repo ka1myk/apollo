@@ -1,7 +1,7 @@
 import math
 import json
+import random
 import time
-from random import random
 from secrets import randbelow
 from datetime import datetime
 from binance.client import Client
