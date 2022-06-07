@@ -56,16 +56,15 @@ while True:
                                         side='BUY',
                                         positionSide='LONG',
                                         type='MARKET')
-            print(timestamp, 'open long and wait', time_to_cool_down)
+            print(timestamp, symbol, 'open long and wait', time_to_cool_down)
         else:
             client.futures_create_order(symbol=symbol,
                                         quantity=quantity,
                                         side='SELL',
                                         positionSide='SHORT',
                                         type='MARKET')
-            print(timestamp, 'open short and wait', time_to_cool_down)
+            print(timestamp, symbol, 'open short and wait', time_to_cool_down)
         time.sleep(time_to_cool_down)
-
 
     except Exception as e:
         print(timestamp, "Function errored out!", e)

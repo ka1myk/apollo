@@ -14,7 +14,17 @@ gmt - 	check STRONG BUY or STRONG SELL 									       -> open long AND short
 
 TO BE 05.06.22
 BTC, ETH, SOL, XRP, ADA, BNB - coinglass liquidation
-DOGE, FTT, AVAX, NEAR, GMT, APE - tradingview signals
+FTM, GAl - random
+DOGE, FTT, AVAX, NEAR, APE, GMT - tradingview signals
+-------
+DOGE - 	check BUY or SELL, wait, check BUY or SELL                                 -> open long OR short
+FTT  -  check STRONG BUY or STRONG SELL                                            -> open long OR short
+
+AVAX - 	check BUY or SELL, wait, check BUY or SELL                                 -> open REVERSE long OR REVERSE short
+NEAR - 	check STRONG BUY or STRONG SELL             						       -> open REVERSE long OR REVERSE short
+
+APE - 	check BUY or SELL, wait, check BUY or SELL                                 -> open long AND short
+GMT - 	check STRONG BUY or STRONG SELL 									       -> open long AND short
 
 -TODO-
 GAL, FTM, DODO, ANC, GALA, TRX, 1000LUNC, LUNA2 - math random and other strategies

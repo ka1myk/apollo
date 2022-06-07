@@ -1,4 +1,6 @@
 {
+  "tradingview_open_long_signal": ["STRONG_BUY"],
+  "tradingview_open_short_signal": ["STRONG_SELL"],
   "leverage": 5,
   "multiplier": 1,
   "time_to_cool_down": 900,

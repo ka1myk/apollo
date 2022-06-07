@@ -63,7 +63,7 @@ while True:
                                         side='BUY',
                                         positionSide='LONG',
                                         type='MARKET')
-            print(timestamp, long_signal, 'open long and wait', time_to_cool_down)
+            print(timestamp, long_signal, symbol, 'open long and wait', time_to_cool_down)
             time.sleep(time_to_cool_down)
 
         short_signal = float(data['data'][90]['sellVolUsd'])
@@ -73,7 +73,7 @@ while True:
                                         side='SELL',
                                         positionSide='SHORT',
                                         type='MARKET')
-            print(timestamp, short_signal, 'open short and wait', time_to_cool_down)
+            print(timestamp, short_signal, symbol, 'open short and wait', time_to_cool_down)
             time.sleep(time_to_cool_down)
 
     except Exception as e:
