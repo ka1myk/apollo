@@ -59,7 +59,7 @@ while True:
         long_signal = float(data['data'][90]['buyVolUsd'])
         short_signal = float(data['data'][90]['sellVolUsd'])
 
-        print(timestamp, "long_signal", long_signal, "short_signal", short_signal)
+        print(timestamp, symbol, "liquidations_in_USD", liquidations_in_USD, "long_signal", long_signal, "short_signal", short_signal)
 
         if long_signal > liquidations_in_USD:
             client.futures_create_order(symbol=symbol,
