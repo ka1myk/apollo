@@ -1,17 +1,17 @@
 AS IS 07.06.22
 -------
-BTC, ETH, SOL, XRP, ADA, BNB - coinglass liquidation
-FTM, GAl - random
-DOGE, FTT, AVAX, NEAR, APE, GMT - tradingview signals
+BTC, ETH, SOL, XRP, ADA, BNB        - coinglass liquidation
+DOGE, FTT, AVAX, NEAR, APE, GMT     - tradingview signals
+FTM, GAl                            - random
 -------
 DOGE - 	check BUY or SELL, wait, check BUY or SELL      -> open long OR short
 FTT  -  check STRONG BUY or STRONG SELL                 -> open long OR short
 AVAX - 	check BUY or SELL, wait, check BUY or SELL      -> open REVERSE long OR REVERSE short
 NEAR - 	check STRONG BUY or STRONG SELL             	-> open REVERSE long OR REVERSE short
-APE - 	check BUY or SELL, wait, check BUY or SELL      -> open long AND short
-GMT - 	check STRONG BUY or STRONG SELL 			    -> open long AND short
--TODO-
-DODO, ANC, GALA, TRX, 1000LUNC, LUNA2 - other strategies
+APE  - 	check BUY or SELL, wait, check BUY or SELL      -> open long AND short
+GMT  - 	check STRONG BUY or STRONG SELL 			    -> open long AND short
+-------
+DODO, ANC, GALA, TRX, 1000LUNC, LUNA2 - to do other strategies
 -------
 calculate liquidation automatically
 carousel of strategies and symbols
@@ -31,7 +31,7 @@ https://sammchardy.github.io/binance-order-filters/
 -------
 Guide to deploy:
 https://www.futuresboard.xyz/guides.html
---------
+-------
 Commands:
 apt-get update && 
 apt-get upgrade && 
