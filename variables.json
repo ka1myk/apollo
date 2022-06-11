@@ -11,6 +11,6 @@
   "xrp_coinglass_liquidation_endpoint" : "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=XRP&timeType=9",
   "ada_coinglass_liquidation_endpoint" : "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ADA&timeType=9",
   "bnb_coinglass_liquidation_endpoint" : "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=BNB&timeType=9",
-  "tradingview_open_long_signal": ["STRONG_BUY"],
+  "tradingview_open_long_signal": ["STRONG_BUY", "BUY"],
   "tradingview_open_short_signal": ["STRONG_SELL"]
 }
