@@ -23,6 +23,9 @@ while True:
             data = f.read()
         d = json.loads(data)
 
+        print(timestamp, "withdrawAvailable", withdrawAvailable, "balance", balance, "time_to_cool_down",
+              d['time_to_cool_down'], 'multiplier', d['multiplier'], "ratio", ratio)
+
         if (1 > ratio > 0.95) and d['time_to_cool_down'] != 60 and d['multiplier'] != 1:
             d['time_to_cool_down'] = 60
             d['multiplier'] = 1
