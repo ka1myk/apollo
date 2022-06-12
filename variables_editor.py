@@ -20,6 +20,7 @@ while True:
         multiplier = d['multiplier']
         tradingview_open_long_signal = d['tradingview_open_long_signal']
         tradingview_open_short_signal = d['tradingview_open_short_signal']
+        qty_coins_liquidation = d['qty_coins_liquidation']
 
         withdrawAvailable = round(float(client.futures_account_balance()[9]["withdrawAvailable"]), 2)
         balance = round(float(client.futures_account_balance()[9]["balance"]), 2)
@@ -32,42 +33,49 @@ while True:
         if 1 > ratio > 0.98:
             d['multiplier'] = 1
             d['time_to_cool_down'] = 30
+            d['qty_coins_liquidation'] = 350
             d['tradingview_open_long_signal'] = ["STRONG_BUY", "BUY"]
             d['tradingview_open_short_signal'] = ["STRONG_SELL", "SELL"]
 
         if 0.97 > ratio > 0.95:
             d['multiplier'] = 1
             d['time_to_cool_down'] = 60
+            d['qty_coins_liquidation'] = 400
             d['tradingview_open_long_signal'] = ["STRONG_BUY", "BUY"]
             d['tradingview_open_short_signal'] = ["STRONG_SELL", "SELL"]
 
         if 0.94 > ratio > 0.90:
             d['multiplier'] = 1
             d['time_to_cool_down'] = 300
+            d['qty_coins_liquidation'] = 450
             d['tradingview_open_long_signal'] = ["STRONG_BUY", "BUY"]
             d['tradingview_open_short_signal'] = ["STRONG_SELL", "SELL"]
 
         if 0.89 > ratio > 0.80:
             d['multiplier'] = 1
             d['time_to_cool_down'] = 600
+            d['qty_coins_liquidation'] = 500
             d['tradingview_open_long_signal'] = ["STRONG_BUY"]
             d['tradingview_open_short_signal'] = ["STRONG_SELL"]
 
         if 0.79 > ratio > 0.70:
             d['multiplier'] = 1
             d['time_to_cool_down'] = 3000
+            d['qty_coins_liquidation'] = 550
             d['tradingview_open_long_signal'] = ["STRONG_BUY"]
             d['tradingview_open_short_signal'] = ["STRONG_SELL"]
 
         if 0.69 > ratio > 0.50:
             d['multiplier'] = 1
             d['time_to_cool_down'] = 6000
+            d['qty_coins_liquidation'] = 600
             d['tradingview_open_long_signal'] = ["STRONG_BUY"]
             d['tradingview_open_short_signal'] = ["STRONG_SELL"]
 
         if 0.49 > ratio:
             d['multiplier'] = 1
             d['time_to_cool_down'] = 30000
+            d['qty_coins_liquidation'] = 650
             d['tradingview_open_long_signal'] = ["STRONG_BUY"]
             d['tradingview_open_short_signal'] = ["STRONG_SELL"]
 
