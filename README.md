@@ -1,5 +1,3 @@
-AS IS 07.06.22
--------
 BTC, ETH, SOL, XRP, ADA, BNB        - coinglass liquidation
 DOGE, FTT, AVAX, NEAR, APE, GMT     - tradingview signals
 FTM, GAl                            - random
@@ -11,9 +9,8 @@ NEAR - 	check STRONG BUY or STRONG SELL             	-> open REVERSE long OR REV
 APE  - 	check BUY or SELL, wait, check BUY or SELL      -> open long AND short
 GMT  - 	check STRONG BUY or STRONG SELL 			    -> open long AND short
 -------
-DODO, ANC, GALA, TRX, 1000LUNC, LUNA2 - to do other strategies
+DODO, ANC, GALA, TRX, 1000LUNC, LUNA2 - TBD
 -------
-calculate liquidation automatically
 carousel of strategies and symbols
 arbitrage
 taker Buy/Sell Volume
