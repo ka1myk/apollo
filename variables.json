@@ -1,16 +1,20 @@
 {
   "leverage": 5,
   "multiplier": 1,
-  "time_to_cool_down": 900,
+  "time_to_cool_down": 30000,
   "exception_cool_down": 10,
+  "qty_coins_liquidation": 330,
   "time_to_wait_one_more_check": 60,
-  "liquidations_in_USD": 300000,
-  "eth_coinglass_liquidation_endpoint" : "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=9",
-  "btc_coinglass_liquidation_endpoint" : "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=BTC&timeType=9",
-  "sol_coinglass_liquidation_endpoint" : "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=SOL&timeType=9",
-  "xrp_coinglass_liquidation_endpoint" : "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=XRP&timeType=9",
-  "ada_coinglass_liquidation_endpoint" : "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ADA&timeType=9",
-  "bnb_coinglass_liquidation_endpoint" : "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=BNB&timeType=9",
-  "tradingview_open_long_signal": ["STRONG_BUY", "BUY"],
-  "tradingview_open_short_signal": ["STRONG_SELL", "SELL"]
+  "eth_coinglass_liquidation_endpoint": "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=9",
+  "btc_coinglass_liquidation_endpoint": "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=BTC&timeType=9",
+  "sol_coinglass_liquidation_endpoint": "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=SOL&timeType=9",
+  "xrp_coinglass_liquidation_endpoint": "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=XRP&timeType=9",
+  "ada_coinglass_liquidation_endpoint": "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ADA&timeType=9",
+  "bnb_coinglass_liquidation_endpoint": "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=BNB&timeType=9",
+  "tradingview_open_long_signal": [
+    "STRONG_BUY"
+  ],
+  "tradingview_open_short_signal": [
+    "STRONG_SELL"
+  ]
 }

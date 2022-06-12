@@ -43,25 +43,28 @@ while True:
         with open('/root/binance_strategies/variables.json') as v:
             variables = json.load(v)
 
+        btc_coinglass_liquidation_endpoint = variables['btc_coinglass_liquidation_endpoint']
+
         exception_cool_down = variables['exception_cool_down']
-        liquidations_in_USD = variables['liquidations_in_USD']
+        qty_coins_liquidation = variables['qty_coins_liquidation']
         time_to_cool_down = variables['time_to_cool_down']
         multiplier = variables['multiplier']
         quantity = round(minNotional * multiplier, quantityPrecision)
-
-        btc_coinglass_liquidation_endpoint = variables['btc_coinglass_liquidation_endpoint']
 
         headers = {'coinglassSecret': creds['coinglass']['coinglassSecret']}
         url = requests.get(btc_coinglass_liquidation_endpoint, headers=headers)
         text = url.text
         data = json.loads(text)
 
-        long_signal = float(data['data'][90]['buyVolUsd'])
-        short_signal = float(data['data'][90]['sellVolUsd'])
+        long_signal = float(data['data'][90]['buyVolUsd']) / float(
+            client.futures_mark_price(symbol=symbol)["markPrice"])
+        short_signal = float(data['data'][90]['sellVolUsd']) / float(
+            client.futures_mark_price(symbol=symbol)["markPrice"])
 
-        print(timestamp, symbol, "liquidations_in_USD", liquidations_in_USD, "long_signal", long_signal, "short_signal", short_signal)
+        print(timestamp, symbol, "qty_coins_liquidation", qty_coins_liquidation, "long_signal", long_signal,
+              "short_signal", short_signal)
 
-        if long_signal > liquidations_in_USD:
+        if long_signal > qty_coins_liquidation:
             client.futures_create_order(symbol=symbol,
                                         quantity=quantity,
                                         side='BUY',
@@ -70,8 +73,7 @@ while True:
             print(timestamp, long_signal, symbol, 'open long and wait', time_to_cool_down)
             time.sleep(time_to_cool_down)
 
-
-        if short_signal > liquidations_in_USD:
+        if short_signal > qty_coins_liquidation:
             client.futures_create_order(symbol=symbol,
                                         quantity=quantity,
                                         side='SELL',
