@@ -1,10 +1,10 @@
 {
-    "binance_01" : {
-        "exchange": "binance",
-        "key": "",
-        "secret": ""
-    },
-    "coinglass": {
-        "coinglassSecret": ""
-    }
+  "binance_01": {
+    "exchange": "binance",
+    "key": "",
+    "secret": ""
+  },
+  "coinglass": {
+    "coinglassSecret": ""
+  }
 }

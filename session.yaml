@@ -1,51 +1,51 @@
 session_name: profit_only
 windows:
-- window_name: strategies
-  layout: even-vertical
-  shell_command_before:
-    - cd /root/binance_strategies
-  panes:
-    - shell_command:
-        - python3 coinglass/ada.py
-    - shell_command:
-        - python3 coinglass/bnb.py
-    - shell_command:
-        - python3 coinglass/btc.py
-    - shell_command:
-        - python3 coinglass/eth.py
-    - shell_command:
-        - python3 coinglass/sol.py
-    - shell_command:
-        - python3 coinglass/xrp.py
-    - shell_command:
-        - python3 random/ftm.py
-    - shell_command:
-        - python3 random/gal.py
-    - shell_command:
-        - python3 tradingview/ape.py
-    - shell_command:
-        - python3 tradingview/avax.py
-    - shell_command:
-        - python3 tradingview/doge.py
-    - shell_command:
-        - python3 tradingview/ftt.py
-    - shell_command:
-        - python3 tradingview/gmt.py
-    - shell_command:
-        - python3 tradingview/near.py
-- window_name: editor_and_gs
-  layout: even-vertical
-  shell_command_before:
-    - cd /root/passivbot
-  panes:
-    - shell_command:
-        - python3 /root/binance_strategies/gs.py
-    - shell_command:
-        - python3 /root/binance_strategies/variables_editor.py
-- window_name: futuresboard
-  layout: even-vertical
-  shell_command_before:
-    - cd /root/futuresboard
-  panes:
-    - shell_command:
-        - futuresboard
+  - window_name: strategies
+    layout: even-vertical
+    shell_command_before:
+      - cd /root/binance_strategies
+    panes:
+      - shell_command:
+          - python3 coinglass/ada.py
+      - shell_command:
+          - python3 coinglass/bnb.py
+      - shell_command:
+          - python3 coinglass/btc.py
+      - shell_command:
+          - python3 coinglass/eth.py
+      - shell_command:
+          - python3 coinglass/sol.py
+      - shell_command:
+          - python3 coinglass/xrp.py
+      - shell_command:
+          - python3 random/ftm.py
+      - shell_command:
+          - python3 random/gal.py
+      - shell_command:
+          - python3 tradingview/ape.py
+      - shell_command:
+          - python3 tradingview/avax.py
+      - shell_command:
+          - python3 tradingview/doge.py
+      - shell_command:
+          - python3 tradingview/ftt.py
+      - shell_command:
+          - python3 tradingview/gmt.py
+      - shell_command:
+          - python3 tradingview/near.py
+  - window_name: editor_and_gs
+    layout: even-vertical
+    shell_command_before:
+      - cd /root/passivbot
+    panes:
+      - shell_command:
+          - python3 /root/binance_strategies/gs.py
+      - shell_command:
+          - python3 /root/binance_strategies/variables_editor.py
+  - window_name: futuresboard
+    layout: even-vertical
+    shell_command_before:
+      - cd /root/futuresboard
+    panes:
+      - shell_command:
+          - futuresboard
