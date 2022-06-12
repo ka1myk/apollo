@@ -65,17 +65,10 @@ while True:
             d['tradingview_open_long_signal'] = ["STRONG_BUY"]
             d['tradingview_open_short_signal'] = ["STRONG_SELL"]
 
-        if 0.69 > ratio > 0.50:
+        if 0.69 > ratio:
             d['multiplier'] = 1
             d['time_to_cool_down'] = 6000
             d['qty_coins_liquidation'] = 600
-            d['tradingview_open_long_signal'] = ["STRONG_BUY"]
-            d['tradingview_open_short_signal'] = ["STRONG_SELL"]
-
-        if 0.49 > ratio:
-            d['multiplier'] = 1
-            d['time_to_cool_down'] = 30000
-            d['qty_coins_liquidation'] = 650
             d['tradingview_open_long_signal'] = ["STRONG_BUY"]
             d['tradingview_open_short_signal'] = ["STRONG_SELL"]
 
