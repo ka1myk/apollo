@@ -1,9 +1,9 @@
 {
   "leverage": 5,
   "multiplier": 1,
-  "time_to_cool_down": 30000,
+  "time_to_cool_down": 6000,
   "exception_cool_down": 10,
-  "qty_coins_liquidation": 330,
+  "qty_coins_liquidation": 450,
   "time_to_wait_one_more_check": 60,
   "eth_coinglass_liquidation_endpoint": "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=9",
   "btc_coinglass_liquidation_endpoint": "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=BTC&timeType=9",
