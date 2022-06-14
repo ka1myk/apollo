@@ -22,12 +22,17 @@ while True:
         tradingview_open_short_signal = d['tradingview_open_short_signal']
         qty_coins_liquidation = d['qty_coins_liquidation']
 
-        withdrawAvailable = round(float(client.futures_account_balance()[9]["withdrawAvailable"]), 2)
-        balance = round(float(client.futures_account_balance()[9]["balance"]), 2)
-        ratio = round(float(withdrawAvailable / balance), 2)
+        totalMarginBalance = round(float(client.futures_account()['totalMarginBalance']), 3)
+        totalWalletBalance = round(float(client.futures_account()['totalWalletBalance']), 3)
 
-        print(timestamp, "withdrawAvailable", withdrawAvailable, "balance", balance, "time_to_cool_down",
-              d['time_to_cool_down'], 'multiplier', d['multiplier'], "ratio", ratio, tradingview_open_long_signal,
+        ratio = round(float(totalMarginBalance / totalWalletBalance), 3)
+
+        print(timestamp, "totalMarginBalance", totalMarginBalance,
+              "totalWalletBalance", totalWalletBalance,
+              "time_to_cool_down", d['time_to_cool_down'],
+              'multiplier', d['multiplier'],
+              "ratio", ratio,
+              tradingview_open_long_signal,
               tradingview_open_short_signal)
 
         if 1 > ratio > 0.98:
