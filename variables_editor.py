@@ -16,11 +16,11 @@ while True:
 
         d = json.loads(data)
 
-        exception_cool_down = d['exception_cool_down']
         multiplier = d['multiplier']
+        exception_cool_down = d['exception_cool_down']
+        qty_coins_liquidation = d['qty_coins_liquidation']
         tradingview_open_long_signal = d['tradingview_open_long_signal']
         tradingview_open_short_signal = d['tradingview_open_short_signal']
-        qty_coins_liquidation = d['qty_coins_liquidation']
 
         totalMarginBalance = round(float(client.futures_account()['totalMarginBalance']), 3)
         totalWalletBalance = round(float(client.futures_account()['totalWalletBalance']), 3)
