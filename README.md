@@ -55,5 +55,5 @@ crontab -e
 --------
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
-@reboot sleep 10; /bin/bash -c /root/binance_strategies/start.sh
+@reboot sleep 90; /bin/bash -c /root/binance_strategies/start.sh
 0 */12 * * * /bin/bash -c /root/binance_strategies/restart.sh
