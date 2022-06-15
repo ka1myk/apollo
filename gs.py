@@ -4,25 +4,25 @@ import subprocess
 
 def coinglass_gs():
     subprocess.Popen(["python3", "passivbot.py", "binance_01", "ADABUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
-    subprocess.Popen(["python3", "passivbot.py", "binance_01","BNBBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
-    subprocess.Popen(["python3", "passivbot.py", "binance_01","BTCBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
-    subprocess.Popen(["python3", "passivbot.py", "binance_01","ETHBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
-    subprocess.Popen(["python3", "passivbot.py", "binance_01","SOLBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
-    subprocess.Popen(["python3", "passivbot.py", "binance_01","XRPBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
+    subprocess.Popen(["python3", "passivbot.py", "binance_01", "BNBBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
+    subprocess.Popen(["python3", "passivbot.py", "binance_01", "BTCBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
+    subprocess.Popen(["python3", "passivbot.py", "binance_01", "ETHBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
+    subprocess.Popen(["python3", "passivbot.py", "binance_01", "SOLBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
+    subprocess.Popen(["python3", "passivbot.py", "binance_01", "XRPBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
 
 
 def random_gs():
-    subprocess.Popen(["python3", "passivbot.py", "binance_01","FTMBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
-    subprocess.Popen(["python3", "passivbot.py", "binance_01","GALBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
+    subprocess.Popen(["python3", "passivbot.py", "binance_01", "FTMBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
+    subprocess.Popen(["python3", "passivbot.py", "binance_01", "GALBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
 
 
 def tradingview_gs():
-    subprocess.Popen(["python3", "passivbot.py", "binance_01","APEBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
-    subprocess.Popen(["python3", "passivbot.py", "binance_01","AVAXBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
-    subprocess.Popen(["python3", "passivbot.py", "binance_01","DOGEBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
-    subprocess.Popen(["python3", "passivbot.py", "binance_01","FTTBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
-    subprocess.Popen(["python3", "passivbot.py", "binance_01","GMTBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
-    subprocess.Popen(["python3", "passivbot.py", "binance_01","NEARBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
+    subprocess.Popen(["python3", "passivbot.py", "binance_01", "APEBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
+    subprocess.Popen(["python3", "passivbot.py", "binance_01", "AVAXBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
+    subprocess.Popen(["python3", "passivbot.py", "binance_01", "DOGEBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
+    subprocess.Popen(["python3", "passivbot.py", "binance_01", "FTTBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
+    subprocess.Popen(["python3", "passivbot.py", "binance_01", "GMTBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
+    subprocess.Popen(["python3", "passivbot.py", "binance_01", "NEARBUSD", "/root/binance_strategies/config.json", "-lm", "gs", "-sm", "gs"])
 
 
 if __name__ == '__main__':
