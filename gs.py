@@ -2,7 +2,7 @@ import multiprocessing
 import subprocess
 
 
-def coinglass_gs():
+async def coinglass_gs():
     subprocess.call(
         [
             "python3",
@@ -94,7 +94,7 @@ def coinglass_gs():
     )
 
 
-def random_gs():
+async def random_gs():
     subprocess.call(
         [
             "python3",
@@ -126,7 +126,7 @@ def random_gs():
     )
 
 
-def tradingview_gs():
+async def tradingview_gs():
     subprocess.call(
         [
             "python3",

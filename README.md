@@ -49,7 +49,8 @@ pip3 install -r requirements_liveonly.txt &&
 mv api-keys.example.json api-keys.json &&
 cd &&
 git clone https://github.com/ka1myk/binance_strategies.git &&
-cd binance_strategies && pip3 install -r requirements.txt &&
+cd binance_strategies && 
+pip3 install -r requirements.txt &&
 git pull https://github.com/ka1myk/binance_strategies.git
 --------
 crontab -e
