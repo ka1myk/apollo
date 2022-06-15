@@ -44,7 +44,7 @@ apt-get install systemd-timesyncd &&
 apt-get install python3-pip && 
 cd && 
 git clone https://github.com/enarjord/passivbot.git && 
-cd passivbot && pip3 install -r requirements_liveonly.txt && 
+cd passivbot &&
 pip3 install -r requirements_liveonly.txt &&
 mv api-keys.example.json api-keys.json &&
 cd &&
