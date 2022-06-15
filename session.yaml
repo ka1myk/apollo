@@ -59,7 +59,7 @@ windows:
       - shell_command:
           - python3 passivbot.py binance_01 AVAXBUSD /root/binance_strategies/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 DOGEUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 DOGEBUSD /root/binance_strategies/config.json -lm gs -sm gs
       - shell_command:
           - python3 passivbot.py binance_01 FTTBUSD /root/binance_strategies/config.json -lm gs -sm gs
       - shell_command:
