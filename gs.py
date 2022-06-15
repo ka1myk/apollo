@@ -3,7 +3,7 @@ import subprocess
 
 
 def coinglass_gs():
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
@@ -18,7 +18,7 @@ def coinglass_gs():
         ]
     )
 
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
@@ -33,7 +33,7 @@ def coinglass_gs():
         ]
     )
 
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
@@ -48,7 +48,7 @@ def coinglass_gs():
         ]
     )
 
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
@@ -63,7 +63,7 @@ def coinglass_gs():
         ]
     )
 
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
@@ -78,7 +78,7 @@ def coinglass_gs():
         ]
     )
 
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
@@ -95,7 +95,7 @@ def coinglass_gs():
 
 
 def random_gs():
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
@@ -110,7 +110,7 @@ def random_gs():
         ]
     )
 
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
@@ -127,7 +127,7 @@ def random_gs():
 
 
 def tradingview_gs():
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
@@ -142,7 +142,7 @@ def tradingview_gs():
         ]
     )
 
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
@@ -157,7 +157,7 @@ def tradingview_gs():
         ]
     )
 
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
@@ -172,7 +172,7 @@ def tradingview_gs():
         ]
     )
 
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
@@ -187,7 +187,7 @@ def tradingview_gs():
         ]
     )
 
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
@@ -202,7 +202,7 @@ def tradingview_gs():
         ]
     )
 
-    subprocess.Popen(
+    subprocess.call(
         [
             "python3",
             "passivbot.py",
