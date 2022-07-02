@@ -24,6 +24,10 @@ windows:
       - shell_command:
           - python3 random/luna2.py
       - shell_command:
+          - python3 random/link.py
+      - shell_command:
+          - python3 random/waves.py
+      - shell_command:
           - python3 tradingview/ape.py
       - shell_command:
           - python3 tradingview/avax.py
@@ -58,6 +62,10 @@ windows:
           - python3 passivbot.py binance_01 1000LUNCBUSD /root/binance_strategies/config.json -lm gs -sm gs
       - shell_command:
           - python3 passivbot.py binance_01 LUNA2BUSD /root/binance_strategies/config.json -lm gs -sm gs
+      - shell_command:
+          - python3 passivbot.py binance_01 LINKBUSD /root/binance_strategies/config.json -lm gs -sm gs
+      - shell_command:
+          - python3 passivbot.py binance_01 WAVESBUSD /root/binance_strategies/config.json -lm gs -sm gs
       - shell_command:
           - python3 passivbot.py binance_01 APEBUSD /root/binance_strategies/config.json -lm gs -sm gs
       - shell_command:
