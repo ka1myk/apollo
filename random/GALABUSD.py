@@ -1,6 +1,5 @@
 import math
 import json
-import random
 import time
 from secrets import randbelow
 from datetime import datetime
@@ -10,7 +9,7 @@ with open('/root/binance_strategies/api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
-symbol = 'GALBUSD'
+symbol = 'GALABUSD'
 info = client.futures_exchange_info()
 
 
@@ -65,8 +64,7 @@ while True:
                                         positionSide='SHORT',
                                         type='MARKET')
             print(timestamp, symbol, 'open short and wait', time_to_cool_down)
-
-        time.sleep(time_to_cool_down * random.choice(range(1, 3)))
+        time.sleep(time_to_cool_down)
 
     except Exception as e:
         print(timestamp, "Function errored out!", e)

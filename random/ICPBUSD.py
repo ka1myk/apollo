@@ -1,7 +1,7 @@
 import math
 import json
 import time
-import requests
+from secrets import randbelow
 from datetime import datetime
 from binance.client import Client
 
@@ -9,7 +9,7 @@ with open('/root/binance_strategies/api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
-symbol = 'SOLBUSD'
+symbol = 'ICPBUSD'
 info = client.futures_exchange_info()
 
 
@@ -37,50 +37,34 @@ minNotional = round_up(float(get_notional(symbol)) / float(client.futures_mark_p
                        get_precision(symbol))
 
 while True:
+
     try:
         timestamp = datetime.now().strftime("%d.%m.%y %H:%M:%S")
 
         with open('/root/binance_strategies/variables.json') as v:
             variables = json.load(v)
 
-        sol_coinglass_liquidation_endpoint = variables['sol_coinglass_liquidation_endpoint']
-
         exception_cool_down = variables['exception_cool_down']
-        qty_coins_liquidation = variables['qty_coins_liquidation']
         time_to_cool_down = variables['time_to_cool_down']
         multiplier = variables['multiplier']
+
         quantity = round(minNotional * multiplier, quantityPrecision)
 
-        headers = {'coinglassSecret': creds['coinglass']['coinglassSecret']}
-        url = requests.get(sol_coinglass_liquidation_endpoint, headers=headers)
-        text = url.text
-        data = json.loads(text)
-
-        long_signal = float(data['data'][90]['buyVolUsd']) / float(
-            client.futures_mark_price(symbol=symbol)["markPrice"])
-        short_signal = float(data['data'][90]['sellVolUsd']) / float(
-            client.futures_mark_price(symbol=symbol)["markPrice"])
-
-        print(timestamp, symbol, "qty_coins_liquidation", qty_coins_liquidation, "long_signal", long_signal,
-              "short_signal", short_signal)
-
-        if long_signal > qty_coins_liquidation:
+        if randbelow(2) == 1:
             client.futures_create_order(symbol=symbol,
                                         quantity=quantity,
                                         side='BUY',
                                         positionSide='LONG',
                                         type='MARKET')
-            print(timestamp, long_signal, symbol, 'open long and wait', time_to_cool_down)
-            time.sleep(time_to_cool_down)
-
-        if short_signal > qty_coins_liquidation:
+            print(timestamp, symbol, 'open long and wait', time_to_cool_down)
+        else:
             client.futures_create_order(symbol=symbol,
                                         quantity=quantity,
                                         side='SELL',
                                         positionSide='SHORT',
                                         type='MARKET')
-            print(timestamp, short_signal, symbol, 'open short and wait', time_to_cool_down)
-            time.sleep(time_to_cool_down)
+            print(timestamp, symbol, 'open short and wait', time_to_cool_down)
+        time.sleep(time_to_cool_down)
 
     except Exception as e:
         print(timestamp, "Function errored out!", e)
