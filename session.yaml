@@ -17,39 +17,39 @@ windows:
           - python3 random/AVAXBUSD.py
       - shell_command:
           - python3 random/BNBBUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/DODOBUSD.py
       - shell_command:
           - python3 random/DOGEBUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/DOTBUSD.py
       - shell_command:
           - python3 random/ETHBUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/FTMBUSD.py
       - shell_command:
           - python3 random/FTTBUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/GALABUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/GALBUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/GMTBUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/ICPBUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/LINKBUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/LUNA2BUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/NEARBUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/TLMBUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/TRXBUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/WAVESBUSD.py
-	  - shell_command:
+      - shell_command:
           - python3 random/XRPBUSD.py
   - window_name: editor_and_gs
     layout: even-vertical
