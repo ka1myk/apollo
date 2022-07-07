@@ -8,48 +8,70 @@ windows:
       - shell_command:
           - python3 random/1000LUNCBUSD.py
       - shell_command:
+          - sleep 150s
           - python3 random/ADABUSD.py
       - shell_command:
+          - sleep 300s
           - python3 random/ANCBUSD.py
       - shell_command:
+          - sleep 450s
           - python3 random/APEBUSD.py
       - shell_command:
+          - sleep 600s
           - python3 random/AVAXBUSD.py
       - shell_command:
+          - sleep 750s
           - python3 random/BNBBUSD.py
       - shell_command:
+          - sleep 900s
           - python3 random/DODOBUSD.py
       - shell_command:
+          - sleep 1050s
           - python3 random/DOGEBUSD.py
       - shell_command:
+          - sleep 1200s
           - python3 random/DOTBUSD.py
       - shell_command:
+          - sleep 1350s
           - python3 random/ETHBUSD.py
       - shell_command:
+          - sleep 1500s
           - python3 random/FTMBUSD.py
       - shell_command:
+          - sleep 1650s
           - python3 random/FTTBUSD.py
       - shell_command:
+          - sleep 1800s
           - python3 random/GALABUSD.py
       - shell_command:
+          - sleep 1950s
           - python3 random/GALBUSD.py
       - shell_command:
+          - sleep 2100s
           - python3 random/GMTBUSD.py
       - shell_command:
+          - sleep 2250s
           - python3 random/ICPBUSD.py
       - shell_command:
+          - sleep 2400s
           - python3 random/LINKBUSD.py
       - shell_command:
+          - sleep 2550s
           - python3 random/LUNA2BUSD.py
       - shell_command:
+          - sleep 2700s
           - python3 random/NEARBUSD.py
       - shell_command:
+          - sleep 2850s
           - python3 random/TLMBUSD.py
       - shell_command:
+          - sleep 3000s
           - python3 random/TRXBUSD.py
       - shell_command:
+          - sleep 3150s
           - python3 random/WAVESBUSD.py
       - shell_command:
+          - sleep 3300s
           - python3 random/XRPBUSD.py
   - window_name: editor_and_gs
     layout: even-vertical
