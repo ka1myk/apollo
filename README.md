@@ -1,24 +1,3 @@
-BTC, ETH, SOL, XRP, ADA, BNB        - coinglass liquidation
-DOGE, FTT, AVAX, NEAR, APE, GMT     - tradingview signals
-FTM, GAl                            - random
--------
-DOGE - 	check BUY or SELL, wait, check BUY or SELL      -> open long OR short
-FTT  -  check STRONG BUY or STRONG SELL                 -> open long OR short
-AVAX - 	check BUY or SELL, wait, check BUY or SELL      -> open REVERSE long OR REVERSE short
-NEAR - 	check STRONG BUY or STRONG SELL             	-> open REVERSE long OR REVERSE short
-APE  - 	check BUY or SELL, wait, check BUY or SELL      -> open long AND short
-GMT  - 	check STRONG BUY or STRONG SELL 			    -> open long AND short
--------
-DODO, ANC, GALA, TRX, 1000LUNC, LUNA2 - TBD
--------
-carousel of strategies and symbols
-arbitrage
-taker Buy/Sell Volume
-change leverage dynamically
-trailing stop profit
-change min_markup dynamically
-open (MARKET) and close orders (GTX) in batch with get position and profit percent from variables.json
--------
 https://docs.glassnode.com/api/transactions#percent-volume-in-profit
 https://coinglass.github.io/API-Reference/#exchange-open-interest
 https://alternative.me/crypto/
@@ -58,4 +37,4 @@ crontab -e
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
 @reboot sleep 90; /bin/bash -c /root/binance_strategies/start.sh
-0 */12 * * * /bin/bash -c /root/binance_strategies/restart.sh
+0 0 * * * /bin/bash -c /root/binance_strategies/restart.sh
