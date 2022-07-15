@@ -30,47 +30,36 @@ while True:
               "ratio", ratio)
 
         if 1 > ratio > 0.98:
-            d['multiplier'] = 1
             d['time_to_cool_down'] = 60
 
         if 0.97 > ratio > 0.95:
-            d['multiplier'] = 1.1
             d['time_to_cool_down'] = 180
 
         if 0.94 > ratio > 0.90:
-            d['multiplier'] = 1.2
             d['time_to_cool_down'] = 300
 
         if 0.89 > ratio > 0.80:
-            d['multiplier'] = 1.3
             d['time_to_cool_down'] = 900
 
         if 0.79 > ratio > 0.70:
-            d['multiplier'] = 1.4
             d['time_to_cool_down'] = 1800
 
         if 0.69 > ratio > 0.60:
-            d['multiplier'] = 1.5
             d['time_to_cool_down'] = 3600
 
         if 0.59 > ratio > 0.50:
-            d['multiplier'] = 1.6
             d['time_to_cool_down'] = 7200
 
         if 0.49 > ratio > 0.40:
-            d['multiplier'] = 1.7
             d['time_to_cool_down'] = 14400
 
         if 0.39 > ratio > 0.30:
-            d['multiplier'] = 1.8
             d['time_to_cool_down'] = 21600
 
         if 0.29 > ratio > 0.20:
-            d['multiplier'] = 1.9
             d['time_to_cool_down'] = 28800
 
         if 0.19 > ratio:
-            d['multiplier'] = 2
             d['time_to_cool_down'] = 57600
 
         with open('/root/binance_strategies/variables.json', 'w') as f:
