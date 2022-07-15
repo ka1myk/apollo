@@ -5,7 +5,7 @@ from secrets import randbelow
 from datetime import datetime
 from binance.client import Client
 
-with open('/root/binance_strategies/api-keys.json') as p:
+with open('/root/apollo/api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
@@ -41,7 +41,7 @@ while True:
     try:
         timestamp = datetime.now().strftime("%d.%m.%y %H:%M:%S")
 
-        with open('/root/binance_strategies/variables.json') as v:
+        with open('/root/apollo/variables.json') as v:
             variables = json.load(v)
 
         exception_cool_down = variables['exception_cool_down']

@@ -3,7 +3,7 @@ windows:
   - window_name: strategies
     layout: even-vertical
     shell_command_before:
-      - cd /root/binance_strategies
+      - cd /root/apollo
     panes:
       - shell_command:
           - python3 random/1000LUNCBUSD.py
@@ -79,53 +79,53 @@ windows:
       - cd /root/passivbot
     panes:
       - shell_command:
-          - python3 /root/binance_strategies/variables_editor.py
+          - python3 /root/apollo/variables_editor.py
       - shell_command:
-          - python3 passivbot.py binance_01 1000LUNCBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 1000LUNCBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 ADABUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 ADABUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 ANCBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 ANCBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 APEBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 APEBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 AVAXBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 AVAXBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 BNBBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 BNBBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 DODOBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 DODOBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 DOGEBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 DOGEBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 DOTBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 DOTBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 ETHBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 ETHBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 FTMBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 FTMBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 FTTBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 FTTBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 GALABUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 GALABUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 GALBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 GALBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 GMTBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 GMTBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 ICPBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 ICPBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 LINKBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 LINKBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 LUNA2BUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 LUNA2BUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 NEARBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 NEARBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 TLMBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 TLMBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 TRXBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 TRXBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 WAVESBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 WAVESBUSD /root/apollo/config.json -lm gs -sm gs
       - shell_command:
-          - python3 passivbot.py binance_01 XRPBUSD /root/binance_strategies/config.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 XRPBUSD /root/apollo/config.json -lm gs -sm gs
   - window_name: futuresboard
     layout: even-vertical
     shell_command_before:

@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 from binance.client import Client
 
-with open('/root/binance_strategies/api-keys.json') as p:
+with open('/root/apollo/api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
@@ -11,7 +11,7 @@ while True:
     try:
         timestamp = datetime.now().strftime("%d.%m.%y %H:%M:%S")
 
-        with open('/root/binance_strategies/variables.json', 'r') as f:
+        with open('/root/apollo/variables.json', 'r') as f:
             data = f.read()
 
         d = json.loads(data)
@@ -62,7 +62,7 @@ while True:
         if 0.19 > ratio:
             d['time_to_cool_down'] = 57600
 
-        with open('/root/binance_strategies/variables.json', 'w') as f:
+        with open('/root/apollo/variables.json', 'w') as f:
             json.dump(d, f)
 
     except Exception as e:

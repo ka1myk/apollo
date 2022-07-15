@@ -27,14 +27,14 @@ cd passivbot &&
 pip3 install -r requirements_liveonly.txt &&
 mv api-keys.example.json api-keys.json &&
 cd &&
-git clone https://github.com/ka1myk/binance_strategies.git &&
+git clone https://github.com/ka1myk/apollo.git &&
 cd binance_strategies && 
 pip3 install -r requirements.txt &&
-git pull https://github.com/ka1myk/binance_strategies.git
+git pull https://github.com/ka1myk/apollo.git
 --------
 crontab -e
 --------
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
-@reboot sleep 90; /bin/bash -c /root/binance_strategies/start.sh
-0 0 * * * /bin/bash -c /root/binance_strategies/restart.sh
+@reboot sleep 90; /bin/bash -c /root/apollo/start.sh
+0 0 * * * /bin/bash -c /root/apollo/restart.sh
