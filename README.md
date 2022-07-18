@@ -28,7 +28,7 @@ pip3 install -r requirements_liveonly.txt &&
 mv api-keys.example.json api-keys.json &&
 cd &&
 git clone https://github.com/ka1myk/apollo.git &&
-cd binance_strategies && 
+cd apollo && 
 pip3 install -r requirements.txt &&
 git pull https://github.com/ka1myk/apollo.git
 --------

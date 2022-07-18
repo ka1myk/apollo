@@ -1,5 +1,5 @@
 {
-  "config_name": "for_gs_only",
+  "config_name": "for_gs",
   "logging_level": 0,
   "long": {
     "auto_unstuck_ema_dist": 0,
