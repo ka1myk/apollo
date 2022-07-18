@@ -5,13 +5,13 @@ from secrets import randbelow
 from datetime import datetime
 from binance.client import Client
 
-# with open('/root/passivbot/api-keys.json') as p:
-with open('api-keys.json') as p:
+with open('/root/passivbot/api-keys.json') as p:
+    # with open('api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
-# with open('/root/apollo/variables.json', 'r') as f:
-with open('variables.json', 'r') as f:
+with open('/root/apollo/variables.json', 'r') as f:
+    # with open('variables.json', 'r') as f:
     data = f.read()
 
 d = json.loads(data)
@@ -23,8 +23,8 @@ while True:
     try:
         for x in coins:
 
-            # with open('/root/apollo/variables.json') as v:
-            with open('variables.json') as v:
+            with open('/root/apollo/variables.json') as v:
+                # with open('variables.json') as v:
                 variables = json.load(v)
 
             timestamp = datetime.now().strftime("%d.%m.%y %H:%M:%S")
