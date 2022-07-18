@@ -16,7 +16,7 @@ apt-get install git &&
 apt-get install tmux && 
 apt-get install tmuxp && 
 apt-get install systemd-timesyncd && 
-apt-get install python3-pip &&
+apt-get install python3-pip
 
 cd &&
 git clone https://github.com/ka1myk/apollo.git &&
@@ -27,7 +27,7 @@ cd &&
 git clone https://github.com/ecoppen/futuresboard.git && 
 cd futuresboard && 
 python3 -m pip install . &&
-mv config/config.json.example config/config.json &&
+mv config/config.json.example config/config.json
 
 cd && 
 git clone https://github.com/enarjord/passivbot.git && 
@@ -35,7 +35,10 @@ cd passivbot &&
 pip3 install -r requirements_liveonly.txt &&
 cp /root/apollo/passivbot/api-keys.json /root/passivbot/api-keys.json &&
 cp /root/apollo/passivbot/config.json /root/passivbot/configs/live/config.json &&
-cp /root/apollo/passivbot/config.yaml /root/passivbot/manager/config.yaml
+cp /root/apollo/passivbot/config.yaml /root/passivbot/manager/config.yaml &&
+cd &&
+cd /root/passivbot/manager &&
+nano constants.py 
 --------
 crontab -e
 --------
