@@ -45,4 +45,3 @@ crontab -e
 SHELL=/bin/bash
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
 @reboot sleep 90; /bin/bash -c /root/apollo/sh/start.sh
-0 0 * * * /bin/bash -c /root/apollo/sh/restart.sh
