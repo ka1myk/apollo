@@ -4,7 +4,6 @@ from datetime import datetime
 from binance.client import Client
 
 with open('/root/passivbot/api-keys.json') as p:
-    # with open('api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
@@ -13,7 +12,6 @@ while True:
         timestamp = datetime.now().strftime("%d.%m.%y %H:%M:%S")
 
         with open('/root/apollo/variables.json', 'r') as f:
-            # with open('variables.json', 'r') as f:
             data = f.read()
 
         d = json.loads(data)
@@ -33,41 +31,37 @@ while True:
               "ratio", ratio,
               "coins_amount", coins_amount)
 
-        if 1 > ratio > 0.98:
+        #Fibonacci numbers
+        #delta ratio 1, 2, 3, 5, 8, 13, 21, 34, 55
+
+        if 1 > ratio > 0.99:
             d['time_to_cool_down'] = round(60 / coins_amount)
 
-        if 0.97 > ratio > 0.95:
+        if 0.99 > ratio > 0.97:
             d['time_to_cool_down'] = round(180 / coins_amount)
 
-        if 0.94 > ratio > 0.90:
+        if 0.97 > ratio > 0.94:
             d['time_to_cool_down'] = round(300 / coins_amount)
 
-        if 0.89 > ratio > 0.80:
+        if 0.94 > ratio > 0.89:
             d['time_to_cool_down'] = round(900 / coins_amount)
 
-        if 0.79 > ratio > 0.70:
+        if 0.89 > ratio > 0.81:
             d['time_to_cool_down'] = round(1800 / coins_amount)
 
-        if 0.69 > ratio > 0.60:
+        if 0.81 > ratio > 0.68:
             d['time_to_cool_down'] = round(3600 / coins_amount)
 
-        if 0.59 > ratio > 0.50:
+        if 0.68 > ratio > 0.47:
             d['time_to_cool_down'] = round(7200 / coins_amount)
 
-        if 0.49 > ratio > 0.40:
+        if 0.47 > ratio > 0.13:
             d['time_to_cool_down'] = round(14400 / coins_amount)
 
-        if 0.39 > ratio > 0.30:
+        if 0.13 > ratio:
             d['time_to_cool_down'] = round(21600 / coins_amount)
 
-        if 0.29 > ratio > 0.20:
-            d['time_to_cool_down'] = round(28800 / coins_amount)
-
-        if 0.19 > ratio:
-            d['time_to_cool_down'] = round(57600 / coins_amount)
-
         with open('/root/apollo/variables.json', 'w') as f:
-            # with open('variables.json', 'w') as f:
             json.dump(d, f)
 
         time.sleep(exception_cool_down)
