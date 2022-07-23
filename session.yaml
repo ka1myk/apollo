@@ -1,30 +1,25 @@
-session_name: passiv_session
+session_name: profit_only
 windows:
-- window_name: passiv_long
-  layout: even-vertical
-  shell_command_before:
-    - cd ~/passivbot
-  panes:
-    - shell_command:
-        - python3 /root/passivbot_configs/ada.py
-    - shell_command:
-        - python3 /root/passivbot_configs/eth.py
-    - shell_command:
-        - python3 /root/passivbot_configs/sol.py
-    - shell_command:
-        - python3 /root/passivbot_configs/xrp.py
-    - shell_command:
-        - python3 /root/passivbot_configs/btc.py
-    - shell_command:
-        - python3 /root/passivbot_configs/bnb.py
-    - shell_command:
-        - python3 /root/passivbot_configs/ftt.py
-    - shell_command:
-        - python3 /root/passivbot_configs/doge.py
-- window_name: futuresboard
-  layout: even-vertical
-  shell_command_before:
-    - cd /root/futuresboard
-  panes:
-    - shell_command:
-        - futuresboard
+  - window_name: strategies
+    layout: even-vertical
+    shell_command_before:
+      - cd /root/apollo
+    panes:
+      - shell_command:
+          - python3 random_and_carousel.py
+      - shell_command:
+          - python3 variables_editor.py
+  - window_name: gs
+    layout: even-vertical
+    shell_command_before:
+      - cd /root/passivbot
+    panes:
+      - shell_command:
+          - python3 manager start -a
+  - window_name: futuresboard
+    layout: even-vertical
+    shell_command_before:
+      - cd /root/futuresboard
+    panes:
+      - shell_command:
+          - futuresboard
