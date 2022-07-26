@@ -32,33 +32,33 @@ while True:
               "coins_amount", coins_amount)
 
         #Fibonacci numbers
-        #delta ratio 1, 2, 3, 5, 8, 13, 21, 34, 55
+        #delta ratio 1, 1, 2, 3, 5, 8, 13, 21
 
         if 1 > ratio > 0.99:
             d['time_to_cool_down'] = round(60 / coins_amount)
 
-        if 0.99 > ratio > 0.97:
+        if 0.99 > ratio > 0.98:
             d['time_to_cool_down'] = round(180 / coins_amount)
 
-        if 0.97 > ratio > 0.94:
+        if 0.98 > ratio > 0.96:
             d['time_to_cool_down'] = round(300 / coins_amount)
 
-        if 0.94 > ratio > 0.89:
+        if 0.96 > ratio > 0.93:
             d['time_to_cool_down'] = round(900 / coins_amount)
 
-        if 0.89 > ratio > 0.81:
+        if 0.93 > ratio > 0.88:
             d['time_to_cool_down'] = round(1800 / coins_amount)
 
-        if 0.81 > ratio > 0.68:
+        if 0.88 > ratio > 0.80:
             d['time_to_cool_down'] = round(3600 / coins_amount)
 
-        if 0.68 > ratio > 0.47:
+        if 0.80 > ratio > 0.67:
             d['time_to_cool_down'] = round(7200 / coins_amount)
 
-        if 0.47 > ratio > 0.13:
+        if 0.67 > ratio > 0.46:
             d['time_to_cool_down'] = round(14400 / coins_amount)
 
-        if 0.13 > ratio:
+        if 0.46 > ratio:
             d['time_to_cool_down'] = round(21600 / coins_amount)
 
         with open('/root/apollo/variables.json', 'w') as f:
