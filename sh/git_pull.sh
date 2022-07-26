@@ -6,5 +6,5 @@ git stash
 git pull https://github.com/ka1myk/apollo.git
 cp /root/apollo/passivbot/config.json /root/passivbot/configs/live/config.json
 cp /root/apollo/passivbot/config.yaml /root/passivbot/manager/config.yaml
-cd cd /root/apollo
+cd cd /root/apollo/sh
 chmod +x *.sh
