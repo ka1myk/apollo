@@ -1,15 +1,6 @@
 {
   "coins": [
-    "ADABUSD",
-    "AVAXBUSD",
-    "BNBBUSD",
-    "DOGEBUSD",
-    "DOTBUSD",
-    "ETHBUSD",
-    "LTCBUSD",
-    "MATICBUSD",
-    "TRXBUSD",
-    "XRPBUSD"
+    "ETHBUSD"
   ],
   "multiplier": 1.3,
   "time_to_cool_down": 13,
