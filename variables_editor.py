@@ -33,6 +33,7 @@ while True:
 
         #Fibonacci numbers
         #delta ratio 1, 1, 2, 3, 5, 8, 13, 21
+        #multiplier  1.618, 2.618, 4.236, 6.854, 11.089, 17.942, 29.030, 46.971, 75.999
 
         if 1 > ratio > 0.99:
             d['time_to_cool_down'] = round(60 / coins_amount)
