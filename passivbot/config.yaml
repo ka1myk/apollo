@@ -23,13 +23,4 @@ defaults:
 instances:
   - user: "binance_01"
     symbols:
-      - "ADABUSD"
-      - "AVAXBUSD"
-      - "BNBBUSD"
-      - "DOGEBUSD"
-      - "DOTBUSD"
       - "ETHBUSD"
-      - "LTCBUSD"
-      - "MATICBUSD"
-      - "TRXBUSD"
-      - "XRPBUSD"
