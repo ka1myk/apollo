@@ -36,30 +36,39 @@ while True:
 
         if 1 > ratio > 0.99:
             d['time_to_cool_down'] = round(60 / coins_amount)
+            d['multiplier'] = 1.618
 
         if 0.99 > ratio > 0.98:
             d['time_to_cool_down'] = round(180 / coins_amount)
+            d['multiplier'] = 2.618
 
         if 0.98 > ratio > 0.96:
             d['time_to_cool_down'] = round(300 / coins_amount)
+            d['multiplier'] = 4.236
 
         if 0.96 > ratio > 0.93:
             d['time_to_cool_down'] = round(900 / coins_amount)
+            d['multiplier'] = 6.854
 
         if 0.93 > ratio > 0.88:
             d['time_to_cool_down'] = round(1800 / coins_amount)
+            d['multiplier'] = 11.089
 
         if 0.88 > ratio > 0.80:
             d['time_to_cool_down'] = round(3600 / coins_amount)
+            d['multiplier'] = 17.942
 
         if 0.80 > ratio > 0.67:
             d['time_to_cool_down'] = round(7200 / coins_amount)
+            d['multiplier'] = 29.030
 
         if 0.67 > ratio > 0.46:
             d['time_to_cool_down'] = round(14400 / coins_amount)
+            d['multiplier'] = 46.971
 
         if 0.46 > ratio:
             d['time_to_cool_down'] = round(21600 / coins_amount)
+            d['multiplier'] = 75.999
 
         with open('/root/apollo/variables.json', 'w') as f:
             json.dump(d, f)
