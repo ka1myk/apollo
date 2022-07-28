@@ -29,6 +29,7 @@ while True:
             exception_cool_down = variables['exception_cool_down']
             time_to_cool_down = variables['time_to_cool_down']
             multiplier = variables['multiplier']
+            greed = variables['greed']
 
             symbol = x
             info = client.futures_exchange_info()
@@ -57,7 +58,7 @@ while True:
             minNotional = round_up(
                 float(get_notional(symbol)) / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
                 get_precision(symbol))
-            quantity = round(minNotional * multiplier, quantityPrecision)
+            quantity = round(minNotional * multiplier * greed, quantityPrecision)
 
             if randbelow(2) == 1:
                 client.futures_create_order(symbol=symbol,
