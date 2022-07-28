@@ -29,6 +29,7 @@ while True:
               "time_to_cool_down", d['time_to_cool_down'],
               'multiplier', d['multiplier'],
               "ratio", ratio,
+              "greed", d["greed"],
               "coins_amount", coins_amount)
 
         # Fibonacci numbers
