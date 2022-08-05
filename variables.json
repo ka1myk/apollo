@@ -2,7 +2,9 @@
   "coins": [
     "ETHBUSD",
     "BNBBUSD",
-    "DOGEBUSD"
+    "DOGEBUSD",
+    "GALBUSD",
+    "ANCBUSD"
   ],
   "greed": 1,
   "multiplier": 1.618,
