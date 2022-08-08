@@ -6,7 +6,7 @@ windows:
       - cd /root/apollo
     panes:
       - shell_command:
-          - python3 random_and_carousel.py
+          - python3 both_and_carousel.py
       - shell_command:
           - python3 variables_editor.py
   - window_name: gs

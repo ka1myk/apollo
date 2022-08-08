@@ -1,10 +1,6 @@
 {
   "coins": [
-    "ETHBUSD",
-    "BNBBUSD",
-    "DOGEBUSD",
-    "GALBUSD",
-    "ANCBUSD"
+    "ETHBUSD"
   ],
   "greed": 1,
   "multiplier": 1.618,

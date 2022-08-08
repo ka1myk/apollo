@@ -24,7 +24,3 @@ instances:
   - user: "binance_01"
     symbols:
       - "ETHBUSD"
-      - "BNBBUSD"
-      - "DOGEBUSD"
-      - "GALBUSD"
-      - "ANCBUSD"
