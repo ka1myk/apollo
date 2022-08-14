@@ -23,6 +23,7 @@ Guide to deploy:
 https://www.futuresboard.xyz/guides.html
 -------
 Commands:
+
 1)
 apt-get update && 
 apt-get upgrade && 
