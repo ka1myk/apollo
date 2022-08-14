@@ -8,7 +8,7 @@
 ![изображение](https://user-images.githubusercontent.com/22070331/184557667-536598a0-0c73-4460-b891-af068d2b279c.png)
 
 
-- for test wiil use hardcode "coin.py", manager from passivbot and dedicated vps
+- for test wiil use hardcode "coin.py" for every coin, simultaneously open long and short, manager with websocket from passivbot and dedicated vps
 
 -------
 Useful links:
