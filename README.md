@@ -1,8 +1,8 @@
 - Testing for a week from ... to ...
-- Goal: to identify the optimal ratio of the percentage of Profit and timeframe
+- Goal: to identify the optimal ratio of the percentage of profit and timeframe
 - Methodology:
 - Choose 3 profits: 0.1%, 0.5%, 1%
-- We choose 6 timeframes in minutes: 1440, 720, 360, 180, 90, 45, 22.5
+- Choose 6 timeframes in minutes: 1440, 720, 360, 180, 90, 45, 22.5
 - Thus we get 21 unique combinations
 								
 ![изображение](https://user-images.githubusercontent.com/22070331/184558270-b467be2e-119b-4757-b564-68d5abe97d5a.png)
