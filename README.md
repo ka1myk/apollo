@@ -9,7 +9,7 @@
 
 - for test wiil use hardcode "coin.py" for every coin, simultaneously open long and short, manager with websocket from passivbot and dedicated vps
 - 784*3=2352 busd for all 21 unique combinations
-
+add week_test.xlsx to edit result
 -------
 Useful links:
 https://docs.glassnode.com/api/transactions#percent-volume-in-profit
