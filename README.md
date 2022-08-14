@@ -2,10 +2,11 @@
 - Goal: to identify the optimal ratio of the percentage of Profit and timeframe
 - Methodology:
 - Choose 3 profits: 0.1%, 0.5%, 1%
-- We choose 6 timeframes in minutes: 1440, 720, 360, 90, 45, 22.5
-- Thus we get 18 unique combinations
+- We choose 6 timeframes in minutes: 1440, 720, 360, 180, 90, 45, 22.5
+- Thus we get 21 unique combinations
 	
-![изображение](https://user-images.githubusercontent.com/22070331/184557456-ca02f68d-dac9-48e1-ac99-9776a24be289.png)
+![изображение](https://user-images.githubusercontent.com/22070331/184557667-536598a0-0c73-4460-b891-af068d2b279c.png)
+
 
 - for test wiil use hardcode "coin.py", manager from passivbot and dedicated vps
 
