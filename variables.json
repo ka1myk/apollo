@@ -3,7 +3,7 @@
     "ETHBUSD"
   ],
   "greed": 1,
-  "multiplier": 1.618,
-  "time_to_cool_down": 60,
+  "multiplier": 1,
+  "time_to_cool_down": 120,
   "exception_cool_down": 5
 }

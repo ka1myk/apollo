@@ -61,19 +61,19 @@ while True:
             quantity = round(minNotional * multiplier * greed, quantityPrecision)
 
             if randbelow(2) == 1:
-                client.futures_create_order(symbol=symbol,
-                                            quantity=quantity,
-                                            side='BUY',
-                                            positionSide='LONG',
-                                            type='MARKET')
+                client.create_order(symbol=symbol,
+                                    quantity=quantity,
+                                    side='BUY',
+                                    positionSide='LONG',
+                                    type='MARKET')
                 print(timestamp, "quantity", quantity, "of", symbol, 'open long and wait', time_to_cool_down,
                       "secs")
             else:
-                client.futures_create_order(symbol=symbol,
-                                            quantity=quantity,
-                                            side='SELL',
-                                            positionSide='SHORT',
-                                            type='MARKET')
+                client.create_order(symbol=symbol,
+                                    quantity=quantity,
+                                    side='SELL',
+                                    positionSide='SHORT',
+                                    type='MARKET')
                 print(timestamp, "quantity", quantity, "of", symbol, 'open short and wait', time_to_cool_down,
                       "secs")
             time.sleep(time_to_cool_down)

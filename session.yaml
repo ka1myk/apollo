@@ -6,16 +6,54 @@ windows:
       - cd /root/apollo
     panes:
       - shell_command:
-          - python3 both_and_carousel.py
-      - shell_command:
-          - python3 variables_editor.py
+          - python3 testing/1000LUNC.py
+          - python3 testing/1000SHIB.py
+          - python3 testing/ADA.py
+          - python3 testing/ANC.py
+          - python3 testing/APES.py
+          - python3 testing/AUCTION.py
+          - python3 testing/DODO.py
+          - python3 testing/DOGE.py
+          - python3 testing/FTM.py
+          - python3 testing/GALA.py
+          - python3 testing/GMT.py
+          - python3 testing/LDO.py
+          - python3 testing/LEVER.py
+          - python3 testing/LINK.py
+          - python3 testing/LTC.py
+          - python3 testing/MATIC.py
+          - python3 testing/NEAR.py
+          - python3 testing/SAND.py
+          - python3 testing/TLM.py
+          - python3 testing/TRX.py
+          - python3 testing/XRP.py
   - window_name: gs
     layout: even-vertical
     shell_command_before:
       - cd /root/passivbot
     panes:
       - shell_command:
-          - python3 manager start -a
+          - python3 passivbot.py binance_01 GMTBUSD configs/live/config0_1.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 LTCBUSD configs/live/config0_1.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 MATICBUSD configs/live/config0_1.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 NEARBUSD configs/live/config0_1.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 SANDBUSD configs/live/config0_1.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 AUCTIONBUSD configs/live/config0_1.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 LDOBUSD configs/live/config0_1.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 LEVERBUSD configs/live/config0_5.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 1000SHIBBUSD configs/live/config0_5.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 TLMBUSD configs/live/config0_5.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 APESBUSD configs/live/config0_5.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 TRXBUSD configs/live/config0_5.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 GALABUSD configs/live/config0_5.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 DOGEBUSD configs/live/config0_5.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 1000LUNCBUSD configs/live/config1.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 ANCBUSD configs/live/config1.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 DODOBUSD configs/live/config1.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 LINKBUSD configs/live/config1.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 XRPBUSD configs/live/config1.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 FTMBUSD configs/live/config1.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 ADABUSD configs/live/config1.json -lm gs -sm gs
   - window_name: futuresboard
     layout: even-vertical
     shell_command_before:
