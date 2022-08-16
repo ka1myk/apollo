@@ -5,7 +5,7 @@ from secrets import randbelow
 from datetime import datetime
 from binance.client import Client
 
-with open('/root/binance_strategies/api-keys.json') as p:
+with open('/root/passivbot/api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
