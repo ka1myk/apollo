@@ -3,70 +3,70 @@ windows:
   - window_name: strategies
     layout: even-vertical
     shell_command_before:
-      - cd /root/apollo
+      - cd /root/apollo/testing
     panes:
       - shell_command:
-          - python3 testing/1000LUNC.py
+          - python3 1000LUNC.py
       - shell_command:
           - sleep 5s
-          - python3 testing/1000SHIB.py
+          - python3 1000SHIB.py
       - shell_command:
           - sleep 10s
-          - python3 testing/ADA.py
+          - python3 ADA.py
       - shell_command:
           - sleep 15s
-          - python3 testing/ANC.py
+          - python3 ANC.py
       - shell_command:
           - sleep 20s
-          - python3 testing/APES.py
+          - python3 APES.py
       - shell_command:
           - sleep 25s
-          - python3 testing/AUCTION.py
+          - python3 AUCTION.py
       - shell_command:
           - sleep 30s
-          - python3 testing/DODO.py
+          - python3 DODO.py
       - shell_command:
           - sleep 35s
-          - python3 testing/DOGE.py
+          - python3 DOGE.py
       - shell_command:
           - sleep 40s
-          - python3 testing/FTM.py
+          - python3 FTM.py
       - shell_command:
           - sleep 45s
-          - python3 testing/GALA.py
+          - python3 GALA.py
       - shell_command:
           - sleep 50s
-          - python3 testing/GMT.py
+          - python3 GMT.py
       - shell_command:
           - sleep 55s
-          - python3 testing/LDO.py
+          - python3 LDO.py
       - shell_command:
           - sleep 60s
-          - python3 testing/LEVER.py
+          - python3 LEVER.py
       - shell_command:
           - sleep 65s
-          - python3 testing/LINK.py
+          - python3 LINK.py
       - shell_command:
           - sleep 70s
-          - python3 testing/LTC.py
+          - python3 LTC.py
       - shell_command:
           - sleep 75s
-          - python3 testing/MATIC.py
+          - python3 MATIC.py
       - shell_command:
           - sleep 80s
-          - python3 testing/NEAR.py
+          - python3 NEAR.py
       - shell_command:
           - sleep 85s
-          - python3 testing/SAND.py
+          - python3 SAND.py
       - shell_command:
           - sleep 90s
-          - python3 testing/TLM.py
+          - python3 TLM.py
       - shell_command:
           - sleep 95s
-          - python3 testing/TRX.py
+          - python3 TRX.py
       - shell_command:
           - sleep 100s
-          - python3 testing/XRP.py
+          - python3 XRP.py
   - window_name: gs
     layout: even-vertical
     shell_command_before:
