@@ -11,7 +11,7 @@ client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 symbol = 'LTCBUSD'
 time_to_cool_down = 43200
-multiplier =
+multiplier = 32
 
 info = client.futures_exchange_info()
 

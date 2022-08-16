@@ -103,7 +103,7 @@ windows:
           - python3 passivbot.py binance_01 TLMBUSD configs/live/config0_5.json -lm gs -sm gs
       - shell_command:
           - sleep 150s
-          - python3 passivbot.py binance_01 APESBUSD configs/live/config0_5.json -lm gs -sm gs
+          - python3 passivbot.py binance_01 APEBUSD configs/live/config0_5.json -lm gs -sm gs
       - shell_command:
           - sleep 155s
           - python3 passivbot.py binance_01 TRXBUSD configs/live/config0_5.json -lm gs -sm gs

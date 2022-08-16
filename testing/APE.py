@@ -11,7 +11,7 @@ client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 symbol = 'APEBUSD'
 time_to_cool_down = 10800
-multiplier =
+multiplier = 8
 
 info = client.futures_exchange_info()
 
