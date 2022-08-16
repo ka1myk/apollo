@@ -7,25 +7,65 @@ windows:
     panes:
       - shell_command:
           - python3 testing/1000LUNC.py
+      - shell_command:
+          - sleep 5s
           - python3 testing/1000SHIB.py
+      - shell_command:
+          - sleep 10s
           - python3 testing/ADA.py
+      - shell_command:
+          - sleep 15s
           - python3 testing/ANC.py
+      - shell_command:
+          - sleep 20s
           - python3 testing/APES.py
+      - shell_command:
+          - sleep 25s
           - python3 testing/AUCTION.py
+      - shell_command:
+          - sleep 30s
           - python3 testing/DODO.py
+      - shell_command:
+          - sleep 35s
           - python3 testing/DOGE.py
+      - shell_command:
+          - sleep 40s
           - python3 testing/FTM.py
+      - shell_command:
+          - sleep 45s
           - python3 testing/GALA.py
+      - shell_command:
+          - sleep 50s
           - python3 testing/GMT.py
+      - shell_command:
+          - sleep 55s
           - python3 testing/LDO.py
+      - shell_command:
+          - sleep 60s
           - python3 testing/LEVER.py
+      - shell_command:
+          - sleep 65s
           - python3 testing/LINK.py
+      - shell_command:
+          - sleep 70s
           - python3 testing/LTC.py
+      - shell_command:
+          - sleep 75s
           - python3 testing/MATIC.py
+      - shell_command:
+          - sleep 80s
           - python3 testing/NEAR.py
+      - shell_command:
+          - sleep 85s
           - python3 testing/SAND.py
+      - shell_command:
+          - sleep 90s
           - python3 testing/TLM.py
+      - shell_command:
+          - sleep 95s
           - python3 testing/TRX.py
+      - shell_command:
+          - sleep 100s
           - python3 testing/XRP.py
   - window_name: gs
     layout: even-vertical
@@ -34,25 +74,65 @@ windows:
     panes:
       - shell_command:
           - python3 passivbot.py binance_01 GMTBUSD configs/live/config0_1.json -lm gs -sm gs
+      - shell_command:
+          - sleep 105s
           - python3 passivbot.py binance_01 LTCBUSD configs/live/config0_1.json -lm gs -sm gs
+      - shell_command:
+          - sleep 110s
           - python3 passivbot.py binance_01 MATICBUSD configs/live/config0_1.json -lm gs -sm gs
+      - shell_command:
+          - sleep 115s
           - python3 passivbot.py binance_01 NEARBUSD configs/live/config0_1.json -lm gs -sm gs
+      - shell_command:
+          - sleep 120s
           - python3 passivbot.py binance_01 SANDBUSD configs/live/config0_1.json -lm gs -sm gs
+      - shell_command:
+          - sleep 125s
           - python3 passivbot.py binance_01 AUCTIONBUSD configs/live/config0_1.json -lm gs -sm gs
+      - shell_command:
+          - sleep 130s
           - python3 passivbot.py binance_01 LDOBUSD configs/live/config0_1.json -lm gs -sm gs
+      - shell_command:
+          - sleep 135s
           - python3 passivbot.py binance_01 LEVERBUSD configs/live/config0_5.json -lm gs -sm gs
+      - shell_command:
+          - sleep 140s
           - python3 passivbot.py binance_01 1000SHIBBUSD configs/live/config0_5.json -lm gs -sm gs
+      - shell_command:
+          - sleep 145s
           - python3 passivbot.py binance_01 TLMBUSD configs/live/config0_5.json -lm gs -sm gs
+      - shell_command:
+          - sleep 150s
           - python3 passivbot.py binance_01 APESBUSD configs/live/config0_5.json -lm gs -sm gs
+      - shell_command:
+          - sleep 155s
           - python3 passivbot.py binance_01 TRXBUSD configs/live/config0_5.json -lm gs -sm gs
+      - shell_command:
+          - sleep 160s
           - python3 passivbot.py binance_01 GALABUSD configs/live/config0_5.json -lm gs -sm gs
+      - shell_command:
+          - sleep 165s
           - python3 passivbot.py binance_01 DOGEBUSD configs/live/config0_5.json -lm gs -sm gs
+      - shell_command:
+          - sleep 170s
           - python3 passivbot.py binance_01 1000LUNCBUSD configs/live/config1.json -lm gs -sm gs
+      - shell_command:
+          - sleep 175s
           - python3 passivbot.py binance_01 ANCBUSD configs/live/config1.json -lm gs -sm gs
+      - shell_command:
+          - sleep 180s
           - python3 passivbot.py binance_01 DODOBUSD configs/live/config1.json -lm gs -sm gs
+      - shell_command:
+          - sleep 185s
           - python3 passivbot.py binance_01 LINKBUSD configs/live/config1.json -lm gs -sm gs
+      - shell_command:
+          - sleep 190s
           - python3 passivbot.py binance_01 XRPBUSD configs/live/config1.json -lm gs -sm gs
+      - shell_command:
+          - sleep 195s
           - python3 passivbot.py binance_01 FTMBUSD configs/live/config1.json -lm gs -sm gs
+      - shell_command:
+          - sleep 200s
           - python3 passivbot.py binance_01 ADABUSD configs/live/config1.json -lm gs -sm gs
   - window_name: futuresboard
     layout: even-vertical
