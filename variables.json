@@ -4,6 +4,6 @@
   ],
   "greed": 1,
   "multiplier": 1,
-  "time_to_cool_down": 120,
+  "time_to_cool_down": 600,
   "exception_cool_down": 5
 }
