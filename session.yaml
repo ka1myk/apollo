@@ -18,7 +18,7 @@ windows:
           - python3 ANC.py
       - shell_command:
           - sleep 20s
-          - python3 APES.py
+          - python3 APE.py
       - shell_command:
           - sleep 25s
           - python3 AUCTION.py
