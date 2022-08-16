@@ -12,6 +12,7 @@ client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 symbol = 'MATICBUSD'
 time_to_cool_down = 21600
 multiplier = 16
+exception_cool_down = 5
 
 info = client.futures_exchange_info()
 
@@ -43,11 +44,6 @@ while True:
 
     try:
         timestamp = datetime.now().strftime("%d.%m.%y %H:%M:%S")
-
-        with open('/root/apollo/variables.json') as v:
-            variables = json.load(v)
-
-        exception_cool_down = variables['exception_cool_down']
 
         quantity = round(minNotional * multiplier, quantityPrecision)
 
