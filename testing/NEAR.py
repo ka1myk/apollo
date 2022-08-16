@@ -11,6 +11,7 @@ client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 symbol = 'NEARBUSD'
 time_to_cool_down = 21600
+multiplier =
 
 info = client.futures_exchange_info()
 
