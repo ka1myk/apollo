@@ -48,7 +48,6 @@ while True:
             variables = json.load(v)
 
         exception_cool_down = variables['exception_cool_down']
-        multiplier = variables['multiplier']
 
         quantity = round(minNotional * multiplier, quantityPrecision)
 
