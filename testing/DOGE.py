@@ -43,7 +43,7 @@ while True:
     try:
         timestamp = datetime.now().strftime("%d.%m.%y %H:%M:%S")
 
-        with open('/root/binance_strategies/variables.json') as v:
+        with open('/root/apollo/variables.json') as v:
             variables = json.load(v)
 
         exception_cool_down = variables['exception_cool_down']
