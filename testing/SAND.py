@@ -11,7 +11,8 @@ client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 symbol = 'SANDBUSD'
 time_to_cool_down = 5400
-multiplier = 4
+multiplier = 2
+
 exception_cool_down = 5
 
 info = client.futures_exchange_info()

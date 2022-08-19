@@ -11,7 +11,8 @@ client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 symbol = 'FTMBUSD'
 time_to_cool_down = 2700
-multiplier = 2
+multiplier = 1
+
 exception_cool_down = 5
 
 info = client.futures_exchange_info()

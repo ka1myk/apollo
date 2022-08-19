@@ -10,8 +10,9 @@ with open('/root/passivbot/api-keys.json') as p:
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 symbol = 'DOGEBUSD'
-time_to_cool_down = 1350
-multiplier = 1
+time_to_cool_down = 172800
+multiplier = 64
+
 exception_cool_down = 5
 
 info = client.futures_exchange_info()

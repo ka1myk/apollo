@@ -11,7 +11,8 @@ client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
 symbol = 'GMTBUSD'
 time_to_cool_down = 86400
-multiplier = 64
+multiplier = 32
+
 exception_cool_down = 5
 
 info = client.futures_exchange_info()
