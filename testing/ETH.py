@@ -4,10 +4,10 @@ import json
 with open('variables.json') as v:
     variables = json.load(v)
 
-symbol = 'ANCBUSD'
+symbol = 'ETHBUSD'
 greed = variables['greed']
-multiplier = variables['ANC']['multiplier']
-long_profit_percentage = variables['ANC']['long_profit_percentage']
-short_profit_percentage = variables['ANC']['short_profit_percentage']
+multiplier = variables['ETH']['multiplier']
+long_profit_percentage = variables['ETH']['long_profit_percentage']
+short_profit_percentage = variables['ETH']['short_profit_percentage']
 
 BinanceHelper.BinanceHelper.do_profit(symbol, greed, multiplier, long_profit_percentage, short_profit_percentage)

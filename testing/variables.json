@@ -1,0 +1,113 @@
+{
+  "greed": 1,
+  "1000LUNC": {
+    "multiplier": 32,
+    "long_profit_percentage": 1.06,
+    "short_profit_percentage": 0.94
+  },
+  "NEAR": {
+    "multiplier": 4,
+    "long_profit_percentage": 1.02,
+    "short_profit_percentage": 0.98
+  },
+  "APE": {
+    "multiplier": 4,
+    "long_profit_percentage": 1.02,
+    "short_profit_percentage": 0.98
+  },
+  "FTM": {
+    "multiplier": 1,
+    "long_profit_percentage": 1.01,
+    "short_profit_percentage": 0.99
+  },
+  "TLM": {
+    "multiplier": 8,
+    "long_profit_percentage": 1.034,
+    "short_profit_percentage": 0.966
+  },
+  "TRX": {
+    "multiplier": 2,
+    "long_profit_percentage": 1.015,
+    "short_profit_percentage": 0.985
+  },
+  "ETH": {
+    "multiplier": 1,
+    "long_profit_percentage": 1.01,
+    "short_profit_percentage": 0.99
+  },
+  "DOGE": {
+    "multiplier": 64,
+    "long_profit_percentage": 1.09,
+    "short_profit_percentage": 0.91
+  },
+  "GALA": {
+    "multiplier": 1,
+    "long_profit_percentage": 1.01,
+    "short_profit_percentage": 0.99
+  },
+  "LEVER": {
+    "multiplier": 32,
+    "long_profit_percentage": 1.06,
+    "short_profit_percentage": 0.94
+  },
+  "LTC": {
+    "multiplier": 16,
+    "long_profit_percentage": 1.05,
+    "short_profit_percentage": 0.95
+  },
+  "LINK": {
+    "multiplier": 4,
+    "long_profit_percentage": 1.02,
+    "short_profit_percentage": 0.98
+  },
+  "ADA": {
+    "multiplier": 64,
+    "long_profit_percentage": 1.09,
+    "short_profit_percentage": 0.91
+  },
+  "GMT": {
+    "multiplier": 32,
+    "long_profit_percentage": 1.06,
+    "short_profit_percentage": 0.94
+  },
+  "MATIC": {
+    "multiplier": 8,
+    "long_profit_percentage": 1.034,
+    "short_profit_percentage": 0.966
+  },
+  "LDO": {
+    "multiplier": 64,
+    "long_profit_percentage": 1.09,
+    "short_profit_percentage": 0.91
+  },
+  "DODO": {
+    "multiplier": 8,
+    "long_profit_percentage": 1.034,
+    "short_profit_percentage": 0.966
+  },
+  "AUCTION": {
+    "multiplier": 1,
+    "long_profit_percentage": 1.01,
+    "short_profit_percentage": 0.99
+  },
+  "ANC": {
+    "multiplier": 16,
+    "long_profit_percentage": 1.05,
+    "short_profit_percentage": 0.95
+  },
+  "1000SHIB": {
+    "multiplier": 16,
+    "long_profit_percentage": 1.05,
+    "short_profit_percentage": 0.95
+  },
+  "SAND": {
+    "multiplier": 2,
+    "long_profit_percentage": 1.015,
+    "short_profit_percentage": 0.985
+  },
+  "XRP": {
+    "multiplier": 2,
+    "long_profit_percentage": 1.015,
+    "short_profit_percentage": 0.985
+  }
+}
