@@ -1,0 +1,30 @@
+SHELL=/bin/bash PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
+@reboot sleep 90; /bin/bash -c cd /root/futuresboard && futuresboard
+1w: 0 0 * * 0
+    auction
+    gala
+    ftm
+3d: * * * * *
+    ldo
+    doge
+    ada
+1d: 0 0 * * *
+    gmt
+    lever
+    1000lunc
+12h: 0 */12 * * *
+    ltc
+    1000shib
+    anc
+6h: 0 */6 * * *
+    matic
+    tlm
+    dodo
+3h: 0 */3 * * *
+    near
+    ape
+    link
+1h: 0 * * * *
+    sand
+    trx
+    xrp
