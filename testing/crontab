@@ -1,30 +1,31 @@
 SHELL=/bin/bash PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
 @reboot sleep 90; /bin/bash -c cd /root/futuresboard && futuresboard
-1w: 0 0 * * 0
-    auction
-    gala
-    ftm
-3d: * * * * *
-    ldo
-    doge
-    ada
-1d: 0 0 * * *
-    gmt
-    lever
-    1000lunc
-12h: 0 */12 * * *
-    ltc
-    1000shib
-    anc
-6h: 0 */6 * * *
-    matic
-    tlm
-    dodo
-3h: 0 */3 * * *
-    near
-    ape
-    link
-1h: 0 * * * *
-    sand
-    trx
-    xrp
+
+1w
+    8 2 * * MON auction “At 02:08 on Monday.”
+    28 10 * * WED gala “At 10:28 on Wednesday.”
+    48 18 * * SUN ftm “At 18:48 on Sunday.”
+3d
+    7 4 * * MON,THU ldo “At 04:07 on Monday and Thursday.”
+    27 12 * * THU,FRI doge “At 12:27 on Thursday and Friday.”
+    47 20 * * WED,SAT ada “At 20:47 on Wednesday and Saturday.”
+1d
+    17 0 * * * gmt “At 00:17.”
+    27 8 * * * lever “At 08:27.”
+    47 16 * * * 1000lunc “At 16:47.”
+12h
+    15 */12 * * * ltc “At minute 15 past every 12th hour.”
+    35 */12 * * * 1000shib “At minute 35 past every 12th hour.”
+    55 */12 * * * anc “At minute 55 past every 12th hour.”
+6h
+    10 */6 * * * matic “At minute 10 past every 6th hour.”
+    40 */6 * * * tlm “At minute 40 past every 6th hour.”
+    59 */6 * * * dodo “At minute 59 past every 6th hour.”
+3h
+    5  */3 * * * near “At minute 5 past every 3rd hour.”
+    25 */3 * * * ape “At minute 25 past every 3rd hour.”
+    45 */3 * * * link “At minute 45 past every 3rd hour.”
+1h
+    0  * * * * sand “At minute 0.”
+    20 * * * * trx “At minute 20.”
+    40 * * * * xrp “At minute 40.”
