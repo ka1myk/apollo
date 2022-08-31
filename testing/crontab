@@ -1,5 +1,4 @@
 shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
-@reboot sleep 90; /bin/bash -c cd /root/futuresboard && futuresboard
 
 # 1W
 8 2 * * MON cd /root/apollo/testing && python3 AUCTION.py
