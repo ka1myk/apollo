@@ -1,9 +1,0 @@
-{
-  "coins": [
-    "ETHBUSD"
-  ],
-  "greed": 1,
-  "multiplier": 1.618,
-  "time_to_cool_down": 60,
-  "exception_cool_down": 5
-}

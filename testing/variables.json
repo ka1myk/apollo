@@ -1,0 +1,136 @@
+{
+  "greed": 1,
+  "ETH": {
+    "timeframe": "1h",
+    "multiplier": 1,
+    "long_profit_percentage": 1.014,
+    "short_profit_percentage": 0.986
+  },
+  "AUCTION": {
+    "timeframe": "1w",
+    "multiplier": 168,
+    "long_profit_percentage": 1.191,
+    "short_profit_percentage": 0.809
+  },
+  "GALA": {
+    "timeframe": "1w",
+    "multiplier": 168,
+    "long_profit_percentage": 1.191,
+    "short_profit_percentage": 0.809
+  },
+  "FTM": {
+    "timeframe": "1w",
+    "multiplier": 168,
+    "long_profit_percentage": 1.191,
+    "short_profit_percentage": 0.809
+  },
+  "LDO": {
+    "timeframe": "3d",
+    "multiplier": 72,
+    "long_profit_percentage": 1.123,
+    "short_profit_percentage": 0.877
+  },
+  "DOGE": {
+    "timeframe": "3d",
+    "multiplier": 72,
+    "long_profit_percentage": 1.123,
+    "short_profit_percentage": 0.877
+  },
+  "ADA": {
+    "timeframe": "3d",
+    "multiplier": 72,
+    "long_profit_percentage": 1.123,
+    "short_profit_percentage": 0.877
+  },
+  "GMT": {
+    "timeframe": "1d",
+    "multiplier": 24,
+    "long_profit_percentage": 1.07,
+    "short_profit_percentage": 0.93
+  },
+  "LEVER": {
+    "timeframe": "1d",
+    "multiplier": 24,
+    "long_profit_percentage": 1.07,
+    "short_profit_percentage": 0.93
+  },
+  "1000LUNC": {
+    "timeframe": "1d",
+    "multiplier": 24,
+    "long_profit_percentage": 1.07,
+    "short_profit_percentage": 0.93
+  },
+  "LTC": {
+    "timeframe": "12h",
+    "multiplier": 12,
+    "long_profit_percentage": 1.05,
+    "short_profit_percentage": 0.95
+  },
+  "1000SHIB": {
+    "timeframe": "12h",
+    "multiplier": 12,
+    "long_profit_percentage": 1.05,
+    "short_profit_percentage": 0.95
+  },
+  "ANC": {
+    "timeframe": "12h",
+    "multiplier": 12,
+    "long_profit_percentage": 1.05,
+    "short_profit_percentage": 0.95
+  },
+  "MATIC": {
+    "timeframe": "6h",
+    "multiplier": 6,
+    "long_profit_percentage": 1.035,
+    "short_profit_percentage": 0.965
+  },
+  "TLM": {
+    "timeframe": "6h",
+    "multiplier": 6,
+    "long_profit_percentage": 1.035,
+    "short_profit_percentage": 0.965
+  },
+  "DODO": {
+    "timeframe": "6h",
+    "multiplier": 6,
+    "long_profit_percentage": 1.035,
+    "short_profit_percentage": 0.965
+  },
+  "NEAR": {
+    "timeframe": "4h",
+    "multiplier": 4,
+    "long_profit_percentage": 1.028,
+    "short_profit_percentage": 0.972
+  },
+  "APE": {
+    "timeframe": "4h",
+    "multiplier": 4,
+    "long_profit_percentage": 1.028,
+    "short_profit_percentage": 0.972
+  },
+  "LINK": {
+    "timeframe": "4h",
+    "multiplier": 4,
+    "long_profit_percentage": 1.028,
+    "short_profit_percentage": 0.972
+  },
+  "SAND": {
+    "timeframe": "1h",
+    "multiplier": 1,
+    "long_profit_percentage": 1.014,
+    "short_profit_percentage": 0.986
+  },
+  "TRX": {
+    "timeframe": "1h",
+    "multiplier": 1,
+    "long_profit_percentage": 1.014,
+    "short_profit_percentage": 0.986
+  },
+  "XRP": {
+    "timeframe": "1h",
+    "multiplier": 1,
+    "long_profit_percentage": 1.014,
+    "short_profit_percentage": 0.986
+  }
+}
+
