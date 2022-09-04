@@ -1,11 +1,5 @@
 {
   "greed": 1,
-  "ETH": {
-    "timeframe": "1h",
-    "multiplier": 1,
-    "long_profit_percentage": 1.014,
-    "short_profit_percentage": 0.986
-  },
   "AUCTION": {
     "timeframe": "1w",
     "multiplier": 168,
@@ -54,7 +48,7 @@
     "long_profit_percentage": 1.07,
     "short_profit_percentage": 0.93
   },
-  "1000LUNC": {
+  "ETH": {
     "timeframe": "1d",
     "multiplier": 24,
     "long_profit_percentage": 1.07,
