@@ -13,7 +13,7 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 # 1D
 17 0 * * * cd /root/apollo/testing && python3 GMT.py
 27 8 * * * cd /root/apollo/testing && python3 LEVER.py
-47 16 * * * cd /root/apollo/testing && python3 1000LUNC.py
+47 16 * * * cd /root/apollo/testing && python3 ETH.py
 
 # 12H
 15 */12 * * * cd /root/apollo/testing && python3 LTC.py
