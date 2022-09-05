@@ -4,7 +4,7 @@ from binance.client import Client
 from binance.helpers import round_step_size
 
 
-class BinanceHelper(object):
+class BinanceHelper:
 
     def do_profit(symbol, greed, multiplier, long_profit_percentage, short_profit_percentage):
 
