@@ -1,11 +1,5 @@
 {
   "greed": 1,
-  "1000LUNC": {
-    "timeframe": "1h",
-    "multiplier": 5,
-    "long_profit_percentage": 1.2,
-    "short_profit_percentage": 1
-  },
   "AUCTION": {
     "timeframe": "1w",
     "multiplier": 168,
