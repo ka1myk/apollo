@@ -1,5 +1,5 @@
 shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
-
+### futures ###
 # 1W
 8 2 * * MON cd /root/apollo/testing && python3 AUCTION.py
 28 10 * * WED cd /root/apollo/testing && python3 GALA.py
@@ -35,4 +35,5 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 20 * * * * cd /root/apollo/testing && python3 TRX.py
 40 * * * * cd /root/apollo/testing && python3 XRP.py
 
-0  * * * * cd /root/apollo/testing && python3 1000LUNC.py
+### transfer ###
+0  * * * * cd /root/apollo/testing && python3 transfer_to_spot.py

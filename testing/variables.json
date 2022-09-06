@@ -1,5 +1,6 @@
 {
   "greed": 1,
+  "profit_to_spot_multiplayer": 0.5,
   "AUCTION": {
     "timeframe": "1w",
     "multiplier": 168,
