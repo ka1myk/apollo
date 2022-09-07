@@ -26,7 +26,8 @@ apt-get update &&
 apt-get upgrade && 
 apt-get install git && 
 apt-get install systemd-timesyncd && 
-apt-get install python3-pip
+apt-get install python3-pip &&
+apt-get install tmuxp
 
 2)
 cd &&
@@ -79,5 +80,3 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 0  * * * * cd /root/apollo/testing && python3 SAND.py
 20 * * * * cd /root/apollo/testing && python3 TRX.py
 40 * * * * cd /root/apollo/testing && python3 XRP.py
-
-
