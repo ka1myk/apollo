@@ -14,12 +14,7 @@ class BinanceHelper:
 
         info = client.futures_exchange_info()
 
-        def get_pricePrecision(pair):
-            for x in info['symbols']:
-                if x['symbol'] == pair:
-                    return x['pricePrecision']
-
-        def get_quantityPrecision(pair):
+        def get_quantity_precision(pair):
             for x in info['symbols']:
                 if x['symbol'] == pair:
                     return x['quantityPrecision']
@@ -45,35 +40,35 @@ class BinanceHelper:
         def get_rounded_price(symbol: str, price: float) -> float:
             return round_step_size(price, get_tick_size(symbol))
 
-        minNotional = round_up(
+        min_notional = round_up(
             float(get_notional(symbol)) / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
-            get_quantityPrecision(symbol))
+            get_quantity_precision(symbol))
 
         client.futures_create_order(symbol=symbol,
-                                    quantity=round(minNotional * multiplier * greed, get_quantityPrecision(symbol)),
+                                    quantity=round(min_notional * multiplier * greed, get_quantity_precision(symbol)),
                                     side='BUY',
                                     positionSide='LONG',
                                     type='MARKET')
 
         client.futures_create_order(symbol=symbol,
-                                    quantity=round(minNotional * multiplier * greed, get_quantityPrecision(symbol)),
+                                    quantity=round(min_notional * multiplier * greed, get_quantity_precision(symbol)),
                                     side='SELL',
                                     positionSide='SHORT',
                                     type='MARKET')
 
-        long_positionAmt = abs(float(client.futures_position_information(symbol=symbol)[1]["positionAmt"]))
+        long_position_amt = abs(float(client.futures_position_information(symbol=symbol)[1]["positionAmt"]))
         long_take_profit_price = get_rounded_price(symbol, float(
             client.futures_position_information(symbol=symbol)[1]["entryPrice"]) * long_profit_percentage)
 
-        short_positionAmt = abs(float(client.futures_position_information(symbol=symbol)[2]["positionAmt"]))
+        short_position_amt = abs(float(client.futures_position_information(symbol=symbol)[2]["positionAmt"]))
         short_take_profit_price = get_rounded_price(symbol, float(
             client.futures_position_information(symbol=symbol)[2]["entryPrice"]) * short_profit_percentage)
 
         client.futures_cancel_all_open_orders(symbol=symbol)
 
-        if float(long_positionAmt) != 0:
+        if float(long_position_amt) != 0:
             client.futures_create_order(symbol=symbol,
-                                        quantity=round(long_positionAmt * 0.6, get_quantityPrecision(symbol)),
+                                        quantity=round(long_position_amt * 0.6, get_quantity_precision(symbol)),
                                         price=get_rounded_price(symbol, long_take_profit_price * 1),
                                         side='SELL',
                                         positionSide='LONG',
@@ -81,7 +76,7 @@ class BinanceHelper:
                                         timeInForce="GTC"
                                         )
             client.futures_create_order(symbol=symbol,
-                                        quantity=round(long_positionAmt * 0.1, get_quantityPrecision(symbol)),
+                                        quantity=round(long_position_amt * 0.1, get_quantity_precision(symbol)),
                                         price=get_rounded_price(symbol, long_take_profit_price * 1.005),
                                         side='SELL',
                                         positionSide='LONG',
@@ -89,7 +84,7 @@ class BinanceHelper:
                                         timeInForce="GTC"
                                         )
             client.futures_create_order(symbol=symbol,
-                                        quantity=round(long_positionAmt * 0.1, get_quantityPrecision(symbol)),
+                                        quantity=round(long_position_amt * 0.1, get_quantity_precision(symbol)),
                                         price=get_rounded_price(symbol, long_take_profit_price * 1.01),
                                         side='SELL',
                                         positionSide='LONG',
@@ -97,7 +92,7 @@ class BinanceHelper:
                                         timeInForce="GTC"
                                         )
             client.futures_create_order(symbol=symbol,
-                                        quantity=round(long_positionAmt * 0.1, get_quantityPrecision(symbol)),
+                                        quantity=round(long_position_amt * 0.1, get_quantity_precision(symbol)),
                                         price=get_rounded_price(symbol, long_take_profit_price * 1.015),
                                         side='SELL',
                                         positionSide='LONG',
@@ -105,7 +100,7 @@ class BinanceHelper:
                                         timeInForce="GTC"
                                         )
             client.futures_create_order(symbol=symbol,
-                                        quantity=round(long_positionAmt * 0.1, get_quantityPrecision(symbol)),
+                                        quantity=round(long_position_amt * 0.1, get_quantity_precision(symbol)),
                                         price=get_rounded_price(symbol, long_take_profit_price * 1.02),
                                         side='SELL',
                                         positionSide='LONG',
@@ -113,9 +108,9 @@ class BinanceHelper:
                                         timeInForce="GTC"
                                         )
 
-        if float(short_positionAmt) != 0:
+        if float(short_position_amt) != 0:
             client.futures_create_order(symbol=symbol,
-                                        quantity=round(short_positionAmt * 0.6, get_quantityPrecision(symbol)),
+                                        quantity=round(short_position_amt * 0.6, get_quantity_precision(symbol)),
                                         price=get_rounded_price(symbol, short_take_profit_price * 1),
                                         side='BUY',
                                         positionSide='SHORT',
@@ -123,7 +118,7 @@ class BinanceHelper:
                                         timeInForce="GTC"
                                         )
             client.futures_create_order(symbol=symbol,
-                                        quantity=round(short_positionAmt * 0.1, get_quantityPrecision(symbol)),
+                                        quantity=round(short_position_amt * 0.1, get_quantity_precision(symbol)),
                                         price=get_rounded_price(symbol, short_take_profit_price * 0.995),
                                         side='BUY',
                                         positionSide='SHORT',
@@ -131,7 +126,7 @@ class BinanceHelper:
                                         timeInForce="GTC"
                                         )
             client.futures_create_order(symbol=symbol,
-                                        quantity=round(short_positionAmt * 0.1, get_quantityPrecision(symbol)),
+                                        quantity=round(short_position_amt * 0.1, get_quantity_precision(symbol)),
                                         price=get_rounded_price(symbol, short_take_profit_price * 0.99),
                                         side='BUY',
                                         positionSide='SHORT',
@@ -139,7 +134,7 @@ class BinanceHelper:
                                         timeInForce="GTC"
                                         )
             client.futures_create_order(symbol=symbol,
-                                        quantity=round(short_positionAmt * 0.1, get_quantityPrecision(symbol)),
+                                        quantity=round(short_position_amt * 0.1, get_quantity_precision(symbol)),
                                         price=get_rounded_price(symbol, short_take_profit_price * 0.985),
                                         side='BUY',
                                         positionSide='SHORT',
@@ -147,7 +142,7 @@ class BinanceHelper:
                                         timeInForce="GTC"
                                         )
             client.futures_create_order(symbol=symbol,
-                                        quantity=round(short_positionAmt * 0.1, get_quantityPrecision(symbol)),
+                                        quantity=round(short_position_amt * 0.1, get_quantity_precision(symbol)),
                                         price=get_rounded_price(symbol, short_take_profit_price * 0.98),
                                         side='BUY',
                                         positionSide='SHORT',
