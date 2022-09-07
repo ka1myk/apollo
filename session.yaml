@@ -6,4 +6,4 @@ windows:
     - cd ~/futuresboard
   panes:
     - shell_command:
-        - python3 futuresboard
+        - futuresboard
