@@ -8,7 +8,7 @@ with open('api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
-bnb_amount_to_transfer_from_spot = 0.001
+bnb_amount_to_transfer_from_spot = variables['bnb_amount_to_transfer_from_spot']
 bnb_balance_on_spot = client.get_asset_balance(asset='BNB')["free"]
 
 
