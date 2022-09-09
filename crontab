@@ -38,4 +38,6 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 40 * * * * cd /root/apollo/testing && python3 XRP.py
 
 ### transfer BUSD profit to spot ###
-#0  * * * * cd /root/apollo/testing && python3 transfer_to_spot.py
+0  */12 * * * cd /root/apollo/testing && python3 check_bnb_amount_and_transfer_to_futures.py
+5  */12 * * * cd /root/apollo/testing && python3 buy_on_spot.py
+#10  */12 * * * cd /root/apollo/testing && python3 transfer_to_spot.py
