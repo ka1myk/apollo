@@ -4,22 +4,23 @@ from binance.client import Client
 with open('variables.json') as v:
     variables = json.load(v)
 
-eth_to_buy_multiplayer = variables['eth_to_buy_multiplayer']
 btc_to_buy_multiplayer = variables['btc_to_buy_multiplayer']
-bnb_to_buy_multiplayer = variables['bnb_to_buy_multiplayer']
 
 with open('api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
-eth_buy_order = client.order_market_buy(
-    symbol='ETHBUSD',
-    quantity=100)
+avg_price = client.get_avg_price(symbol='BNBBUSD')
 
-btc_buy_order = client.order_market_buy(
-    symbol='BTCBUSD',
-    quantity=100)
+### bnb market buy on BUSD ###
 
-bnb_buy_order = client.order_market_buy(
+order = client.order_market_buy(
     symbol='BNBBUSD',
-    quantity=100)
+    quantity=0.037)
+
+### availible bnb limit sell ###
+
+btc_limit_sell_availible = client.order_limit_sell(
+    symbol='BNBBUSD',
+    quantity=0.037,
+    price=round(float(avg_price['price']) * 1.05, 1))

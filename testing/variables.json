@@ -4,7 +4,7 @@
   "eth_to_buy_multiplayer": 0.45,
   "btc_to_buy_multiplayer": 0.45,
   "bnb_to_buy_multiplayer": 0.1,
-  "bnb_amount_to_transfer_from_spot": 0.001,
+  "bnb_amount_to_transfer_from_spot": 0.005,
   "AUCTION": {
     "timeframe": "1w",
     "multiplier": 168,
