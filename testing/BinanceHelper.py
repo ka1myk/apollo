@@ -12,6 +12,11 @@ class BinanceHelper:
             creds = json.load(p)
         client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
+        with open('variables.json') as v:
+            variables = json.load(v)
+
+        leverage = int(variables['leverage'])
+
         info = client.futures_exchange_info()
 
         def get_quantity_precision(pair):
@@ -43,6 +48,8 @@ class BinanceHelper:
         min_notional = round_up(
             float(get_notional(symbol)) / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
             get_quantity_precision(symbol))
+
+        client.futures_change_leverage(symbol=symbol, leverage=leverage)
 
         client.futures_create_order(symbol=symbol,
                                     quantity=round(min_notional * multiplier * greed, get_quantity_precision(symbol)),

@@ -3,6 +3,7 @@
   "profit_to_spot_multiplayer": 0.5,
   "bnb_amount_to_transfer_from_spot": 0.005,
   "currency": "BUSD",
+  "leverage": 7,
   "AUCTION": {
     "timeframe": "1w",
     "multiplier": 168,
