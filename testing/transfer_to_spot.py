@@ -11,7 +11,7 @@ with open('api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
-timeframe_in_hours = 6
+timeframe_in_hours = 24
 
 profit = (client.futures_income_history(incomeType="REALIZED_PNL",
                                         startTime=client.get_server_time()[

@@ -1,10 +1,8 @@
 {
   "greed": 1,
   "profit_to_spot_multiplayer": 0.5,
-  "eth_to_buy_multiplayer": 0.45,
-  "btc_to_buy_multiplayer": 0.45,
-  "bnb_to_buy_multiplayer": 0.1,
   "bnb_amount_to_transfer_from_spot": 0.005,
+  "currency": "BUSD",
   "AUCTION": {
     "timeframe": "1w",
     "multiplier": 168,

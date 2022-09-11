@@ -19,7 +19,8 @@ def get_futures_wallet_balance(pair):
 
 
 bnb_balance_on_futures = get_futures_wallet_balance('BNB')
-print('bnb_balance_on_futures', bnb_balance_on_futures, 'bnb_amount_to_transfer_from_spot', bnb_amount_to_transfer_from_spot,
+print('bnb_balance_on_futures', bnb_balance_on_futures, 'bnb_amount_to_transfer_from_spot',
+      bnb_amount_to_transfer_from_spot,
       'bnb_balance_on_spot', bnb_balance_on_spot)
 
 if float(bnb_balance_on_futures) < float(bnb_amount_to_transfer_from_spot) < float(bnb_balance_on_spot):

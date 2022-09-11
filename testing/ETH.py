@@ -4,7 +4,9 @@ import json
 with open('variables.json') as v:
     variables = json.load(v)
 
-symbol = 'ETHBUSD'
+coin = "ETH"
+currency = variables['currency']
+symbol = coin + currency
 greed = variables['greed']
 multiplier = variables['ETH']['multiplier']
 long_profit_percentage = variables['ETH']['long_profit_percentage']

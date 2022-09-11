@@ -4,7 +4,9 @@ import json
 with open('variables.json') as v:
     variables = json.load(v)
 
-symbol = 'AUCTIONBUSD'
+coin = "AUCTION"
+currency = variables['currency']
+symbol = coin + currency
 greed = variables['greed']
 multiplier = variables['AUCTION']['multiplier']
 long_profit_percentage = variables['AUCTION']['long_profit_percentage']

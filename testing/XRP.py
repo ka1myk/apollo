@@ -4,7 +4,9 @@ import json
 with open('variables.json') as v:
     variables = json.load(v)
 
-symbol = 'XRPBUSD'
+coin = "XRP"
+currency = variables['currency']
+symbol = coin + currency
 greed = variables['greed']
 multiplier = variables['XRP']['multiplier']
 long_profit_percentage = variables['XRP']['long_profit_percentage']
