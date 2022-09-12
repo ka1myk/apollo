@@ -13,7 +13,7 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 # 1D
 0  0 * * * cd /root/apollo/testing && python3 BNB.py
 0  8 * * * cd /root/apollo/testing && python3 XRP.py
-0 16 * * * cd /root/apollo/testing && python3 DOT.p
+0 16 * * * cd /root/apollo/testing && python3 DOT.py
 
 ### transfer BUSD profit to spot ###
 5 0 * * * cd /root/apollo/testing && python3 check_bnb_amount_and_transfer_to_futures.py
