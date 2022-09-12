@@ -5,8 +5,6 @@ from secrets import randbelow
 with open('variables.json') as v:
     variables = json.load(v)
 
-btc_to_buy_multiplayer = variables['btc_to_buy_multiplayer']
-
 with open('api-keys.json') as p:
     creds = json.load(p)
 client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])

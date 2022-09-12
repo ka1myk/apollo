@@ -15,7 +15,8 @@ class BinanceHelper:
         with open('variables.json') as v:
             variables = json.load(v)
 
-        leverage = int(variables['leverage'])
+        leverage = variables['leverage']
+        amount_of_close_orders = variables['amount_of_close_orders']
 
         info = client.futures_exchange_info()
 
@@ -74,85 +75,25 @@ class BinanceHelper:
         client.futures_cancel_all_open_orders(symbol=symbol)
 
         if float(long_position_amt) != 0:
-            client.futures_create_order(symbol=symbol,
-                                        quantity=round(long_position_amt * 0.6, get_quantity_precision(symbol)),
-                                        price=get_rounded_price(symbol, long_take_profit_price * 1),
-                                        side='SELL',
-                                        positionSide='LONG',
-                                        type='LIMIT',
-                                        timeInForce="GTC"
-                                        )
-            client.futures_create_order(symbol=symbol,
-                                        quantity=round(long_position_amt * 0.1, get_quantity_precision(symbol)),
-                                        price=get_rounded_price(symbol, long_take_profit_price * 1.005),
-                                        side='SELL',
-                                        positionSide='LONG',
-                                        type='LIMIT',
-                                        timeInForce="GTC"
-                                        )
-            client.futures_create_order(symbol=symbol,
-                                        quantity=round(long_position_amt * 0.1, get_quantity_precision(symbol)),
-                                        price=get_rounded_price(symbol, long_take_profit_price * 1.01),
-                                        side='SELL',
-                                        positionSide='LONG',
-                                        type='LIMIT',
-                                        timeInForce="GTC"
-                                        )
-            client.futures_create_order(symbol=symbol,
-                                        quantity=round(long_position_amt * 0.1, get_quantity_precision(symbol)),
-                                        price=get_rounded_price(symbol, long_take_profit_price * 1.015),
-                                        side='SELL',
-                                        positionSide='LONG',
-                                        type='LIMIT',
-                                        timeInForce="GTC"
-                                        )
-            client.futures_create_order(symbol=symbol,
-                                        quantity=round(long_position_amt * 0.1, get_quantity_precision(symbol)),
-                                        price=get_rounded_price(symbol, long_take_profit_price * 1.02),
-                                        side='SELL',
-                                        positionSide='LONG',
-                                        type='LIMIT',
-                                        timeInForce="GTC"
-                                        )
+            for i in range(amount_of_close_orders):
+                client.futures_create_order(symbol=symbol,
+                                            quantity=round(long_position_amt / amount_of_close_orders,
+                                                           get_quantity_precision(symbol)),
+                                            price=get_rounded_price(symbol, long_take_profit_price * (1 + 0.01 * i)),
+                                            side='SELL',
+                                            positionSide='LONG',
+                                            type='LIMIT',
+                                            timeInForce="GTC"
+                                            )
 
         if float(short_position_amt) != 0:
-            client.futures_create_order(symbol=symbol,
-                                        quantity=round(short_position_amt * 0.6, get_quantity_precision(symbol)),
-                                        price=get_rounded_price(symbol, short_take_profit_price * 1),
-                                        side='BUY',
-                                        positionSide='SHORT',
-                                        type='LIMIT',
-                                        timeInForce="GTC"
-                                        )
-            client.futures_create_order(symbol=symbol,
-                                        quantity=round(short_position_amt * 0.1, get_quantity_precision(symbol)),
-                                        price=get_rounded_price(symbol, short_take_profit_price * 0.995),
-                                        side='BUY',
-                                        positionSide='SHORT',
-                                        type='LIMIT',
-                                        timeInForce="GTC"
-                                        )
-            client.futures_create_order(symbol=symbol,
-                                        quantity=round(short_position_amt * 0.1, get_quantity_precision(symbol)),
-                                        price=get_rounded_price(symbol, short_take_profit_price * 0.99),
-                                        side='BUY',
-                                        positionSide='SHORT',
-                                        type='LIMIT',
-                                        timeInForce="GTC"
-                                        )
-            client.futures_create_order(symbol=symbol,
-                                        quantity=round(short_position_amt * 0.1, get_quantity_precision(symbol)),
-                                        price=get_rounded_price(symbol, short_take_profit_price * 0.985),
-                                        side='BUY',
-                                        positionSide='SHORT',
-                                        type='LIMIT',
-                                        timeInForce="GTC"
-                                        )
-            client.futures_create_order(symbol=symbol,
-                                        quantity=round(short_position_amt * 0.1, get_quantity_precision(symbol)),
-                                        price=get_rounded_price(symbol, short_take_profit_price * 0.98),
-                                        side='BUY',
-                                        positionSide='SHORT',
-                                        type='LIMIT',
-                                        timeInForce="GTC"
-                                        )
+            for i in range(amount_of_close_orders):
+                client.futures_create_order(symbol=symbol,
+                                            quantity=round(short_position_amt / amount_of_close_orders,
+                                                           get_quantity_precision(symbol)),
+                                            price=get_rounded_price(symbol, short_take_profit_price * (1 - 0.01 * i)),
+                                            side='BUY',
+                                            positionSide='SHORT',
+                                            type='LIMIT',
+                                            timeInForce="GTC"
+                                            )
