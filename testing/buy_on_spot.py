@@ -1,30 +1,55 @@
 import json
+from secrets import randbelow
+
 from binance.client import Client
-from notify import send_to_telegram
-import platform
+from binance.helpers import round_step_size
+
+with open('variables.json') as v:
+    variables = json.load(v)
+
+with open('api-keys.json') as p:
+    creds = json.load(p)
+client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
+
+currency = variables['currency']
+greed = variables['greed']
+
+coins = ["ADA", "BNB", "BTC", "DOT", "ETH", "SOL", "XRP"]
+for x in coins:
+    symbol = x + currency
+
+    info = client.get_symbol_info(symbol)
+    price = client.get_avg_price(symbol=symbol)['price']
 
 
-try:
-    with open('variables.json') as v:
-        variables = json.load(v)
+    def get_notional(symbol):
+        for y in info['filters']:
+            if y['filterType'] == 'MIN_NOTIONAL':
+                return y['minNotional']
 
-    with open('api-keys.json') as p:
-        creds = json.load(p)
-    client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
 
-    currency = variables['currency']
+    def get_price_precision(symbol):
+        n = len(str(get_rounded_price(symbol, price)).split(".")[1])
+        return n
 
-    # coins = ["ADA", "BNB", "BTC", "DOT", "ETH", "SOL", "XRP"]
-    coins = ["XRP"]
-    for x in coins:
-        symbol = x + currency1
 
-    # market_buy = client.order_market_buy(
-    #     symbol= coin + currency,
-    #     quantity=min_quantity)
-    # limit_sell = client.order_limit_sell(
-    #     symbol= coin + currency,
-    #     quantity=min_quantity,
-    #     price=round(float(avg_price['price']) * round(randbelow(30) * 0.01 + 1.02, 3), 1))
-except Exception as message:
-    print(send_to_telegram(str(platform.node()) + str(message)))
+    def get_tick_size(symbol):
+        for y in info['filters']:
+            if y['filterType'] == 'PRICE_FILTER':
+                return y['tickSize']
+
+
+    def get_rounded_price(symbol: str, price: float) -> float:
+        return round_step_size(price, get_tick_size(symbol))
+
+
+    market_buy = client.order_market_buy(symbol=symbol, side='BUY', type='MARKET',
+                                         quoteOrderQty=float(get_notional(symbol)))
+
+    avg_price_with_profit_and_precision = round(float(price) * float(randbelow(30) * 0.01 + 1.02),
+                                                get_price_precision(symbol))
+
+    free_balance = float(client.get_asset_balance(asset=x)['free'])
+
+    limit_sell = client.order_limit_sell(symbol=symbol, quantity=free_balance,
+                                         price=avg_price_with_profit_and_precision)
