@@ -3,12 +3,12 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 
 ### futures ###
 # 1W
-40 0 * * MON cd /root/apollo/testing && python3 BTC.py
-40 12 * * WED cd /root/apollo/testing && python3 SOL.py
+0  2 * * MON cd /root/apollo/testing && python3 BTC.py
+0 14 * * WED cd /root/apollo/testing && python3 SOL.py
 
 # 3D
-20 0 * * TUE,FRI cd /root/apollo/testing && python3 ETH.py
-20 12 * * THU,SUN cd /root/apollo/testing && python3 ADA.py
+0  6 * * TUE,FRI cd /root/apollo/testing && python3 ETH.py
+0 18 * * THU,SUN cd /root/apollo/testing && python3 ADA.py
 
 # 1D
 0  0 * * * cd /root/apollo/testing && python3 BNB.py
@@ -16,6 +16,6 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 0 16 * * * cd /root/apollo/testing && python3 DOT.py
 
 ### transfer BUSD profit to spot ###
-5 0 * * * cd /root/apollo/testing && python3 check_bnb_amount_and_transfer_to_futures.py
-10 */12 * * * cd /root/apollo/testing && python3 buy_on_spot.py
-#15 0 * * * cd /root/apollo/testing && python3 transfer_to_spot.py
+5 0  * * * cd /root/apollo/testing && python3 bnb_to_futures.py
+10 0 * * * cd /root/apollo/testing && python3 buy_on_spot.py
+#15 0 * * * cd /root/apollo/testing && python3 busd_to_spot.py
