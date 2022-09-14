@@ -15,6 +15,7 @@ currency = variables['currency']
 greed = variables['greed']
 
 coins = ["ADA", "BNB", "BTC", "DOT", "ETH", "SOL", "XRP"]
+
 for x in coins:
     symbol = x + currency
 
@@ -48,8 +49,7 @@ for x in coins:
 
     avg_price_with_profit_and_precision = round(float(price) * float(randbelow(30) * 0.01 + 1.02),
                                                 get_price_precision(symbol))
+    executedQty = float(client.get_all_orders(symbol=symbol, limit=1)[0]["executedQty"])
 
-    free_balance = float(client.get_asset_balance(asset=x)['free'])
-
-    limit_sell = client.order_limit_sell(symbol=symbol, quantity=free_balance,
+    limit_sell = client.order_limit_sell(symbol=symbol, quantity=executedQty,
                                          price=avg_price_with_profit_and_precision)
