@@ -1,7 +1,6 @@
 shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
 @reboot sleep 10; /bin/bash -c tmuxp load /root/apollo/session.yaml
 
-### futures ###
 # 1W
 0 0 * * MON cd /root/apollo/testing && python3 BTC.py
 0 0 * * WED cd /root/apollo/testing && python3 SOL.py
@@ -15,7 +14,6 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 0 12 * * * cd /root/apollo/testing && python3 XRP.py
 0 20 * * * cd /root/apollo/testing && python3 DOT.py
 
-### transfer BUSD profit to spot ###
-5  0 * * * cd /root/apollo/testing && python3 bnb_to_futures.py
-10 0 * * * cd /root/apollo/testing && python3 buy_on_spot.py
-#15 0 * * * cd /root/apollo/testing && python3 busd_to_spot.py
+0 0 * * SAT cd /root/apollo/testing && python3 busd_to_spot.py
+5 0 * * SAT cd /root/apollo/testing && python3 buy_on_spot.py
+15 0 * * * cd /root/apollo/testing && python3 bnb_to_futures.py

@@ -2,6 +2,7 @@
   "greed": 1,
   "profit_to_spot_multiplayer": 0.5,
   "bnb_amount_to_transfer_from_spot": 0.005,
+  "hours_to_transfer_profit": 168,
   "currency": "BUSD",
   "leverage": 7,
   "amount_of_close_orders": 10,
