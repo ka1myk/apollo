@@ -16,4 +16,4 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 
 0 0 * * SAT cd /root/apollo/testing && python3 busd_to_spot.py
 5 0 * * SAT cd /root/apollo/testing && python3 buy_on_spot.py
-15 0 * * * cd /root/apollo/testing && python3 bnb_to_futures.py
+15 0 * * SAT cd /root/apollo/testing && python3 bnb_to_futures.py
