@@ -18,14 +18,14 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 5 0 * * SAT cd /root/apollo && python3 bnb_to_futures.py
 
 # 1W spot
-0 12 * * TUE cd /root/apollo && python3 spot_trade.py --coin ETH
-0 12 * * FRI cd /root/apollo && python3 spot_trade.py --coin XRP
+30 12 * * TUE cd /root/apollo && python3 spot_trade.py --coin ETH
+30 12 * * FRI cd /root/apollo && python3 spot_trade.py --coin XRP
 
 # 3D spot
-0 12 * * TUE,FRI cd /root/apollo && python3 spot_trade.py --coin BNB
-0 12 * * THU,SUN cd /root/apollo && python3 spot_trade.py --coin DOT
+30 12 * * TUE,FRI cd /root/apollo && python3 spot_trade.py --coin BNB
+30 12 * * THU,SUN cd /root/apollo && python3 spot_trade.py --coin DOT
 
 # 1D spot
-0 4 * * * cd /root/apollo && python3 spot_trade.py --coin BTC
-0 12 * * * cd /root/apollo && python3 spot_trade.py --coin SOL
-0 20 * * * cd /root/apollo && python3 spot_trade.py --coin ADA
+30 0 * * * cd /root/apollo && python3 spot_trade.py --coin BTC
+30 8 * * * cd /root/apollo && python3 spot_trade.py --coin SOL
+30 16 * * * cd /root/apollo && python3 spot_trade.py --coin ADA
