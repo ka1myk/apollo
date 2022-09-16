@@ -17,12 +17,13 @@ coin = parser.parse_args()
 
 currency = variables['currency']
 symbol = coin.coin + currency
-multiplier = variables[symbol]['multiplier']
+multiplier = variables[coin.coin]['multiplier']
 greed = variables['greed']
 leverage = variables['leverage']
 amount_of_close_orders = variables['amount_of_close_orders']
-long_profit_percentage = variables[symbol]['long_profit_percentage']
-short_profit_percentage = variables[symbol]['short_profit_percentage']
+long_profit_percentage = variables[coin.coin]['long_profit_percentage']
+short_profit_percentage = variables[coin.coin]['short_profit_percentage']
+
 
 info = client.futures_exchange_info()
 
