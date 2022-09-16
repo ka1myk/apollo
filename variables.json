@@ -9,43 +9,43 @@
   "BTC": {
     "timeframe": "1w",
     "multiplier": 42,
-    "long_profit_percentage": 1.095,
-    "short_profit_percentage": 0.905
+    "long_profit_percentage": 1.09,
+    "short_profit_percentage": 0.91
   },
   "SOL": {
     "timeframe": "1w",
     "multiplier": 24,
-    "long_profit_percentage": 1.095,
-    "short_profit_percentage": 0.905
+    "long_profit_percentage": 1.09,
+    "short_profit_percentage": 0.91
   },
   "ETH": {
     "timeframe": "3d",
     "multiplier": 72,
-    "long_profit_percentage": 1.061,
-    "short_profit_percentage": 0.939
+    "long_profit_percentage": 1.06,
+    "short_profit_percentage": 0.94
   },
   "ADA": {
     "timeframe": "3d",
     "multiplier": 72,
-    "long_profit_percentage": 1.061,
-    "short_profit_percentage": 0.939
+    "long_profit_percentage": 1.06,
+    "short_profit_percentage": 0.94
   },
   "BNB": {
     "timeframe": "1d",
     "multiplier": 24,
-    "long_profit_percentage": 1.035,
-    "short_profit_percentage": 0.965
+    "long_profit_percentage": 1.03,
+    "short_profit_percentage": 0.97
   },
   "XRP": {
     "timeframe": "1d",
     "multiplier": 24,
-    "long_profit_percentage": 1.035,
-    "short_profit_percentage": 0.965
+    "long_profit_percentage": 1.03,
+    "short_profit_percentage": 0.97
   },
   "DOT": {
     "timeframe": "1d",
     "multiplier": 24,
-    "long_profit_percentage": 1.035,
-    "short_profit_percentage": 0.965
+    "long_profit_percentage": 1.03,
+    "short_profit_percentage": 0.97
   }
 }
