@@ -1,7 +1,7 @@
 {
   "greed": 1,
   "profit_to_spot_multiplayer": 0.5,
-  "bnb_amount_to_transfer_from_spot": 0.01,
+  "bnb_amount_to_transfer_from_spot": 0.05,
   "hours_to_transfer_profit": 168,
   "currency": "BUSD",
   "leverage": 7,
@@ -47,5 +47,13 @@
     "multiplier": 24,
     "long_profit_percentage": 1.03,
     "short_profit_percentage": 0.97
+  },
+  "DOGE": {
+    "timeframe": "1h",
+    "multiplier": 1,
+    "long_profit_percentage": 1.01,
+    "short_profit_percentage": 0.99,
+    "previous_unRealizedProfit": "-0.44797482",
+    "unRealizedProfit_multiplayer": 2
   }
 }
