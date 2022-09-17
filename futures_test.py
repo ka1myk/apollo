@@ -78,8 +78,6 @@ if float(short_position_amt) != 0:
         with open('variables.json', 'w') as f:
             json.dump(variables, f)
 
-        client.futures_change_leverage(symbol=symbol, leverage=leverage)
-
         client.futures_create_order(symbol=symbol,
                                     quantity=round(min_notional * multiplier * greed, get_quantity_precision(symbol)),
                                     side='SELL',
@@ -97,3 +95,14 @@ if float(short_position_amt) != 0:
                                         type='LIMIT',
                                         timeInForce="GTC"
                                         )
+else:
+    variables[coin.coin]["previous_unRealizedProfit"] = 0
+
+    with open('variables.json', 'w') as f:
+        json.dump(variables, f)
+
+    client.futures_create_order(symbol=symbol,
+                                quantity=round(min_notional * multiplier * greed, get_quantity_precision(symbol)),
+                                side='SELL',
+                                positionSide='SHORT',
+                                type='MARKET')
