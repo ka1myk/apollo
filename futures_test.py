@@ -74,6 +74,7 @@ if float(short_position_amt) != 0:
                       "previous_unRealizedProfit"])) * unRealizedProfit_multiplayer:
         variables[coin.coin][
             "previous_unRealizedProfit"] = client.futures_position_information(symbol=symbol)[2]["unRealizedProfit"]
+        variables[coin.coin]['multiplier'] = variables[coin.coin]['multiplier'] * 2
 
         with open('variables.json', 'w') as f:
             json.dump(variables, f)
@@ -97,6 +98,7 @@ if float(short_position_amt) != 0:
                                         )
 else:
     variables[coin.coin]["previous_unRealizedProfit"] = 0
+    variables[coin.coin]['multiplier'] = 1
 
     with open('variables.json', 'w') as f:
         json.dump(variables, f)
