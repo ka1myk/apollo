@@ -31,4 +31,4 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 30 16 * * * cd /root/apollo && python3 spot_trade.py --coin ADA
 
 # 1h futures test
-30 * * * * cd /root/apollo && python3 futures_test.py --coin DOGE
+* * * * * cd /root/apollo && python3 futures_test.py --coin DOGE
