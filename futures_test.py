@@ -108,3 +108,15 @@ else:
                                 side='SELL',
                                 positionSide='SHORT',
                                 type='MARKET')
+
+    client.futures_cancel_all_open_orders(symbol=symbol)
+    for i in range(amount_of_close_orders):
+        client.futures_create_order(symbol=symbol,
+                                    quantity=round(short_position_amt / amount_of_close_orders,
+                                                   get_quantity_precision(symbol)),
+                                    price=get_rounded_price(symbol, short_take_profit_price * (1 - 0.01 * i)),
+                                    side='BUY',
+                                    positionSide='SHORT',
+                                    type='LIMIT',
+                                    timeInForce="GTC"
+                                    )
