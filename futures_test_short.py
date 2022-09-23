@@ -22,7 +22,7 @@ symbol = coin.coin + currency
 multiplier = variables[coin.coin]['multiplier']
 greed = variables['greed']
 leverage = variables['leverage']
-amount_of_close_orders = 1
+amount_of_close_orders = variables['amount_of_close_orders']
 short_profit_percentage = variables[coin.coin]['short_profit_percentage']
 unRealizedProfit_multiplayer = variables[coin.coin]['unRealizedProfit_multiplayer']
 

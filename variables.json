@@ -4,56 +4,62 @@
   "bnb_amount_to_transfer_from_spot": 0.05,
   "hours_to_transfer_profit": 168,
   "currency": "BUSD",
-  "leverage": 7,
+  "leverage": 1,
   "amount_of_close_orders": 5,
-  "BTC": {
-    "timeframe": "1w",
-    "multiplier": 42,
-    "long_profit_percentage": 1.09,
-    "short_profit_percentage": 0.91
-  },
   "SOL": {
-    "timeframe": "1w",
-    "multiplier": 24,
-    "long_profit_percentage": 1.09,
-    "short_profit_percentage": 0.91
+    "timeframe": "1d",
+    "multiplier": 1.13,
+    "long_profit_percentage": 1.07,
+    "short_profit_percentage": 0.93,
+    "previous_unRealizedProfit": "0",
+    "unRealizedProfit_multiplayer": 5
   },
-  "ETH": {
-    "timeframe": "3d",
-    "multiplier": 72,
+  "BTC": {
+    "timeframe": "2d",
+    "multiplier": 1,
     "long_profit_percentage": 1.06,
-    "short_profit_percentage": 0.94
-  },
-  "ADA": {
-    "timeframe": "3d",
-    "multiplier": 72,
-    "long_profit_percentage": 1.06,
-    "short_profit_percentage": 0.94
+    "short_profit_percentage": 0.94,
+    "previous_unRealizedProfit": "0",
+    "unRealizedProfit_multiplayer": 4
   },
   "BNB": {
-    "timeframe": "1d",
-    "multiplier": 24,
-    "long_profit_percentage": 1.03,
-    "short_profit_percentage": 0.97
-  },
-  "XRP": {
-    "timeframe": "1d",
-    "multiplier": 24,
-    "long_profit_percentage": 1.03,
-    "short_profit_percentage": 0.97
+    "timeframe": "3d",
+    "multiplier": 2.3,
+    "long_profit_percentage": 1.05,
+    "short_profit_percentage": 0.95,
+    "previous_unRealizedProfit": "0",
+    "unRealizedProfit_multiplayer": 4
   },
   "DOT": {
-    "timeframe": "1d",
-    "multiplier": 24,
-    "long_profit_percentage": 1.03,
-    "short_profit_percentage": 0.97
+    "timeframe": "4d",
+    "multiplier": 1.85,
+    "long_profit_percentage": 1.04,
+    "short_profit_percentage": 0.96,
+    "previous_unRealizedProfit": "0",
+    "unRealizedProfit_multiplayer": 3
   },
-  "DOGE": {
-    "timeframe": "1h",
-    "multiplier": 1,
+  "XRP": {
+    "timeframe": "5d",
+    "multiplier": 1.6,
+    "long_profit_percentage": 1.03,
+    "short_profit_percentage": 0.97,
+    "previous_unRealizedProfit": "0",
+    "unRealizedProfit_multiplayer": 3
+  },
+  "ADA": {
+    "timeframe": "6d",
+    "multiplier": 1.23,
+    "long_profit_percentage": 1.02,
+    "short_profit_percentage": 0.98,
+    "previous_unRealizedProfit": "0",
+    "unRealizedProfit_multiplayer": 2
+  },
+  "ETH": {
+    "timeframe": "7d",
+    "multiplier": 1.12,
     "long_profit_percentage": 1.01,
     "short_profit_percentage": 0.99,
-    "previous_unRealizedProfit": "-0.44797482",
-    "unRealizedProfit_multiplayer": 3
+    "previous_unRealizedProfit": "0",
+    "unRealizedProfit_multiplayer": 2
   }
 }
