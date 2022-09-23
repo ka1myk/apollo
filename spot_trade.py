@@ -48,7 +48,7 @@ def get_rounded_price(symbol: str, price: float) -> float:
 market_buy = client.order_market_buy(symbol=symbol, side='BUY', type='MARKET',
                                      quoteOrderQty=float(get_notional(symbol)) * float(greed))
 
-avg_price_with_profit_and_precision = round(float(price) * float(randbelow(30) * 0.01 + 1.02),
+avg_price_with_profit_and_precision = round(float(price) * float(randbelow(9) * 0.01 + 1.01),
                                             get_price_precision(symbol))
 executedQty = float(client.get_all_orders(symbol=symbol, limit=1)[0]["executedQty"])
 

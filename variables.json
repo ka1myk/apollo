@@ -5,7 +5,7 @@
   "hours_to_transfer_profit": 168,
   "currency": "BUSD",
   "leverage": 7,
-  "amount_of_close_orders": 10,
+  "amount_of_close_orders": 5,
   "BTC": {
     "timeframe": "1w",
     "multiplier": 42,
