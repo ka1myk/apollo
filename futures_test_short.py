@@ -82,7 +82,7 @@ def open_market_and_create_close():
         client.futures_create_order(symbol=symbol,
                                     quantity=round(short_position_amt / amount_of_close_orders,
                                                    get_quantity_precision(symbol)),
-                                    price=get_rounded_price(symbol, short_take_profit_price * (1 - 0.01 * i)),
+                                    price=get_rounded_price(symbol, short_take_profit_price * (1 - 0.01 * (2 ** i))),
                                     side='BUY',
                                     positionSide='SHORT',
                                     type='LIMIT',

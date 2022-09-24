@@ -20,7 +20,7 @@
     "long_profit_percentage": 1.06,
     "short_profit_percentage": 0.94,
     "previous_unRealizedProfit": "0",
-    "unRealizedProfit_multiplayer": 4
+    "unRealizedProfit_multiplayer": 4.5
   },
   "BNB": {
     "timeframe": "3d",
@@ -36,7 +36,7 @@
     "long_profit_percentage": 1.04,
     "short_profit_percentage": 0.96,
     "previous_unRealizedProfit": "0",
-    "unRealizedProfit_multiplayer": 3
+    "unRealizedProfit_multiplayer": 3.5
   },
   "XRP": {
     "timeframe": "5d",
@@ -52,7 +52,7 @@
     "long_profit_percentage": 1.02,
     "short_profit_percentage": 0.98,
     "previous_unRealizedProfit": "0",
-    "unRealizedProfit_multiplayer": 2
+    "unRealizedProfit_multiplayer": 2.5
   },
   "ETH": {
     "timeframe": "7d",
