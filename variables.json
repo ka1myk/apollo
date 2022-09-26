@@ -4,7 +4,7 @@
   "bnb_amount_to_transfer_from_spot": 0.05,
   "hours_to_transfer_profit": 168,
   "currency": "BUSD",
-  "leverage": 7,
+  "leverage": 5,
   "amount_of_close_orders": 5,
   "SOL": {
     "timeframe": "1d",

@@ -92,10 +92,9 @@ def open_market_and_create_close():
 
 if float(short_position_amt) != 0:
     if abs(float(client.futures_position_information(symbol=symbol)[2]["unRealizedProfit"])) > abs(
-            float(variables[coin.coin][
-                      "previous_unRealizedProfit"])) * unRealizedProfit_multiplayer:
-        variables[coin.coin][
-            "previous_unRealizedProfit"] = client.futures_position_information(symbol=symbol)[2]["unRealizedProfit"]
+            float(variables[coin.coin]["previous_unRealizedProfit"])) * unRealizedProfit_multiplayer:
+        variables[coin.coin]["previous_unRealizedProfit"] = client.futures_position_information(symbol=symbol)[2][
+            "unRealizedProfit"]
 
         with open('variables.json', 'w') as f:
             json.dump(variables, f)
