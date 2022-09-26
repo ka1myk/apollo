@@ -1,7 +1,5 @@
 import json
-from secrets import randbelow
 import argparse
-
 from binance.client import Client
 from binance.helpers import round_step_size
 
@@ -19,6 +17,11 @@ coin = parser.parse_args()
 currency = variables['currency']
 symbol = coin.coin + currency
 greed = variables['greed']
+leverage = variables['leverage']
+multiplier = variables[coin.coin]['multiplier']
+amount_of_close_orders = variables['amount_of_close_orders']
+long_profit_percentage = variables[coin.coin]['long_profit_percentage']
+short_profit_percentage = variables[coin.coin]['short_profit_percentage']
 
 info = client.get_symbol_info(symbol)
 price = client.get_avg_price(symbol=symbol)['price']
@@ -45,12 +48,16 @@ def get_rounded_price(symbol: str, price: float) -> float:
     return round_step_size(price, get_tick_size(symbol))
 
 
-market_buy = client.order_market_buy(symbol=symbol, side='BUY', type='MARKET',
-                                     quoteOrderQty=float(get_notional(symbol)) * float(greed))
+def open_market_and_create_close():
+    client.order_market_buy(symbol=symbol, side='BUY', type='MARKET',
+                            quoteOrderQty=float(get_notional(symbol)) * float(greed))
 
-avg_price_with_profit_and_precision = round(float(price) * float(randbelow(9) * 0.01 + 1.01),
-                                            get_price_precision(symbol))
-executedQty = float(client.get_all_orders(symbol=symbol, limit=1)[0]["executedQty"])
+    avg_price_with_profit_and_precision = round(float(price) * float(long_profit_percentage),
+                                                get_price_precision(symbol))
+    executedQty = float(client.get_all_orders(symbol=symbol, limit=1)[0]["executedQty"])
 
-limit_sell = client.order_limit_sell(symbol=symbol, quantity=executedQty,
-                                     price=avg_price_with_profit_and_precision)
+    client.order_limit_sell(symbol=symbol, quantity=executedQty,
+                            price=avg_price_with_profit_and_precision)
+
+
+open_market_and_create_close()
