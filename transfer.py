@@ -1,3 +1,4 @@
+#TODO cancel all spot orders created > 1 week
 import json
 from binance.client import Client
 

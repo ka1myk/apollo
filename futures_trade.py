@@ -22,10 +22,10 @@ currency = variables['currency']
 symbol = coin.coin + currency
 greed = variables['greed']
 leverage = variables['leverage']
-multiplier = variables[coin.coin]['multiplier']
+multiplier = variables['coin'][coin.coin]['multiplier']
 amount_of_close_orders = variables['amount_of_close_orders']
-long_profit_percentage = variables[coin.coin]['long_profit_percentage']
-short_profit_percentage = variables[coin.coin]['short_profit_percentage']
+long_profit_percentage = variables['coin'][coin.coin]['long_profit_percentage']
+short_profit_percentage = variables['coin'][coin.coin]['short_profit_percentage']
 
 info = client.futures_exchange_info()
 
