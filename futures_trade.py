@@ -1,3 +1,6 @@
+#TODO calculate multiplier as 40$ a week with greed=1
+#TODO calculate short_profit_percentage as average of timeframe change six month
+
 import math
 import json
 import argparse

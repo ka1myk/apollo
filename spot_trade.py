@@ -1,3 +1,5 @@
+#TODO calculate long_profit_percentage as average of timeframe change six month
+
 import json
 import argparse
 from binance.client import Client
@@ -27,7 +29,7 @@ info = client.get_symbol_info(symbol)
 price = client.get_avg_price(symbol=symbol)['price']
 
 
-def get_notional(symbol):
+def get_notional():
     for y in info['filters']:
         if y['filterType'] == 'MIN_NOTIONAL':
             return y['minNotional']
@@ -38,7 +40,7 @@ def get_price_precision(symbol):
     return n
 
 
-def get_tick_size(symbol):
+def get_tick_size():
     for y in info['filters']:
         if y['filterType'] == 'PRICE_FILTER':
             return y['tickSize']

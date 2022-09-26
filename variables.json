@@ -1,44 +1,44 @@
 {
   "greed": 1,
-  "profit_to_spot_multiplayer": 0.5,
-  "bnb_amount_to_transfer_from_spot": 0.05,
-  "hours_to_transfer_profit": 168,
-  "currency": "BUSD",
   "leverage": 1,
+  "currency": "BUSD",
   "amount_of_close_orders": 7,
-  "SOL": {
-    "multiplier": 1.13,
-    "long_profit_percentage": 1.07,
-    "short_profit_percentage": 0.93
-  },
-  "BTC": {
-    "multiplier": 1,
-    "long_profit_percentage": 1.06,
-    "short_profit_percentage": 0.94
-  },
-  "BNB": {
-    "multiplier": 2.3,
-    "long_profit_percentage": 1.05,
-    "short_profit_percentage": 0.95
-  },
-  "DOT": {
-    "multiplier": 1.85,
-    "long_profit_percentage": 1.04,
-    "short_profit_percentage": 0.96
-  },
-  "XRP": {
-    "multiplier": 1.6,
-    "long_profit_percentage": 1.03,
-    "short_profit_percentage": 0.97
-  },
-  "ADA": {
-    "multiplier": 1.23,
-    "long_profit_percentage": 1.02,
-    "short_profit_percentage": 0.98
-  },
-  "ETH": {
-    "multiplier": 1.12,
-    "long_profit_percentage": 1.01,
-    "short_profit_percentage": 0.99
+  "hours_to_transfer_profit": 168,
+  "coin": {
+    "SOL": {
+      "multiplier": 1.13,
+      "long_profit_percentage": 1.03,
+      "short_profit_percentage": 0.93
+    },
+    "BTC": {
+      "multiplier": 1,
+      "long_profit_percentage": 1.04,
+      "short_profit_percentage": 0.94
+    },
+    "BNB": {
+      "multiplier": 2.3,
+      "long_profit_percentage": 1.05,
+      "short_profit_percentage": 0.95
+    },
+    "DOT": {
+      "multiplier": 1.85,
+      "long_profit_percentage": 1.06,
+      "short_profit_percentage": 0.96
+    },
+    "XRP": {
+      "multiplier": 1.6,
+      "long_profit_percentage": 1.07,
+      "short_profit_percentage": 0.97
+    },
+    "ADA": {
+      "multiplier": 1.23,
+      "long_profit_percentage": 1.08,
+      "short_profit_percentage": 0.98
+    },
+    "ETH": {
+      "multiplier": 1.12,
+      "long_profit_percentage": 1.09,
+      "short_profit_percentage": 0.99
+    }
   }
 }

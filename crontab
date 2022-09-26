@@ -17,4 +17,4 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 0 9 * *  MON,TUE,WED,THU,FRI,SAT      cd /root/apollo && python3 spot_trade.py --coin BTC
 0 11 * * MON,TUE,WED,THU,FRI,SAT,SUN  cd /root/apollo && python3 spot_trade.py --coin SOL
 
-30 0 * * MON                          cd /root/apollo && python3 bnb_to_futures.py
+30 0 * * MON                          cd /root/apollo && python3 transfer.py
