@@ -1,7 +1,6 @@
 {
   "currency": "BUSD",
   "amount_of_close_orders": 7,
-  "hours_to_transfer_profit": 168,
   "coin": {
     "SOL": {
       "times_a_week_futures": 1,

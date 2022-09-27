@@ -4,6 +4,8 @@ import json
 import argparse
 from binance.client import Client
 from binance.helpers import round_step_size
+from secrets import randbelow
+
 
 with open('api-keys.json') as p:
     creds = json.load(p)
@@ -60,8 +62,9 @@ def open_market_and_create_close():
                                                 get_price_precision(symbol))
     executedQty = float(client.get_all_orders(symbol=symbol, limit=1)[0]["executedQty"])
 
-    client.order_limit_sell(symbol=symbol, quantity=executedQty,
-                            price=avg_price_with_profit_and_precision)
+    if randbelow(2) == 1:
+        client.order_limit_sell(symbol=symbol, quantity=executedQty,
+                                price=avg_price_with_profit_and_precision)
 
 
 open_market_and_create_close()

@@ -1,4 +1,3 @@
-#TODO cancel all spot orders created > 1 week
 import json
 from binance.client import Client
 
@@ -10,7 +9,6 @@ with open('variables.json') as v:
     variables = json.load(v)
 
 currency = variables['currency']
-hours_to_transfer_profit = variables['hours_to_transfer_profit']
 
 def get_free_currency():
     for x in client.futures_account_balance():
@@ -20,14 +18,14 @@ def get_free_currency():
 def busd_from_futures_to_spot():
     profit = client.futures_income_history(incomeType="REALIZED_PNL",
                                            startTime=client.get_server_time()[
-                                                         "serverTime"] - 1000 * 60 * 60 * hours_to_transfer_profit,
-                                           endTime=client.get_server_time()["serverTime"])
+                                                         'serverTime'] - 1000 * 60 * 60,
+                                           endTime=client.get_server_time()['serverTime'])
 
     for x in profit:
         client.futures_account_transfer(asset="BUSD",
-                                        amount=float(x["income"]),
+                                        amount=float(x['income']),
                                         type=2,
-                                        timestamp=client.get_server_time()["serverTime"])
+                                        timestamp=client.get_server_time()['serverTime'])
 
 
 def coin_from_spot_to_futures():
