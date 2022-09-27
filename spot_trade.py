@@ -27,7 +27,7 @@ info = client.get_symbol_info(symbol)
 price = client.get_avg_price(symbol=symbol)['price']
 
 
-def get_notional():
+def get_notional(symbol):
     for y in info['filters']:
         if y['filterType'] == 'MIN_NOTIONAL':
             return y['minNotional']
@@ -38,7 +38,7 @@ def get_price_precision(symbol):
     return n
 
 
-def get_tick_size():
+def get_tick_size(symbol):
     for y in info['filters']:
         if y['filterType'] == 'PRICE_FILTER':
             return y['tickSize']

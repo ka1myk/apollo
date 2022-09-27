@@ -1,5 +1,5 @@
-#TODO calculate multiplier as 40$ a week with greed=1
-#TODO calculate short_profit_percentage as average of timeframe change six month
+# TODO calculate short_profit_percentage as average of timeframe change six month
+# TODO calculate greed based on wallet balance of futures
 
 import math
 import json
@@ -22,8 +22,8 @@ currency = variables['currency']
 symbol = coin.coin + currency
 greed = variables['greed']
 leverage = variables['leverage']
-multiplier = variables['coin'][coin.coin]['multiplier']
 amount_of_close_orders = variables['amount_of_close_orders']
+times_a_week_futures = variables['coin'][coin.coin]['times_a_week_futures']
 long_profit_percentage = variables['coin'][coin.coin]['long_profit_percentage']
 short_profit_percentage = variables['coin'][coin.coin]['short_profit_percentage']
 
@@ -61,9 +61,18 @@ def get_rounded_price(symbol: str, price: float) -> float:
     return round_step_size(price, get_tick_size(symbol))
 
 
-min_notional = round_up(
-    float(get_notional(symbol)) / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
-    get_quantity_precision(symbol))
+def min_notional(symbol: str) -> float:
+    return round_up(
+        float(get_notional(symbol)) / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
+        get_quantity_precision(symbol))
+
+
+def multiplier_of_twice_BTC(symbol: str) -> float:
+    return round(
+        (2 * (min_notional("BTCBUSD") * float(client.futures_mark_price(symbol="BTCBUSD")["markPrice"]))) / (
+                min_notional(symbol) * float(
+            client.futures_mark_price(symbol=symbol)["markPrice"])) / times_a_week_futures, 2)
+
 
 short_position_amt = abs(float(client.futures_position_information(symbol=symbol)[2]["positionAmt"]))
 short_take_profit_price = get_rounded_price(symbol, float(
@@ -72,7 +81,8 @@ short_take_profit_price = get_rounded_price(symbol, float(
 
 def open_market_and_create_close():
     client.futures_create_order(symbol=symbol,
-                                quantity=round(min_notional * multiplier * greed, get_quantity_precision(symbol)),
+                                quantity=round(min_notional(symbol) * multiplier_of_twice_BTC(symbol) * greed,
+                                               get_quantity_precision(symbol)),
                                 side='SELL',
                                 positionSide='SHORT',
                                 type='MARKET')
