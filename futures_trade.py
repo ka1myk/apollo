@@ -22,7 +22,6 @@ amount_of_close_orders = variables['amount_of_close_orders']
 times_a_week_futures = variables['coin'][coin.coin]['times_a_week_futures']
 short_profit_percentage = variables['coin'][coin.coin]['short_profit_percentage']
 
-client.futures_change_multi_assets_mode(multiAssetsMargin="True")
 client.futures_change_leverage(symbol=symbol, leverage=5)
 
 info = client.futures_exchange_info()
