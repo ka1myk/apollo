@@ -1,5 +1,5 @@
 # TODO calculate short_profit_percentage as average of timeframe change six month
-# TODO calculate greed based on wallet balance of futures
+# TODO set leverage
 
 import math
 import json
@@ -20,7 +20,6 @@ coin = parser.parse_args()
 
 currency = variables['currency']
 symbol = coin.coin + currency
-greed = variables['greed']
 leverage = variables['leverage']
 amount_of_close_orders = variables['amount_of_close_orders']
 times_a_week_futures = variables['coin'][coin.coin]['times_a_week_futures']
@@ -28,6 +27,14 @@ long_profit_percentage = variables['coin'][coin.coin]['long_profit_percentage']
 short_profit_percentage = variables['coin'][coin.coin]['short_profit_percentage']
 
 info = client.futures_exchange_info()
+
+
+def set_greed():
+    if float(client.futures_account()['totalWalletBalance']) < 3000:
+        greed = 1
+    else:
+        greed = round(float(client.futures_account()['totalWalletBalance']) / 3000)
+    return greed
 
 
 def get_quantity_precision(symbol):
@@ -81,7 +88,7 @@ short_take_profit_price = get_rounded_price(symbol, float(
 
 def open_market_and_create_close():
     client.futures_create_order(symbol=symbol,
-                                quantity=round(min_notional(symbol) * multiplier_of_twice_BTC(symbol) * greed,
+                                quantity=round(min_notional(symbol) * multiplier_of_twice_BTC(symbol) * set_greed(),
                                                get_quantity_precision(symbol)),
                                 side='SELL',
                                 positionSide='SHORT',

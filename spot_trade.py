@@ -1,4 +1,4 @@
-#TODO calculate long_profit_percentage as average of timeframe change six month
+# TODO calculate long_profit_percentage as average of timeframe change six month
 
 import json
 import argparse
@@ -26,6 +26,12 @@ short_profit_percentage = variables['coin'][coin.coin]['short_profit_percentage'
 info = client.get_symbol_info(symbol)
 price = client.get_avg_price(symbol=symbol)['price']
 
+def set_greed():
+    if float(client.get_asset_balance(asset='BUSD')['free']) < 3000:
+        greed = 1
+    else:
+        greed = round(float(client.get_asset_balance(asset='BUSD')['free']) / 3000)
+    return greed
 
 def get_notional(symbol):
     for y in info['filters']:
@@ -50,7 +56,7 @@ def get_rounded_price(symbol: str, price: float) -> float:
 
 def open_market_and_create_close():
     client.order_market_buy(symbol=symbol, side='BUY', type='MARKET',
-                            quoteOrderQty=float(get_notional(symbol)) * float(greed))
+                            quoteOrderQty=float(get_notional(symbol)) * set_greed())
 
     avg_price_with_profit_and_precision = round(float(price) * float(long_profit_percentage),
                                                 get_price_precision(symbol))
