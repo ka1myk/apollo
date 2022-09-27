@@ -1,6 +1,4 @@
 {
-  "greed": 1,
-  "leverage": 1,
   "currency": "BUSD",
   "amount_of_close_orders": 7,
   "hours_to_transfer_profit": 168,

@@ -16,15 +16,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--coin', type=str, required=True)
 coin = parser.parse_args()
 
-currency = variables['currency']
-symbol = coin.coin + currency
-greed = variables['greed']
-multiplier = variables['coin'][coin.coin]['multiplier']
+symbol = coin.coin + variables['currency']
 long_profit_percentage = variables['coin'][coin.coin]['long_profit_percentage']
-short_profit_percentage = variables['coin'][coin.coin]['short_profit_percentage']
 
 info = client.get_symbol_info(symbol)
 price = client.get_avg_price(symbol=symbol)['price']
+
 
 def set_greed():
     if float(client.get_asset_balance(asset='BUSD')['free']) < 3000:
@@ -32,6 +29,7 @@ def set_greed():
     else:
         greed = round(float(client.get_asset_balance(asset='BUSD')['free']) / 3000)
     return greed
+
 
 def get_notional(symbol):
     for y in info['filters']:

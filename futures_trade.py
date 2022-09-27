@@ -1,5 +1,4 @@
 # TODO calculate short_profit_percentage as average of timeframe change six month
-# TODO set leverage
 
 import math
 import json
@@ -18,15 +17,15 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--coin', type=str, required=True)
 coin = parser.parse_args()
 
-currency = variables['currency']
-symbol = coin.coin + currency
-leverage = variables['leverage']
+symbol = coin.coin + variables['currency']
 amount_of_close_orders = variables['amount_of_close_orders']
 times_a_week_futures = variables['coin'][coin.coin]['times_a_week_futures']
-long_profit_percentage = variables['coin'][coin.coin]['long_profit_percentage']
 short_profit_percentage = variables['coin'][coin.coin]['short_profit_percentage']
 
 info = client.futures_exchange_info()
+
+client.futures_change_multi_assets_mode(multiAssetsMargin="True")
+client.futures_change_leverage(symbol=symbol, leverage=1)
 
 
 def set_greed():
