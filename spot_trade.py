@@ -1,11 +1,7 @@
-# TODO calculate long_profit_percentage as average of timeframe change six month
-
 import json
 import argparse
 from binance.client import Client
 from binance.helpers import round_step_size
-from secrets import randbelow
-
 
 with open('api-keys.json') as p:
     creds = json.load(p)
@@ -19,7 +15,6 @@ parser.add_argument('--coin', type=str, required=True)
 coin = parser.parse_args()
 
 symbol = coin.coin + variables['currency']
-long_profit_percentage = variables['coin'][coin.coin]['long_profit_percentage']
 
 info = client.get_symbol_info(symbol)
 price = client.get_avg_price(symbol=symbol)['price']
@@ -54,17 +49,9 @@ def get_rounded_price(symbol: str, price: float) -> float:
     return round_step_size(price, get_tick_size(symbol))
 
 
-def open_market_and_create_close():
+def open_market():
     client.order_market_buy(symbol=symbol, side='BUY', type='MARKET',
                             quoteOrderQty=float(get_notional(symbol)) * set_greed())
 
-    avg_price_with_profit_and_precision = round(float(price) * float(long_profit_percentage),
-                                                get_price_precision(symbol))
-    executedQty = float(client.get_all_orders(symbol=symbol, limit=1)[0]["executedQty"])
 
-    if randbelow(2) == 1:
-        client.order_limit_sell(symbol=symbol, quantity=executedQty,
-                                price=avg_price_with_profit_and_precision)
-
-
-open_market_and_create_close()
+open_market()

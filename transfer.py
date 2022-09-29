@@ -18,7 +18,7 @@ def get_free_currency():
 def busd_from_futures_to_spot():
     profit = client.futures_income_history(incomeType="REALIZED_PNL",
                                            startTime=client.get_server_time()[
-                                                         'serverTime'] - 1000 * 60 * 60,
+                                                         'serverTime'] - 1000 * 60 * 60 * 24,
                                            endTime=client.get_server_time()['serverTime'])
 
     for x in profit:
