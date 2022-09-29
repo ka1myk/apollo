@@ -33,9 +33,14 @@ def busd_from_futures_to_spot():
 def coin_from_spot_to_futures():
     coins = variables['coin'].keys()
     for x in coins:
-        if float(client.get_asset_balance(asset=x)["free"]) > 0:
+        if float(client.get_asset_balance(asset=x)["free"]) > 0 and x != "BNB":
             client.futures_account_transfer(asset=x,
                                             amount=float(client.get_asset_balance(asset=x)["free"]),
+                                            type=1,
+                                            timestamp=client.get_server_time()["serverTime"])
+        else:
+            client.futures_account_transfer(asset=x,
+                                            amount=float(client.get_asset_balance(asset=x)["free"]) * 0.8,
                                             type=1,
                                             timestamp=client.get_server_time()["serverTime"])
 
