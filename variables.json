@@ -1,34 +1,32 @@
 {
+  "binance_01": {
+    "exchange": "binance",
+    "key": "",
+    "secret": ""
+  },
   "currency": "BUSD",
-  "amount_of_close_orders": 7,
+  "amount_of_close_orders": 5,
   "coin": {
     "SOL": {
-      "times_a_week_futures": 1,
-      "short_profit_percentage": 0.93
+      "times_a_week_futures": 1
     },
     "BTC": {
-      "times_a_week_futures": 2,
-      "short_profit_percentage": 0.94
+      "times_a_week_futures": 2
     },
     "BNB": {
-      "times_a_week_futures": 3,
-      "short_profit_percentage": 0.95
+      "times_a_week_futures": 3
     },
     "DOT": {
-      "times_a_week_futures": 4,
-      "short_profit_percentage": 0.96
+      "times_a_week_futures": 4
     },
     "XRP": {
-      "times_a_week_futures": 5,
-      "short_profit_percentage": 0.97
+      "times_a_week_futures": 5
     },
     "ADA": {
-      "times_a_week_futures": 6,
-      "short_profit_percentage": 0.98
+      "times_a_week_futures": 6
     },
     "ETH": {
-      "times_a_week_futures": 7,
-      "short_profit_percentage": 0.99
+      "times_a_week_futures": 7
     }
   }
 }

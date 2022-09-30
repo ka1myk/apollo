@@ -3,10 +3,6 @@ import argparse
 from binance.client import Client
 from binance.helpers import round_step_size
 
-with open('api-keys.json') as p:
-    creds = json.load(p)
-client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
-
 with open('variables.json') as v:
     variables = json.load(v)
 
@@ -14,6 +10,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--coin', type=str, required=True)
 coin = parser.parse_args()
 
+client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 symbol = coin.coin + variables['currency']
 
 info = client.get_symbol_info(symbol)

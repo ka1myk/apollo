@@ -6,10 +6,6 @@ import argparse
 from binance.client import Client
 from binance.helpers import round_step_size
 
-with open('api-keys.json') as p:
-    creds = json.load(p)
-client = Client(creds['binance_01']['key'], creds['binance_01']['secret'])
-
 with open('variables.json') as v:
     variables = json.load(v)
 
@@ -17,12 +13,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--coin', type=str, required=True)
 coin = parser.parse_args()
 
+client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 symbol = coin.coin + variables['currency']
 amount_of_close_orders = variables['amount_of_close_orders']
 times_a_week_futures = variables['coin'][coin.coin]['times_a_week_futures']
-short_profit_percentage = variables['coin'][coin.coin]['short_profit_percentage']
 
-client.futures_change_leverage(symbol=symbol, leverage=1)
+client.futures_change_leverage(symbol=symbol, leverage=3)
 
 info = client.futures_exchange_info()
 
@@ -81,7 +77,7 @@ def multiplier_of_twice_BTC(symbol: str) -> float:
 
 short_position_amt = abs(float(client.futures_position_information(symbol=symbol)[2]["positionAmt"]))
 short_take_profit_price = get_rounded_price(symbol, float(
-    client.futures_position_information(symbol=symbol)[2]["entryPrice"]) * short_profit_percentage)
+    client.futures_position_information(symbol=symbol)[2]["entryPrice"]))
 
 
 def open_market_and_create_close():
