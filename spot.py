@@ -17,11 +17,14 @@ info = client.get_symbol_info(symbol)
 price = client.get_avg_price(symbol=symbol)['price']
 
 
+# why 3360?
+# 7 * 40 * 4 * 3 = 3360$ for 3 month
+# len(coins) * week budget in $ * weeks in month * amount of month continuous trade
 def set_greed():
-    if float(client.get_asset_balance(asset='BUSD')['free']) < 3000:
+    if float(client.get_asset_balance(asset='BUSD')['free']) < 3360:
         greed = 1
     else:
-        greed = round(float(client.get_asset_balance(asset='BUSD')['free']) / 3000)
+        greed = round(float(client.get_asset_balance(asset='BUSD')['free']) / 3360)
     return greed
 
 
