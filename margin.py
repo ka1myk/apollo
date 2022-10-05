@@ -1,3 +1,7 @@
+# TODO profit percentage as variable
+# TODO quantity: why * 1.01 and round to 4?
+# TODO Proof-of-Concept
+
 import json
 import argparse
 from binance.client import Client

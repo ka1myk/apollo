@@ -1,4 +1,6 @@
-# TODO calculate short_profit_percentage as average of timeframe change six month
+# TODO calculate amount_of_close_orders via summary week volume
+# TODO from 1d to 1w - 3% and 1 close order, from 1w to 2w - 6%, 12% and 2 close orders
+# TODO from 3w to 4w - 15%, 18%, 21% and 3 close orders, from 4w - 21%, 24%, 27%, 30% and 4 close orders
 
 import math
 import json
@@ -23,11 +25,14 @@ client.futures_change_leverage(symbol=symbol, leverage=3)
 info = client.futures_exchange_info()
 
 
+# why 3360?
+# 7 * 40 * 4 * 3 = 3360$ for 3 month
+# len(coins) * week budget in $ * weeks in month * amount of month continuous trade
 def set_greed():
-    if float(client.futures_account()['totalWalletBalance']) < 3000:
+    if float(client.futures_account()['totalWalletBalance']) < 3360:
         greed = 1
     else:
-        greed = round(float(client.futures_account()['totalWalletBalance']) / 3000)
+        greed = round(float(client.futures_account()['totalWalletBalance']) / 3360)
     return greed
 
 
