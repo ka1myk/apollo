@@ -20,7 +20,7 @@ symbol = coin.coin + variables['currency']
 amount_of_close_orders = variables['amount_of_close_orders']
 times_a_week_futures = variables['coin'][coin.coin]['times_a_week_futures']
 
-client.futures_change_leverage(symbol=symbol, leverage=3)
+client.futures_change_leverage(symbol=symbol, leverage=2)
 
 info = client.futures_exchange_info()
 
