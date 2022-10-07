@@ -18,7 +18,3 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 0 11 * * MON,TUE,WED,THU,FRI,SAT,SUN  cd /root/apollo && python3 spot.py --coin SOL
 
 30 0 * * *                            cd /root/apollo && python3 transfer.py
-
-#30 0 * * *                            cd /root/apollo && python3 margin.py --pair ETHBUSD
-#30 8 * * *                            cd /root/apollo && python3 margin.py --pair ETHBTC
-#30 16 * * *                           cd /root/apollo && python3 margin.py --pair BTCBUSD

@@ -1,7 +1,3 @@
-# TODO profit percentage as variable
-# TODO quantity: why * 1.01 and round to 4?
-# TODO RSI eth and btc 2 timeframe check and MA 2 timeframe and tradingview technical and compare liquidation
-
 import json
 import argparse
 from binance.client import Client
@@ -11,15 +7,27 @@ with open('variables.json') as v:
     variables = json.load(v)
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--pair', type=str, required=True)
-pair = parser.parse_args()
 
-symbol = pair.pair
+parser.add_argument('--pair', type=str, required=True)
+parser.add_argument('--strategy', type=str, required=True)
+
+args = vars(parser.parse_args())
+
+symbol = args['pair']
+strategy = args['strategy']
 
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 
 info = client.get_symbol_info(symbol)
 price = client.get_avg_price(symbol=symbol)['price']
+
+
+def set_greed():
+    if float(client.get_margin_account()['totalAssetOfBtc']) < 0.1:
+        greed = 1
+    else:
+        greed = round(float(client.get_margin_account()['totalAssetOfBtc']) / 0.1)
+    return greed
 
 
 def get_notional(symbol):
@@ -43,22 +51,47 @@ def get_rounded_price(symbol: str, price: float) -> float:
     return round_step_size(price, get_tick_size(symbol))
 
 
-def margin_create_sell_and_buy():
-    avg_price_with_sell_profit_and_precision = round(float(price) * float(1.003),
-                                                     get_price_precision(symbol))
-
-    avg_price_with_buy_profit_and_precision = round(float(price) * float(0.997),
-                                                    get_price_precision(symbol))
-
-    quantity = round(float(get_notional(symbol)) * 1.01 / float(price), 4)
-
-    client.create_margin_order(symbol=symbol, side='SELL', type='LIMIT', timeInForce="GTC",
-                               quantity=quantity,
-                               price=avg_price_with_sell_profit_and_precision)
-
-    client.create_margin_order(symbol=symbol, side='BUY', type='LIMIT', timeInForce="GTC",
-                               quantity=quantity,
-                               price=avg_price_with_buy_profit_and_precision)
+def get_quoteOrderQty(symbol: str) -> float:
+    return float(get_notional(symbol)) * set_greed()
 
 
-margin_create_sell_and_buy()
+def margin_create_buy():
+    client.create_margin_order(symbol=symbol,
+                               side='BUY',
+                               type='MARKET',
+                               quoteOrderQty=get_quoteOrderQty(symbol))
+
+
+def margin_create_sell():
+    client.create_margin_order(symbol=symbol,
+                               side='SELL',
+                               type='MARKET',
+                               quoteOrderQty=get_quoteOrderQty(symbol))
+
+
+# margin_create_buy()
+# margin_create_sell()
+
+if strategy == "random":
+    print(1)
+
+if strategy == "liquidation":
+    print(2)
+
+if strategy == "tradingview":
+    print(3)
+
+if strategy == "rsi":
+    print(4)
+
+if strategy == "ma":
+    print(5)
+
+if strategy == "bollinger":
+    print(6)
+
+if strategy == "elliott":
+    print(7)
+
+if strategy == "volume":
+    print(8)
