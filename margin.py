@@ -1,6 +1,6 @@
 # TODO profit percentage as variable
 # TODO quantity: why * 1.01 and round to 4?
-# TODO Proof-of-Concept
+# TODO RSI eth and btc 2 timeframe check and MA 2 timeframe and tradingview technical and compare liquidation
 
 import json
 import argparse

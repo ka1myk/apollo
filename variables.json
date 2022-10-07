@@ -5,7 +5,6 @@
     "secret": ""
   },
   "currency": "BUSD",
-  "amount_of_close_orders": 5,
   "coin": {
     "SOL": {
       "times_a_week_futures": 1
