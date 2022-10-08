@@ -79,24 +79,33 @@ if strategy == "coinglass":
 
     headers = {'coinglassSecret': '50f90ddcd6a8437992431ab0f1b698c1'}
     eth_url = requests.get(
-        "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=3",
+        "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=11",
         headers=headers)
     text = eth_url.text
     eth_data = json.loads(text)
 
     btc_url = requests.get(
-        "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=BTC&timeType=3",
+        "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=BTC&timeType=11",
         headers=headers)
     text = btc_url.text
     btc_data = json.loads(text)
 
-    print(float(eth_data['data'][89]['buyVolUsd']))
-    print(float(btc_data['data'][89]['buyVolUsd']))
+    print("buyVolUsd")
+    print("eth", float(eth_data['data'][89]['buyVolUsd']))
+    print("btc", float(btc_data['data'][89]['buyVolUsd']))
 
-    print(float(eth_data['data'][89]['sellVolUsd']))
-    print(float(btc_data['data'][89]['sellVolUsd']))
+    print("sellVolUsd")
+    print("eth", float(eth_data['data'][89]['sellVolUsd']))
+    print("btc", float(btc_data['data'][89]['sellVolUsd']))
 
 if strategy == "tradingview":
+    INTERVAL_30_MINUTES = TA_Handler(
+        symbol=symbol,
+        screener="crypto",
+        exchange="BINANCE",
+        interval=Interval.INTERVAL_30_MINUTES
+    )
+
     INTERVAL_1_HOUR = TA_Handler(
         symbol=symbol,
         screener="crypto",
@@ -104,17 +113,11 @@ if strategy == "tradingview":
         interval=Interval.INTERVAL_1_HOUR
     )
 
-    INTERVAL_4_HOURS = TA_Handler(
-        symbol=symbol,
-        screener="crypto",
-        exchange="BINANCE",
-        interval=Interval.INTERVAL_4_HOURS
-    )
-
-    if INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"] in ("STRONG_BUY", "BUY") and \
-            INTERVAL_4_HOURS.get_analysis().summary["RECOMMENDATION"] in ("STRONG_BUY", "BUY"):
+    if INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"] in ("STRONG_BUY", "BUY") and \
+            INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"] in ("STRONG_BUY", "BUY"):
         margin_create_buy()
-    else:
+    if INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"] in ("STRONG_SELL", "SELL") and \
+            INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"] in ("STRONG_SELL", "SELL"):
         margin_create_sell()
 
 if strategy == "cryptometer":
