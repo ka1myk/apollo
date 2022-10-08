@@ -200,5 +200,5 @@ def create_limit():
                                     )
 
 
-# open_market()
+open_market()
 create_limit()
