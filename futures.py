@@ -1,7 +1,3 @@
-# TODO calculate amount_of_close_orders via summary week volume
-# TODO from 1d to 1w - 3% and 1 close order, from 1w to 2w - 6%, 12% and 2 close orders
-# TODO from 3w to 4w - 15%, 18%, 21% and 3 close orders, from 4w - 21%, 24%, 27%, 30% and 4 close orders
-
 import math
 import json
 import argparse
@@ -99,7 +95,7 @@ def create_limit():
 
     client.futures_cancel_all_open_orders(symbol=symbol)
 
-    if amount_of_close_orders < 1:
+    if amount_of_close_orders <= 1:
         client.futures_create_order(symbol=symbol,
                                     quantity=round(short_position_amt / 1,
                                                    get_quantity_precision(symbol)),
@@ -110,7 +106,7 @@ def create_limit():
                                     timeInForce="GTC"
                                     )
 
-    if 1 < amount_of_close_orders < 2:
+    if 1 < amount_of_close_orders <= 2:
         client.futures_create_order(symbol=symbol,
                                     quantity=round(short_position_amt / 2,
                                                    get_quantity_precision(symbol)),
@@ -131,7 +127,7 @@ def create_limit():
                                     timeInForce="GTC"
                                     )
 
-    if 2 < amount_of_close_orders < 3:
+    if 2 < amount_of_close_orders <= 3:
         client.futures_create_order(symbol=symbol,
                                     quantity=round(short_position_amt / 3,
                                                    get_quantity_precision(symbol)),
@@ -162,7 +158,7 @@ def create_limit():
                                     timeInForce="GTC"
                                     )
 
-    if 3 < amount_of_close_orders:
+    if amount_of_close_orders > 3:
         client.futures_create_order(symbol=symbol,
                                     quantity=round(short_position_amt / 4,
                                                    get_quantity_precision(symbol)),
@@ -204,5 +200,5 @@ def create_limit():
                                     )
 
 
-open_market()
+# open_market()
 create_limit()
