@@ -75,7 +75,12 @@ def margin_create_sell():
 
 
 if strategy == "coinglass":
-    # 1m=9, 5m=3, 15m=10, 30m=11, 4h=1, 12h=4, 90d=18
+    # 1m=9, 5m=3, 15m=10, 30m=11, 4h=1, 12h=4, 90d=18 in docs
+    # 0, 3, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 19 - no response
+    # 1+, 2, 4+, 9+, 10+, 11+, 18+ - get 200 ok
+    # 1 {'buyVolUsd': 2117337.962561, 'sellVolUsd': 3730660.27687, 'createTime': 1663948800000 }
+    # 2 [{'buyVolUsd': 260.00453, 'sellVolUsd': 58532.86362, 'createTime': 1664928000000,}
+    # ~ 4 days ago 1665254300
 
     headers = {'coinglassSecret': '50f90ddcd6a8437992431ab0f1b698c1'}
     eth_url = requests.get(
@@ -90,13 +95,11 @@ if strategy == "coinglass":
     text = btc_url.text
     btc_data = json.loads(text)
 
-    print("buyVolUsd")
-    print("eth", float(eth_data['data'][89]['buyVolUsd']))
-    print("btc", float(btc_data['data'][89]['buyVolUsd']))
-
-    print("sellVolUsd")
-    print("eth", float(eth_data['data'][89]['sellVolUsd']))
-    print("btc", float(btc_data['data'][89]['sellVolUsd']))
+    if float(eth_data['data'][89]['buyVolUsd']) + float(btc_data['data'][89]['sellVolUsd']) > float(
+            btc_data['data'][89]['buyVolUsd']) + float(eth_data['data'][89]['sellVolUsd']):
+        margin_create_buy()
+    else:
+        margin_create_sell()
 
 if strategy == "tradingview":
     INTERVAL_30_MINUTES = TA_Handler(
