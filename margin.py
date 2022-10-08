@@ -1,7 +1,12 @@
+# TODO tradingview add various exchanges
+
+import requests
 import json
 import argparse
 from binance.client import Client
 from binance.helpers import round_step_size
+
+from tradingview_ta import TA_Handler, Interval, Exchange
 
 with open('variables.json') as v:
     variables = json.load(v)
@@ -69,29 +74,66 @@ def margin_create_sell():
                                quoteOrderQty=get_quoteOrderQty(symbol))
 
 
-# margin_create_buy()
-# margin_create_sell()
+if strategy == "coinglass":
+    #1m=9, 5m=3, 15m=10, 30m=11, 4h=1, 12h=4, 90d=18
 
-if strategy == "random":
-    print(1)
+    headers = {'coinglassSecret': '50f90ddcd6a8437992431ab0f1b698c1'}
+    eth_url = requests.get(
+        "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=ETH&timeType=3",
+        headers=headers)
+    text = eth_url.text
+    eth_data = json.loads(text)
 
-if strategy == "liquidation":
-    print(2)
+    btc_url = requests.get(
+        "https://open-api.coinglass.com/api/pro/v1/futures/liquidation/detail/chart?symbol=BTC&timeType=3",
+        headers=headers)
+    text = btc_url.text
+    btc_data = json.loads(text)
+
+    print(float(eth_data['data'][89]['buyVolUsd']))
+    print(float(btc_data['data'][89]['buyVolUsd']))
+
+    print(float(eth_data['data'][89]['sellVolUsd']))
+    print(float(btc_data['data'][89]['sellVolUsd']))
 
 if strategy == "tradingview":
-    print(3)
+    INTERVAL_1_HOUR = TA_Handler(
+        symbol=symbol,
+        screener="crypto",
+        exchange="BINANCE",
+        interval=Interval.INTERVAL_1_HOUR
+    )
 
-if strategy == "rsi":
-    print(4)
+    INTERVAL_4_HOURS = TA_Handler(
+        symbol=symbol,
+        screener="crypto",
+        exchange="BINANCE",
+        interval=Interval.INTERVAL_4_HOURS
+    )
 
-if strategy == "ma":
-    print(5)
+    if INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"] in ("STRONG_BUY", "BUY") and \
+            INTERVAL_4_HOURS.get_analysis().summary["RECOMMENDATION"] in ("STRONG_BUY", "BUY"):
+        margin_create_buy()
+    else:
+        margin_create_sell()
 
-if strategy == "bollinger":
-    print(6)
+if strategy == "cryptometer":
+    # https://www.cryptometer.io/api-doc/
+    print("TBD")
 
-if strategy == "elliott":
-    print(7)
+if strategy == "cryptosignal":
+    # https://github.com/CryptoSignal/Crypto-Signal
+    print("TBD")
 
-if strategy == "volume":
-    print(8)
+if strategy == "coingecko":
+    # https://github.com/man-c/pycoingecko
+    # https://www.coingecko.com/en/api/documentation
+    print("TBD")
+
+if strategy == "polygon":
+    # https://polygon.io/
+    print("TBD")
+
+if strategy == "taapi":
+    # https://taapi.io/
+    print("TBD")

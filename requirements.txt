@@ -1,1 +1,3 @@
 python-binance
+tradingview-ta
+requests
