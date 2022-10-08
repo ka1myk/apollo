@@ -75,7 +75,7 @@ def margin_create_sell():
 
 
 if strategy == "coinglass":
-    #1m=9, 5m=3, 15m=10, 30m=11, 4h=1, 12h=4, 90d=18
+    # 1m=9, 5m=3, 15m=10, 30m=11, 4h=1, 12h=4, 90d=18
 
     headers = {'coinglassSecret': '50f90ddcd6a8437992431ab0f1b698c1'}
     eth_url = requests.get(
@@ -115,10 +115,11 @@ if strategy == "tradingview":
 
     if INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"] in ("STRONG_BUY", "BUY") and \
             INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"] in ("STRONG_BUY", "BUY"):
-        margin_create_buy()
+        margin_create_sell()
+
     if INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"] in ("STRONG_SELL", "SELL") and \
             INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"] in ("STRONG_SELL", "SELL"):
-        margin_create_sell()
+        margin_create_buy()
 
 if strategy == "cryptometer":
     # https://www.cryptometer.io/api-doc/
