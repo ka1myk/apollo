@@ -60,18 +60,26 @@ def get_quoteOrderQty(symbol: str) -> float:
     return float(get_notional(symbol)) * set_greed()
 
 
-def margin_create_buy():
-    client.create_margin_order(symbol=symbol,
-                               side='BUY',
-                               type='MARKET',
-                               quoteOrderQty=get_quoteOrderQty(symbol))
+def margin_create_limit_sell():
+    avg_price_with_sell_profit_and_precision = round(float(price) * float(1.01),
+                                                     get_price_precision(symbol))
+
+    quantity = round(float(get_notional(symbol)) * 1.01 / float(price), 4)
+
+    client.create_margin_order(symbol=symbol, side='SELL', type='LIMIT', timeInForce="GTC",
+                               quantity=quantity,
+                               price=avg_price_with_sell_profit_and_precision)
 
 
-def margin_create_sell():
-    client.create_margin_order(symbol=symbol,
-                               side='SELL',
-                               type='MARKET',
-                               quoteOrderQty=get_quoteOrderQty(symbol))
+def margin_create_limit_buy():
+    avg_price_with_buy_profit_and_precision = round(float(price) * float(0.99),
+                                                    get_price_precision(symbol))
+
+    quantity = round(float(get_notional(symbol)) * 1.01 / float(price), 4)
+
+    client.create_margin_order(symbol=symbol, side='BUY', type='LIMIT', timeInForce="GTC",
+                               quantity=quantity,
+                               price=avg_price_with_buy_profit_and_precision)
 
 
 if strategy == "coinglass":
@@ -97,9 +105,9 @@ if strategy == "coinglass":
 
     if float(eth_data['data'][89]['buyVolUsd']) + float(btc_data['data'][89]['sellVolUsd']) > float(
             btc_data['data'][89]['buyVolUsd']) + float(eth_data['data'][89]['sellVolUsd']):
-        margin_create_buy()
+        margin_create_limit_buy()
     else:
-        margin_create_sell()
+        margin_create_limit_sell()
 
 if strategy == "tradingview":
     INTERVAL_30_MINUTES = TA_Handler(
@@ -118,15 +126,38 @@ if strategy == "tradingview":
 
     if INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"] in ("STRONG_BUY", "BUY") and \
             INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"] in ("STRONG_BUY", "BUY"):
-        margin_create_sell()
+        margin_create_limit_sell()
 
     if INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"] in ("STRONG_SELL", "SELL") and \
             INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"] in ("STRONG_SELL", "SELL"):
-        margin_create_buy()
+        margin_create_limit_buy()
 
 if strategy == "cryptometer":
     # https://www.cryptometer.io/api-doc/
-    print("TBD")
+    # MACD
+    # RSI
+    # ATR
+    # PSAR
+    # EMA
+    # SMA
+    # CCI
+    # api = 1161x8cbc9366T614xy23G3s1006S2TNQf6b6He7
+
+    cryptometer_key = "1161x8cbc9366T614xy23G3s1006S2TNQf6b6He7"
+    eth_url = requests.get(
+        "https://api.cryptometer.io/open-interest/?market_pair=ethbusd&e=binance_futures&api_key=" + str(
+            cryptometer_key))
+    text = eth_url.text
+    eth_data = json.loads(text)
+
+    btc_url = requests.get(
+        "https://api.cryptometer.io/open-interest/?market_pair=btcbusd&e=binance_futures&api_key=" + str(
+            cryptometer_key))
+    text = btc_url.text
+    btc_data = json.loads(text)
+
+    print(float(eth_data["data"][0]["open_interest"]))
+    print(float(btc_data["data"][0]["open_interest"]))
 
 if strategy == "cryptosignal":
     # https://github.com/CryptoSignal/Crypto-Signal
