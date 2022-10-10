@@ -1,4 +1,6 @@
 # TODO tradingview add various exchanges
+import time
+import urllib
 
 import requests
 import json
@@ -177,19 +179,42 @@ if strategy == "cryptometer":
     print(float(eth_data["data"][0]["open_interest"]))
     print(float(btc_data["data"][0]["open_interest"]))
 
-if strategy == "cryptosignal":
-    # https://github.com/CryptoSignal/Crypto-Signal
-    print("TBD")
-
-if strategy == "coingecko":
-    # https://github.com/man-c/pycoingecko
-    # https://www.coingecko.com/en/api/documentation
-    print("TBD")
-
-if strategy == "polygon":
-    # https://polygon.io/
-    print("TBD")
-
 if strategy == "taapi":
     # https://taapi.io/
-    print("TBD")
+    taapi_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbHVlIjoiNjM0NDRhM2ZmYzVhOGFkZmVjMWM5NGRkIiwiaWF0IjoxNjY1NDE5ODUxLCJleHAiOjMzMTY5ODgzODUxfQ.piZ025xlPHtQitPzFJbWXHzLQXZ_XVGEAQu-9TnK77g"
+
+    # Define indicator
+    indicator = "rsi"
+
+    # Define endpoint
+    endpoint = f"https://api.taapi.io/{indicator}"
+
+    # Define a parameters dict for the parameters to be sent to the API
+    parameters_1 = {
+        'secret': taapi_key,
+        'exchange': 'binance',
+        'symbol': 'BTC/USDT',
+        'interval': '30m'
+    }
+
+    parameters_2 = {
+        'secret': taapi_key,
+        'exchange': 'binance',
+        'symbol': 'ETH/USDT',
+        'interval': '30m'
+    }
+
+    # Send get request and save the response as response object
+    response_1 = requests.get(url=endpoint, params=parameters_1)
+    time.sleep(16)
+    response_2 = requests.get(url=endpoint, params=parameters_2)
+
+
+    # Extract data in json format
+    result_1 = response_1.json()
+    result_2 = response_2.json()
+
+    # Print result
+    print(result_1)
+    print(result_2)
+

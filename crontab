@@ -19,5 +19,5 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 
 30 0 * * *                            cd /root/apollo && python3 transfer.py
 
-0 */2 * * *                             cd /root/apollo && python3 margin.py --pair ETHBTC --strategy tradingview
-29 */2 * * *                            cd /root/apollo && python3 margin.py --pair ETHBTC --strategy coinglass
+0 * * * *                             cd /root/apollo && python3 margin.py --pair ETHBTC --strategy tradingview
+29 * * * *                            cd /root/apollo && python3 margin.py --pair ETHBTC --strategy coinglass
