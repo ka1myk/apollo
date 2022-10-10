@@ -60,6 +60,20 @@ def get_quoteOrderQty(symbol: str) -> float:
     return float(get_notional(symbol)) * set_greed()
 
 
+def margin_create_market_buy():
+    client.create_margin_order(symbol=symbol,
+                               side='BUY',
+                               type='MARKET',
+                               quoteOrderQty=get_quoteOrderQty(symbol))
+
+
+def margin_create_market_sell():
+    client.create_margin_order(symbol=symbol,
+                               side='SELL',
+                               type='MARKET',
+                               quoteOrderQty=get_quoteOrderQty(symbol))
+
+
 def margin_create_limit_sell():
     avg_price_with_sell_profit_and_precision = round(float(price) * float(1.01),
                                                      get_price_precision(symbol))
@@ -105,8 +119,10 @@ if strategy == "coinglass":
 
     if float(eth_data['data'][89]['buyVolUsd']) + float(btc_data['data'][89]['sellVolUsd']) > float(
             btc_data['data'][89]['buyVolUsd']) + float(eth_data['data'][89]['sellVolUsd']):
+        margin_create_market_sell()
         margin_create_limit_buy()
     else:
+        margin_create_market_buy()
         margin_create_limit_sell()
 
 if strategy == "tradingview":
@@ -126,10 +142,12 @@ if strategy == "tradingview":
 
     if INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"] in ("STRONG_BUY", "BUY") and \
             INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"] in ("STRONG_BUY", "BUY"):
+        margin_create_market_buy()
         margin_create_limit_sell()
 
     if INTERVAL_30_MINUTES.get_analysis().summary["RECOMMENDATION"] in ("STRONG_SELL", "SELL") and \
             INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"] in ("STRONG_SELL", "SELL"):
+        margin_create_market_sell()
         margin_create_limit_buy()
 
 if strategy == "cryptometer":
