@@ -20,4 +20,6 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 30 0 * * *                            cd /root/apollo && python3 transfer.py
 
 0 * * * *                             cd /root/apollo && python3 margin.py --pair ETHBTC --strategy tradingview
+15 * * * *                            cd /root/apollo && python3 margin.py --pair ETHBTC --strategy taapi_fibonacciretracement
 29 * * * *                            cd /root/apollo && python3 margin.py --pair ETHBTC --strategy coinglass
+45 * * * *                            cd /root/apollo && python3 margin.py --pair ETHBTC --strategy taapi_supertrend

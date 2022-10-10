@@ -4,6 +4,7 @@
     "key": "",
     "secret": ""
   },
+  "taapi": "",
   "currency": "BUSD",
   "coin": {
     "SOL": {

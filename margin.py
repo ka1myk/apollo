@@ -152,6 +152,92 @@ if strategy == "tradingview":
         margin_create_market_sell()
         margin_create_limit_buy()
 
+if strategy == "taapi_fibonacciretracement":
+    # https://taapi.io/
+    taapi_key = variables['taapi']
+
+    # Define indicator
+    indicator = "fibonacciretracement"
+
+    # Define endpoint
+    endpoint = f"https://api.taapi.io/{indicator}"
+
+    # Define a parameters dict for the parameters to be sent to the API
+    parameters_eth = {
+        'secret': taapi_key,
+        'exchange': 'binance',
+        'symbol': 'ETH/USDT',
+        'interval': '1h'
+    }
+
+    parameters_btc = {
+        'secret': taapi_key,
+        'exchange': 'binance',
+        'symbol': 'BTC/USDT',
+        'interval': '1h'
+    }
+
+    # Send get request and save the response as response object
+    response_eth = requests.get(url=endpoint, params=parameters_eth)
+    time.sleep(16)
+    response_btc = requests.get(url=endpoint, params=parameters_btc)
+
+    # Extract data in json format
+    result_eth = response_eth.json()
+    result_btc = response_btc.json()
+
+    # Print result
+    if result_eth["trend"] == "UPTREND" and result_btc["trend"] == "DOWNTREND":
+        margin_create_market_buy()
+        margin_create_limit_sell()
+
+    if result_eth["trend"] == "DOWNTREND" and result_btc["trend"] == "UPTREND":
+        margin_create_market_sell()
+        margin_create_limit_buy()
+
+if strategy == "taapi_supertrend":
+    # https://taapi.io/
+    taapi_key = variables['taapi']
+
+    # Define indicator
+    indicator = "supertrend"
+
+    # Define endpoint
+    endpoint = f"https://api.taapi.io/{indicator}"
+
+    # Define a parameters dict for the parameters to be sent to the API
+    parameters_eth = {
+        'secret': taapi_key,
+        'exchange': 'binance',
+        'symbol': 'ETH/USDT',
+        'interval': '1h'
+    }
+
+    parameters_btc = {
+        'secret': taapi_key,
+        'exchange': 'binance',
+        'symbol': 'BTC/USDT',
+        'interval': '1h'
+    }
+
+    # Send get request and save the response as response object
+    response_eth = requests.get(url=endpoint, params=parameters_eth)
+    time.sleep(16)
+    response_btc = requests.get(url=endpoint, params=parameters_btc)
+
+    # Extract data in json format
+    result_eth = response_eth.json()
+    result_btc = response_btc.json()
+
+    # Print result
+    if result_eth["valueAdvice"] == "long" and result_btc["valueAdvice"] == "short":
+        margin_create_market_buy()
+        margin_create_limit_sell()
+
+    if result_eth["valueAdvice"] == "short" and result_btc["valueAdvice"] == "long":
+        margin_create_market_sell()
+        margin_create_limit_buy()
+
 if strategy == "cryptometer":
     # https://www.cryptometer.io/api-doc/
     # MACD
@@ -178,43 +264,3 @@ if strategy == "cryptometer":
 
     print(float(eth_data["data"][0]["open_interest"]))
     print(float(btc_data["data"][0]["open_interest"]))
-
-if strategy == "taapi":
-    # https://taapi.io/
-    taapi_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbHVlIjoiNjM0NDRhM2ZmYzVhOGFkZmVjMWM5NGRkIiwiaWF0IjoxNjY1NDE5ODUxLCJleHAiOjMzMTY5ODgzODUxfQ.piZ025xlPHtQitPzFJbWXHzLQXZ_XVGEAQu-9TnK77g"
-
-    # Define indicator
-    indicator = "rsi"
-
-    # Define endpoint
-    endpoint = f"https://api.taapi.io/{indicator}"
-
-    # Define a parameters dict for the parameters to be sent to the API
-    parameters_1 = {
-        'secret': taapi_key,
-        'exchange': 'binance',
-        'symbol': 'BTC/USDT',
-        'interval': '30m'
-    }
-
-    parameters_2 = {
-        'secret': taapi_key,
-        'exchange': 'binance',
-        'symbol': 'ETH/USDT',
-        'interval': '30m'
-    }
-
-    # Send get request and save the response as response object
-    response_1 = requests.get(url=endpoint, params=parameters_1)
-    time.sleep(16)
-    response_2 = requests.get(url=endpoint, params=parameters_2)
-
-
-    # Extract data in json format
-    result_1 = response_1.json()
-    result_2 = response_2.json()
-
-    # Print result
-    print(result_1)
-    print(result_2)
-
