@@ -75,10 +75,10 @@ def margin_create_market_sell():
 
 
 def margin_create_limit_sell():
-    avg_price_with_sell_profit_and_precision = round(float(price) * float(1.01),
+    avg_price_with_sell_profit_and_precision = round(float(price) * float(1.004),
                                                      get_price_precision(symbol))
 
-    quantity = round(float(get_notional(symbol)) * 1.004 / float(price), 4)
+    quantity = round(float(get_notional(symbol)) * 1.1 / float(price), 4)
 
     client.create_margin_order(symbol=symbol, side='SELL', type='LIMIT', timeInForce="GTC",
                                quantity=quantity,
@@ -86,10 +86,10 @@ def margin_create_limit_sell():
 
 
 def margin_create_limit_buy():
-    avg_price_with_buy_profit_and_precision = round(float(price) * float(0.99),
+    avg_price_with_buy_profit_and_precision = round(float(price) * float(0.996),
                                                     get_price_precision(symbol))
 
-    quantity = round(float(get_notional(symbol)) * 0.996 / float(price), 4)
+    quantity = round(float(get_notional(symbol)) * 1.1 / float(price), 4)
 
     client.create_margin_order(symbol=symbol, side='BUY', type='LIMIT', timeInForce="GTC",
                                quantity=quantity,
@@ -155,13 +155,6 @@ if strategy == "tradingview":
 
 if strategy == "cryptometer":
     # https://www.cryptometer.io/api-doc/
-    # MACD
-    # RSI
-    # ATR
-    # PSAR
-    # EMA
-    # SMA
-    # CCI
     # api = 1161x8cbc9366T614xy23G3s1006S2TNQf6b6He7
 
     cryptometer_key = "1161x8cbc9366T614xy23G3s1006S2TNQf6b6He7"
