@@ -1,6 +1,7 @@
 import math
 import json
 import argparse
+
 from binance.client import Client
 from binance.helpers import round_step_size
 
@@ -75,11 +76,6 @@ def multiplier_of_twice_BTC(symbol: str) -> float:
             client.futures_mark_price(symbol=symbol)["markPrice"])) / times_a_week_futures, 2)
 
 
-short_position_amt = abs(float(client.futures_position_information(symbol=symbol)[2]["positionAmt"]))
-short_take_profit_price = get_rounded_price(symbol, float(
-    client.futures_position_information(symbol=symbol)[2]["entryPrice"]))
-
-
 def open_market():
     client.futures_create_order(symbol=symbol,
                                 quantity=round(min_notional(symbol) * multiplier_of_twice_BTC(symbol) * set_greed(),
@@ -90,10 +86,14 @@ def open_market():
 
 
 def create_limit():
+    client.futures_cancel_all_open_orders(symbol=symbol)
+
+    short_position_amt = abs(float(client.futures_position_information(symbol=symbol)[2]["positionAmt"]))
+    short_take_profit_price = get_rounded_price(symbol, float(
+        client.futures_position_information(symbol=symbol)[2]["entryPrice"]))
+
     order_qty = round(min_notional(symbol) * multiplier_of_twice_BTC(symbol), get_quantity_precision(symbol))
     amount_of_close_orders = short_position_amt / (order_qty * times_a_week_futures)
-
-    client.futures_cancel_all_open_orders(symbol=symbol)
 
     if amount_of_close_orders <= 1:
         client.futures_create_order(symbol=symbol,

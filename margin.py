@@ -1,6 +1,4 @@
-# TODO tradingview add various exchanges
 import time
-import urllib
 
 import requests
 import json
@@ -8,7 +6,7 @@ import argparse
 from binance.client import Client
 from binance.helpers import round_step_size
 
-from tradingview_ta import TA_Handler, Interval, Exchange
+from tradingview_ta import TA_Handler, Interval
 
 with open('variables.json') as v:
     variables = json.load(v)
@@ -98,6 +96,9 @@ def margin_create_limit_buy():
                                price=avg_price_with_buy_profit_and_precision)
 
 
+if strategy == "glassnode":
+    print("TBD")
+
 if strategy == "coinglass":
     # 1m=9, 5m=3, 15m=10, 30m=11, 4h=1, 12h=4, 90d=18 in docs
     # 0, 3, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 19 - no response
@@ -151,6 +152,33 @@ if strategy == "tradingview":
             INTERVAL_1_HOUR.get_analysis().summary["RECOMMENDATION"] in ("STRONG_SELL", "SELL"):
         margin_create_market_sell()
         margin_create_limit_buy()
+
+if strategy == "cryptometer":
+    # https://www.cryptometer.io/api-doc/
+    # MACD
+    # RSI
+    # ATR
+    # PSAR
+    # EMA
+    # SMA
+    # CCI
+    # api = 1161x8cbc9366T614xy23G3s1006S2TNQf6b6He7
+
+    cryptometer_key = "1161x8cbc9366T614xy23G3s1006S2TNQf6b6He7"
+    eth_url = requests.get(
+        "https://api.cryptometer.io/open-interest/?market_pair=ethbusd&e=binance_futures&api_key=" + str(
+            cryptometer_key))
+    text = eth_url.text
+    eth_data = json.loads(text)
+
+    btc_url = requests.get(
+        "https://api.cryptometer.io/open-interest/?market_pair=btcbusd&e=binance_futures&api_key=" + str(
+            cryptometer_key))
+    text = btc_url.text
+    btc_data = json.loads(text)
+
+    print(float(eth_data["data"][0]["open_interest"]))
+    print(float(btc_data["data"][0]["open_interest"]))
 
 if strategy == "taapi_fibonacciretracement":
     # https://taapi.io/
@@ -238,29 +266,47 @@ if strategy == "taapi_supertrend":
         margin_create_market_sell()
         margin_create_limit_buy()
 
-if strategy == "cryptometer":
-    # https://www.cryptometer.io/api-doc/
-    # MACD
-    # RSI
-    # ATR
-    # PSAR
-    # EMA
-    # SMA
-    # CCI
-    # api = 1161x8cbc9366T614xy23G3s1006S2TNQf6b6He7
+if strategy == "taapi_div":
+    # https://taapi.io/
+    taapi_key = variables['taapi']
 
-    cryptometer_key = "1161x8cbc9366T614xy23G3s1006S2TNQf6b6He7"
-    eth_url = requests.get(
-        "https://api.cryptometer.io/open-interest/?market_pair=ethbusd&e=binance_futures&api_key=" + str(
-            cryptometer_key))
-    text = eth_url.text
-    eth_data = json.loads(text)
+    # Define indicator
+    indicator = "div"
 
-    btc_url = requests.get(
-        "https://api.cryptometer.io/open-interest/?market_pair=btcbusd&e=binance_futures&api_key=" + str(
-            cryptometer_key))
-    text = btc_url.text
-    btc_data = json.loads(text)
+    # Define endpoint
+    endpoint = f"https://api.taapi.io/{indicator}"
 
-    print(float(eth_data["data"][0]["open_interest"]))
-    print(float(btc_data["data"][0]["open_interest"]))
+    # Define a parameters dict for the parameters to be sent to the API
+    parameters_eth = {
+        'secret': taapi_key,
+        'exchange': 'binance',
+        'symbol': 'ETH/USDT',
+        'interval': '1h'
+    }
+
+    parameters_btc = {
+        'secret': taapi_key,
+        'exchange': 'binance',
+        'symbol': 'BTC/USDT',
+        'interval': '1h'
+    }
+
+    # Send get request and save the response as response object
+    response_eth = requests.get(url=endpoint, params=parameters_eth)
+    time.sleep(16)
+    response_btc = requests.get(url=endpoint, params=parameters_btc)
+
+    # Extract data in json format
+    result_eth = response_eth.json()
+    result_btc = response_btc.json()
+
+    print(result_eth, result_btc)
+
+    # # Print result
+    # if result_eth["valueAdvice"] == "long" and result_btc["valueAdvice"] == "short":
+    #     margin_create_market_buy()
+    #     margin_create_limit_sell()
+    #
+    # if result_eth["valueAdvice"] == "short" and result_btc["valueAdvice"] == "long":
+    #     margin_create_market_sell()
+    #     margin_create_limit_buy()
