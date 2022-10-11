@@ -293,13 +293,52 @@ if strategy == "taapi_div":
     result_eth = response_eth.json()
     result_btc = response_btc.json()
 
-    print(result_eth, result_btc)
+    if result_eth["value"] > result_btc["value"]:
+        margin_create_market_buy()
+        margin_create_limit_sell()
 
-    # # Print result
-    # if result_eth["valueAdvice"] == "long" and result_btc["valueAdvice"] == "short":
-    #     margin_create_market_buy()
-    #     margin_create_limit_sell()
-    #
-    # if result_eth["valueAdvice"] == "short" and result_btc["valueAdvice"] == "long":
-    #     margin_create_market_sell()
-    #     margin_create_limit_buy()
+    else:
+        margin_create_market_sell()
+        margin_create_limit_buy()
+
+if strategy == "taapi_div":
+    # https://taapi.io/
+    taapi_key = variables['taapi']
+
+    # Define indicator
+    indicator = "div"
+
+    # Define endpoint
+    endpoint = f"https://api.taapi.io/{indicator}"
+
+    # Define a parameters dict for the parameters to be sent to the API
+    parameters_eth = {
+        'secret': taapi_key,
+        'exchange': 'binance',
+        'symbol': 'ETH/USDT',
+        'interval': '1h'
+    }
+
+    parameters_btc = {
+        'secret': taapi_key,
+        'exchange': 'binance',
+        'symbol': 'BTC/USDT',
+        'interval': '1h'
+    }
+
+    # Send get request and save the response as response object
+    response_eth = requests.get(url=endpoint, params=parameters_eth)
+    time.sleep(16)
+    response_btc = requests.get(url=endpoint, params=parameters_btc)
+
+    # Extract data in json format
+    result_eth = response_eth.json()
+    result_btc = response_btc.json()
+
+    if result_eth["value"] > result_btc["value"]:
+        margin_create_market_buy()
+        margin_create_limit_sell()
+
+    else:
+        margin_create_market_sell()
+        margin_create_limit_buy()
