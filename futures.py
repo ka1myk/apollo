@@ -85,6 +85,19 @@ def open_market():
                                 type='MARKET')
 
 
+def create_grid(short_position_amt, grid, short_take_profit_price):
+    for x in grid:
+        client.futures_create_order(symbol=symbol,
+                                    quantity=round(short_position_amt / len(grid),
+                                                   get_quantity_precision(symbol)),
+                                    price=get_rounded_price(symbol, short_take_profit_price * x),
+                                    side='BUY',
+                                    positionSide='SHORT',
+                                    type='LIMIT',
+                                    timeInForce="GTC"
+                                    )
+
+
 def create_limit():
     client.futures_cancel_all_open_orders(symbol=symbol)
 
@@ -96,108 +109,20 @@ def create_limit():
     amount_of_close_orders = short_position_amt / (order_qty * times_a_week_futures)
 
     if amount_of_close_orders <= 1:
-        client.futures_create_order(symbol=symbol,
-                                    quantity=round(short_position_amt / 1,
-                                                   get_quantity_precision(symbol)),
-                                    price=get_rounded_price(symbol, short_take_profit_price * 0.97),
-                                    side='BUY',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
+        grid = [0.97]
+        create_grid(short_position_amt, grid, short_take_profit_price)
 
     if 1 < amount_of_close_orders <= 2:
-        client.futures_create_order(symbol=symbol,
-                                    quantity=round(short_position_amt / 2,
-                                                   get_quantity_precision(symbol)),
-                                    price=get_rounded_price(symbol, short_take_profit_price * 0.94),
-                                    side='BUY',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
-
-        client.futures_create_order(symbol=symbol,
-                                    quantity=round(short_position_amt / 2,
-                                                   get_quantity_precision(symbol)),
-                                    price=get_rounded_price(symbol, short_take_profit_price * 0.88),
-                                    side='BUY',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
+        grid = [0.94, 0.88]
+        create_grid(short_position_amt, grid, short_take_profit_price)
 
     if 2 < amount_of_close_orders <= 3:
-        client.futures_create_order(symbol=symbol,
-                                    quantity=round(short_position_amt / 3,
-                                                   get_quantity_precision(symbol)),
-                                    price=get_rounded_price(symbol, short_take_profit_price * 0.85),
-                                    side='BUY',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
-
-        client.futures_create_order(symbol=symbol,
-                                    quantity=round(short_position_amt / 3,
-                                                   get_quantity_precision(symbol)),
-                                    price=get_rounded_price(symbol, short_take_profit_price * 0.82),
-                                    side='BUY',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
-
-        client.futures_create_order(symbol=symbol,
-                                    quantity=round(short_position_amt / 3,
-                                                   get_quantity_precision(symbol)),
-                                    price=get_rounded_price(symbol, short_take_profit_price * 0.79),
-                                    side='BUY',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
+        grid = [0.85, 0.82, 0.79]
+        create_grid(short_position_amt, grid, short_take_profit_price)
 
     if amount_of_close_orders > 3:
-        client.futures_create_order(symbol=symbol,
-                                    quantity=round(short_position_amt / 4,
-                                                   get_quantity_precision(symbol)),
-                                    price=get_rounded_price(symbol, short_take_profit_price * 0.76),
-                                    side='BUY',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
-
-        client.futures_create_order(symbol=symbol,
-                                    quantity=round(short_position_amt / 4,
-                                                   get_quantity_precision(symbol)),
-                                    price=get_rounded_price(symbol, short_take_profit_price * 0.73),
-                                    side='BUY',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
-
-        client.futures_create_order(symbol=symbol,
-                                    quantity=round(short_position_amt / 4,
-                                                   get_quantity_precision(symbol)),
-                                    price=get_rounded_price(symbol, short_take_profit_price * 0.70),
-                                    side='BUY',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
-
-        client.futures_create_order(symbol=symbol,
-                                    quantity=round(short_position_amt / 4,
-                                                   get_quantity_precision(symbol)),
-                                    price=get_rounded_price(symbol, short_take_profit_price * 0.67),
-                                    side='BUY',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
+        grid = [0.76, 0.73, 0.70, 0.67]
+        create_grid(short_position_amt, grid, short_take_profit_price)
 
 
 open_market()
