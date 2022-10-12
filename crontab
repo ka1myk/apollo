@@ -19,6 +19,6 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 
 30 0 * * *                            cd /root/apollo && python3 transfer.py
 
-5 */4 * * *                           cd /root/apollo && python3 margin.py --pair ETHBTC --strategy random
+5  */4 * * *                          cd /root/apollo && python3 margin.py --pair ETHBTC --strategy random
 25 */4 * * *                          cd /root/apollo && python3 margin.py --pair BNBBTC --strategy random
 55 */4 * * *                          cd /root/apollo && python3 margin.py --pair BNBETH --strategy random
