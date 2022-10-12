@@ -1,4 +1,4 @@
-from secrets import randbelow
+import secrets
 import json
 import argparse
 from binance.client import Client
@@ -21,6 +21,9 @@ client = Client(variables['binance_01']['key'], variables['binance_01']['secret'
 
 info = client.get_symbol_info(symbol)
 price = client.get_avg_price(symbol=symbol)['price']
+
+sell_profit = [1.005, 1.01, 1.015, 1.02, 1.025, 1.03, 1.035, 1.04, 1.045, 1.05]
+buy_profit = [0.995, 0.99, 0.985, 0.98, 0.975, 0.97, 0.965, 0.96, 0.955, 0.95]
 
 
 def set_greed():
@@ -76,7 +79,7 @@ def margin_create_market_sell():
 
 
 def margin_create_limit_sell():
-    avg_price_with_sell_profit_and_precision = round(float(price) * float(1.004),
+    avg_price_with_sell_profit_and_precision = round(float(price) * float(secrets.choice(sell_profit)),
                                                      get_price_precision(symbol))
 
     quantity = round(float(client.get_all_margin_orders(symbol=symbol, limit=1)[0]["origQty"]) * 1.1,
@@ -88,7 +91,7 @@ def margin_create_limit_sell():
 
 
 def margin_create_limit_buy():
-    avg_price_with_buy_profit_and_precision = round(float(price) * float(0.996),
+    avg_price_with_buy_profit_and_precision = round(float(price) * float(secrets.choice(buy_profit)),
                                                     get_price_precision(symbol))
 
     quantity = round(float(client.get_all_margin_orders(symbol=symbol, limit=1)[0]["origQty"]) * 1.1,
@@ -100,7 +103,7 @@ def margin_create_limit_buy():
 
 
 if strategy == "random":
-    if randbelow(2) == 1:
+    if secrets.randbelow(2) == 1:
         margin_create_market_buy()
         margin_create_limit_sell()
     else:
