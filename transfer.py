@@ -1,4 +1,5 @@
 import json
+
 from binance.client import Client
 
 with open('variables.json') as v:

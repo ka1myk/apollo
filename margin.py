@@ -1,6 +1,7 @@
-import secrets
-import json
 import argparse
+import json
+import secrets
+
 from binance.client import Client
 from binance.helpers import round_step_size
 

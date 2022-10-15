@@ -1,5 +1,6 @@
-import json
 import argparse
+import json
+
 from binance.client import Client
 from binance.helpers import round_step_size
 
