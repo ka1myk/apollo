@@ -19,6 +19,16 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 
 30 0 * * *                            cd /root/apollo && python3 transfer.py
 
-5   0,8,16 * * *                      cd /root/apollo && python3 margin.py --pair ETHBTC --strategy random
-25 2,10,18 * * *                      cd /root/apollo && python3 margin.py --pair BNBBTC --strategy random
-45 4,12,20 * * *                      cd /root/apollo && python3 margin.py --pair BNBETH --strategy random
+6  0,8,16  * * *                       cd /root/apollo && python3 margin.py --pair ETHBTC --strategy random
+
+12 1,9,17  * * *                       cd /root/apollo && python3 margin.py --pair BNBBTC --strategy random
+18 2,10,18 * * *                       cd /root/apollo && python3 margin.py --pair SOLBTC --strategy random
+
+24 3,11,19 * * *                       cd /root/apollo && python3 margin.py --pair BNBETH --strategy random
+30 4,12,20 * * *                       cd /root/apollo && python3 margin.py --pair SOLETH --strategy random
+
+36 5,13,21 * * *                       cd /root/apollo && python3 margin.py --pair XRPETH --strategy random
+42 6,14,22 * * *                       cd /root/apollo && python3 margin.py --pair ADABTC --strategy random
+
+48 7,15,23 * * *                       cd /root/apollo && python3 margin.py --pair XRPBTC --strategy random
+54 8,16,0  * * *                       cd /root/apollo && python3 margin.py --pair ADAETH --strategy random
