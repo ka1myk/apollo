@@ -12,7 +12,7 @@ currency = variables['currency']
 def get_free_currency():
     for x in client.futures_account_balance():
         if x['asset'] == currency:
-            return x['balance']
+            return float(x['balance'])
 
 
 # 1000 * 60 * 60 * 24 is interval for 24 hours
@@ -41,5 +41,5 @@ def coin_from_spot_to_futures():
 
 
 coin_from_spot_to_futures()
-if float(get_free_currency()) > 0:
+if get_free_currency() > 0:
     busd_from_futures_to_spot()

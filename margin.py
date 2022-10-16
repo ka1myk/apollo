@@ -32,10 +32,10 @@ def set_greed():
         greed = 1
     else:
         greed = round(float(client.get_margin_account()['totalAssetOfBtc']) / 0.1)
-    return greed
+    return int(greed)
 
 
-def get_notional(symbol):
+def get_min_notional():
     for y in info['filters']:
         if y['filterType'] == 'MIN_NOTIONAL':
             return y['minNotional']
@@ -56,48 +56,42 @@ def get_rounded_price(symbol: str, price: float) -> float:
     return round_step_size(price, get_tick_size(symbol))
 
 
-def get_quoteOrderQty(symbol: str) -> float:
-    return float(get_notional(symbol)) * set_greed()
-
-
-def get_qty_precision(symbol):
-    n = len(str(float(client.get_all_margin_orders(symbol=symbol, limit=1)[0]["origQty"])).split(".")[1])
-    return n
+# multiplication by 2 is crutching
+def get_quote_order_qty() -> float:
+    return float(get_min_notional()) * set_greed() * 2
 
 
 def margin_create_market_buy():
     client.create_margin_order(symbol=symbol,
                                side='BUY',
                                type='MARKET',
-                               quoteOrderQty=get_quoteOrderQty(symbol))
+                               quoteOrderQty=get_quote_order_qty())
 
 
 def margin_create_market_sell():
     client.create_margin_order(symbol=symbol,
                                side='SELL',
                                type='MARKET',
-                               quoteOrderQty=get_quoteOrderQty(symbol))
+                               quoteOrderQty=get_quote_order_qty())
 
 
 def margin_create_limit_sell():
-    avg_price_with_sell_profit_and_precision = round(float(price) * float(secrets.choice(sell_profit)),
-                                                     get_price_precision(symbol))
+    avg_price_with_sell_profit_and_precision = round(
+        float(price) * float(secrets.choice(sell_profit)),
+        get_price_precision(symbol))
 
-    quantity = round(float(client.get_all_margin_orders(symbol=symbol, limit=1)[0]["origQty"]) * 1.1,
-                     get_qty_precision(symbol))
-
+    quantity = float(client.get_all_margin_orders(symbol=symbol, limit=1)[0]["origQty"])
     client.create_margin_order(symbol=symbol, side='SELL', type='LIMIT', timeInForce="GTC",
                                quantity=quantity,
                                price=avg_price_with_sell_profit_and_precision)
 
 
 def margin_create_limit_buy():
-    avg_price_with_buy_profit_and_precision = round(float(price) * float(secrets.choice(buy_profit)),
-                                                    get_price_precision(symbol))
+    avg_price_with_buy_profit_and_precision = round(
+        float(price) * float(secrets.choice(buy_profit)),
+        get_price_precision(symbol))
 
-    quantity = round(float(client.get_all_margin_orders(symbol=symbol, limit=1)[0]["origQty"]) * 1.1,
-                     get_qty_precision(symbol))
-
+    quantity = float(client.get_all_margin_orders(symbol=symbol, limit=1)[0]["origQty"])
     client.create_margin_order(symbol=symbol, side='BUY', type='LIMIT', timeInForce="GTC",
                                quantity=quantity,
                                price=avg_price_with_buy_profit_and_precision)

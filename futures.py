@@ -29,21 +29,21 @@ def set_greed():
         greed = 1
     else:
         greed = round(float(client.futures_account()['totalWalletBalance']) / 3360)
-    return greed
+    return int(greed)
 
 
-def get_quantity_precision(symbol):
+def get_quantity_precision(symbol: str) -> int:
     for x in info['symbols']:
         if x['symbol'] == symbol:
-            return x['quantityPrecision']
+            return int(x['quantityPrecision'])
 
 
-def get_notional(symbol):
+def get_notional(symbol: str) -> float:
     for x in info['symbols']:
         if x['symbol'] == symbol:
             for y in x['filters']:
                 if y['filterType'] == 'MIN_NOTIONAL':
-                    return y['notional']
+                    return float(y['notional'])
 
 
 def round_up(n, decimals=0):
@@ -52,11 +52,11 @@ def round_up(n, decimals=0):
 
 
 def get_tick_size(symbol: str) -> float:
-    for symbol_info in info['symbols']:
-        if symbol_info['symbol'] == symbol:
-            for symbol_filter in symbol_info['filters']:
-                if symbol_filter['filterType'] == 'PRICE_FILTER':
-                    return float(symbol_filter['tickSize'])
+    for x in info['symbols']:
+        if x['symbol'] == symbol:
+            for y in x['filters']:
+                if y['filterType'] == 'PRICE_FILTER':
+                    return float(y['tickSize'])
 
 
 def get_rounded_price(symbol: str, price: float) -> float:
