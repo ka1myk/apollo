@@ -1,30 +1,31 @@
 shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
 @reboot sleep 10; /bin/bash -c tmuxp load /root/apollo/session.yaml
 
-0 0  * * MON                          cd /root/apollo && python3 futures.py --coin SOL
-0 4  * * MON,TUE                      cd /root/apollo && python3 futures.py --coin BTC
-0 8  * * MON,TUE,WED                  cd /root/apollo && python3 futures.py --coin BNB
-0 12 * * MON,TUE,WED,THU              cd /root/apollo && python3 futures.py --coin DOT
-0 16 * * MON,TUE,WED,THU,FRI          cd /root/apollo && python3 futures.py --coin XRP
-0 20 * * MON,TUE,WED,THU,FRI,SAT      cd /root/apollo && python3 futures.py --coin ADA
-0 23 * * MON,TUE,WED,THU,FRI,SAT,SUN  cd /root/apollo && python3 futures.py --coin ETH
+0 0   * * MON                         cd /root/apollo && python3 futures.py --coin SOL
+0 2   * * MON,TUE                     cd /root/apollo && python3 futures.py --coin BTC
+0 4   * * MON,TUE,WED                 cd /root/apollo && python3 futures.py --coin BNB
+0 6   * * MON,TUE,WED,THU             cd /root/apollo && python3 futures.py --coin DOT
+0 8   * * MON,TUE,WED,THU,FRI         cd /root/apollo && python3 futures.py --coin XRP
+0 10  * * MON,TUE,WED,THU,FRI,SAT     cd /root/apollo && python3 futures.py --coin ADA
+0 12  * * MON,TUE,WED,THU,FRI,SAT,SUN cd /root/apollo && python3 futures.py --coin ETH
 
-0 13 * * MON                          cd /root/apollo && python3 spot.py --coin ETH
-0 17 * * MON,TUE                      cd /root/apollo && python3 spot.py --coin ADA
-0 21 * * MON,TUE,WED                  cd /root/apollo && python3 spot.py --coin XRP
-0 1  * * MON,TUE,WED,THU              cd /root/apollo && python3 spot.py --coin DOT
-0 5  * * MON,TUE,WED,THU,FRI          cd /root/apollo && python3 spot.py --coin BNB
-0 9  * * MON,TUE,WED,THU,FRI,SAT      cd /root/apollo && python3 spot.py --coin BTC
-0 11 * * MON,TUE,WED,THU,FRI,SAT,SUN  cd /root/apollo && python3 spot.py --coin SOL
+30 14 * * MON,TUE,WED,THU,FRI,SAT,SUN cd /root/apollo && python3 spot.py --coin SOL
+30 16 * * MON,TUE,WED,THU,FRI,SAT     cd /root/apollo && python3 spot.py --coin BTC
+30 18 * * MON,TUE,WED,THU,FRI         cd /root/apollo && python3 spot.py --coin BNB
+30 20 * * MON,TUE,WED,THU             cd /root/apollo && python3 spot.py --coin DOT
+30 22 * * MON,TUE,WED                 cd /root/apollo && python3 spot.py --coin XRP
+30 23 * * MON,TUE                     cd /root/apollo && python3 spot.py --coin ADA
+30 0  * * MON                         cd /root/apollo && python3 spot.py --coin ETH
 
-30 0 * * *                            cd /root/apollo && python3 transfer.py
+5 0 * * *                             cd /root/apollo && python3 transfer.py
 
-6  0,8,16  * * *                      cd /root/apollo && python3 margin.py --pair ETHBTC --strategy random
-12 1,9,17  * * *                      cd /root/apollo && python3 margin.py --pair BNBBTC --strategy random
-18 2,10,18 * * *                      cd /root/apollo && python3 margin.py --pair SOLBTC --strategy random
-24 3,11,19 * * *                      cd /root/apollo && python3 margin.py --pair BNBETH --strategy random
-30 4,12,20 * * *                      cd /root/apollo && python3 margin.py --pair DOTBTC --strategy random
-36 5,13,21 * * *                      cd /root/apollo && python3 margin.py --pair XRPETH --strategy random
-42 6,14,22 * * *                      cd /root/apollo && python3 margin.py --pair ADABTC --strategy random
-48 7,15,23 * * *                      cd /root/apollo && python3 margin.py --pair XRPBTC --strategy random
-54 8,16,0  * * *                      cd /root/apollo && python3 margin.py --pair ADAETH --strategy random
+15 1 * * *                            cd /root/apollo && python3 margin.py --pair SOLBTC --strategy random
+15 3 * * *                            cd /root/apollo && python3 margin.py --pair ADABTC --strategy random
+15 5 * * *                            cd /root/apollo && python3 margin.py --pair XRPETH --strategy random
+15 7 * * *                            cd /root/apollo && python3 margin.py --pair BNBETH --strategy random
+15 9 * * *                            cd /root/apollo && python3 margin.py --pair ETHBTC --strategy random
+15 11 * * *                           cd /root/apollo && python3 margin.py --pair DOTBTC --strategy random
+15 13 * * *                           cd /root/apollo && python3 margin.py --pair ADAETH --strategy random
+15 15 * * *                           cd /root/apollo && python3 margin.py --pair SOLETH --strategy random
+15 17 * * *                           cd /root/apollo && python3 margin.py --pair BNBBTC --strategy random
+15 19 * * *                           cd /root/apollo && python3 margin.py --pair XRPBTC --strategy random
