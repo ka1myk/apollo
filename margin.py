@@ -11,12 +11,10 @@ with open('variables.json') as v:
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--pair', type=str, required=True)
-parser.add_argument('--strategy', type=str, required=True)
 
 args = vars(parser.parse_args())
 
 symbol = args['pair']
-strategy = args['strategy']
 
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 
@@ -97,10 +95,9 @@ def margin_create_limit_buy():
                                price=avg_price_with_buy_profit_and_precision)
 
 
-if strategy == "random":
-    if secrets.randbelow(2) == 1:
-        margin_create_market_buy()
-        margin_create_limit_sell()
-    else:
-        margin_create_market_sell()
-        margin_create_limit_buy()
+if secrets.randbelow(2) == 1:
+    margin_create_market_buy()
+    margin_create_limit_sell()
+else:
+    margin_create_market_sell()
+    margin_create_limit_buy()

@@ -19,13 +19,13 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 
 5 0 * * *                             cd /root/apollo && python3 transfer.py
 
-15 1 * * *                            cd /root/apollo && python3 margin.py --pair SOLBTC --strategy random
-15 3 * * *                            cd /root/apollo && python3 margin.py --pair ADABTC --strategy random
-15 5 * * *                            cd /root/apollo && python3 margin.py --pair XRPETH --strategy random
-15 7 * * *                            cd /root/apollo && python3 margin.py --pair BNBETH --strategy random
-15 9 * * *                            cd /root/apollo && python3 margin.py --pair ETHBTC --strategy random
-15 11 * * *                           cd /root/apollo && python3 margin.py --pair DOTBTC --strategy random
-15 13 * * *                           cd /root/apollo && python3 margin.py --pair ADAETH --strategy random
-15 15 * * *                           cd /root/apollo && python3 margin.py --pair SOLETH --strategy random
-15 17 * * *                           cd /root/apollo && python3 margin.py --pair BNBBTC --strategy random
-15 19 * * *                           cd /root/apollo && python3 margin.py --pair XRPBTC --strategy random
+15 1 * * *                            cd /root/apollo && python3 margin.py --pair SOLBTC
+15 3 * * *                            cd /root/apollo && python3 margin.py --pair ADABTC
+15 5 * * *                            cd /root/apollo && python3 margin.py --pair XRPETH
+15 7 * * *                            cd /root/apollo && python3 margin.py --pair BNBETH
+15 9 * * *                            cd /root/apollo && python3 margin.py --pair ETHBTC
+15 11 * * *                           cd /root/apollo && python3 margin.py --pair DOTBTC
+15 13 * * *                           cd /root/apollo && python3 margin.py --pair ADAETH
+15 15 * * *                           cd /root/apollo && python3 margin.py --pair SOLETH
+15 17 * * *                           cd /root/apollo && python3 margin.py --pair BNBBTC
+15 19 * * *                           cd /root/apollo && python3 margin.py --pair XRPBTC
