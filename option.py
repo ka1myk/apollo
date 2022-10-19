@@ -2,6 +2,8 @@ import json
 
 from binance.client import Client
 
+OPTIONS_URL = 'https://eapi.binance.{}/eapi'
+
 with open('variables.json') as v:
     variables = json.load(v)
 

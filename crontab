@@ -1,6 +1,8 @@
 shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
 @reboot sleep 10; /bin/bash -c tmuxp load /root/apollo/session.yaml
 
+5 0 * * *                             cd /root/apollo && python3 transfer.py
+
 0 0   * * MON                         cd /root/apollo && python3 futures.py --coin SOL
 0 2   * * MON,TUE                     cd /root/apollo && python3 futures.py --coin BTC
 0 4   * * MON,TUE,WED                 cd /root/apollo && python3 futures.py --coin BNB
@@ -16,8 +18,6 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 30 22 * * MON,TUE,WED                 cd /root/apollo && python3 spot.py --coin XRP
 30 23 * * MON,TUE                     cd /root/apollo && python3 spot.py --coin ADA
 30 0  * * MON                         cd /root/apollo && python3 spot.py --coin ETH
-
-5 0 * * *                             cd /root/apollo && python3 transfer.py
 
 15 1 * * *                            cd /root/apollo && python3 margin.py --pair SOLBTC
 15 3 * * *                            cd /root/apollo && python3 margin.py --pair ADABTC

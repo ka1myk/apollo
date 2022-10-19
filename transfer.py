@@ -35,11 +35,20 @@ def coin_from_spot_to_futures():
     for x in coins:
         if float(client.get_asset_balance(asset=x)["free"]) > 0:
             client.futures_account_transfer(asset=x,
-                                            amount=float(client.get_asset_balance(asset=x)["free"]),
+                                            amount=float(client.get_asset_balance(asset=x)["free"]) / 2,
                                             type=1,
                                             timestamp=client.get_server_time()["serverTime"])
 
 
+def coin_from_spot_to_margin():
+    coins = variables['coin'].keys()
+    for x in coins:
+        if float(client.get_asset_balance(asset=x)["free"]) > 0:
+            client.transfer_spot_to_margin(asset=x,
+                                           amount=float(client.get_asset_balance(asset=x)["free"]))
+
+
 coin_from_spot_to_futures()
+coin_from_spot_to_margin()
 if get_free_currency() > 0:
     busd_from_futures_to_spot()
