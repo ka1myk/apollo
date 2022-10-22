@@ -2,8 +2,6 @@ session_name: futuresboard
 windows:
   - window_name: futuresboard
     layout: even-vertical
-    shell_command_before:
-      - cd root/futuresboard
     panes:
       - shell_command:
-          - futuresboard
+          - cd /root/futuresboard && futuresboard
