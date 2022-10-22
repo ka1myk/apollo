@@ -20,6 +20,9 @@ client.futures_change_leverage(symbol=symbol, leverage=2)
 
 info = client.futures_exchange_info()
 
+fees = float(client.get_trade_fee(symbol=symbol)[0]["makerCommission"]) + float(
+    client.get_trade_fee(symbol=symbol)[0]["takerCommission"])
+
 
 # why 3360?
 # 7 * 40 * 4 * 3 = 3360$ for 3 month
@@ -87,6 +90,7 @@ def open_market():
 
 def create_grid(short_position_amt, grid, short_take_profit_price):
     for x in grid:
+        x = x - fees
         client.futures_create_order(symbol=symbol,
                                     quantity=round(short_position_amt / len(grid),
                                                    get_quantity_precision(symbol)),
@@ -121,7 +125,7 @@ def create_limit():
         create_grid(short_position_amt, grid, short_take_profit_price)
 
     if amount_of_close_orders > 3:
-        grid = [0.76, 0.73, 0.70, 0.67]
+        grid = [0.76, 0.70, 0.63, 0.57]
         create_grid(short_position_amt, grid, short_take_profit_price)
 
 
