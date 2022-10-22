@@ -1,7 +1,8 @@
 shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
 @reboot sleep 10; /bin/bash -c tmuxp load /root/apollo/session.yaml
 
-5 0 * * *                             cd /root/apollo && python3 transfer.py
+10 0 * * *                            sudo shutdown -r
+5  0 * * *                            cd /root/apollo && python3 transfer.py
 
 0 0   * * MON                         cd /root/apollo && python3 futures.py --coin SOL
 0 2   * * MON,TUE                     cd /root/apollo && python3 futures.py --coin BTC
