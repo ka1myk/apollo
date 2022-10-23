@@ -10,4 +10,6 @@ with open('variables.json') as v:
 
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 
-print(client.options_positions(symbol="ETH-221125-2700-C"))
+
+print(client.options_mark_price())
+

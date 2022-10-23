@@ -24,14 +24,14 @@ fees = float(client.get_trade_fee(symbol=symbol)[0]["makerCommission"]) + float(
     client.get_trade_fee(symbol=symbol)[0]["takerCommission"])
 
 
-# why 3360?
-# 7 * 40 * 4 * 3 = 3360$ for 3 month
+# why 13440?
+# 7 * 40 * 4 * 12 = 13440$ for 12 month
 # len(coins) * week budget in $ * weeks in month * amount of month continuous trade
 def set_greed():
-    if float(client.futures_account()['totalWalletBalance']) < 3360:
+    if float(client.futures_account()['totalWalletBalance']) < 13440:
         greed = 1
     else:
-        greed = round(float(client.futures_account()['totalWalletBalance']) / 3360)
+        greed = round(float(client.futures_account()['totalWalletBalance']) / 13440)
     return int(greed)
 
 

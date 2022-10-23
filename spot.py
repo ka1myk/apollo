@@ -17,14 +17,14 @@ info = client.get_symbol_info(symbol)
 price = client.get_avg_price(symbol=symbol)['price']
 
 
-# why 3360?
-# 7 * 40 * 4 * 3 = 3360$ for 3 month with greed 1, greed increase only by int
+# why 13440?
+# 7 * 40 * 4 * 12 = 13440$ for 12 month with greed 1, greed increase only by int
 # len(coins) * week budget in $ * weeks in month * amount of month continuous trade
 def set_greed():
-    if float(client.get_asset_balance(asset='BUSD')['free']) < 3360:
+    if float(client.get_asset_balance(asset='BUSD')['free']) < 13440:
         greed = 1
     else:
-        greed = round(float(client.get_asset_balance(asset='BUSD')['free']) / 3360)
+        greed = round(float(client.get_asset_balance(asset='BUSD')['free']) / 13440)
     return int(greed)
 
 
@@ -36,7 +36,7 @@ def get_min_notional():
 
 def open_market():
     client.order_market_buy(symbol=symbol, side='BUY', type='MARKET',
-                            quoteOrderQty=get_min_notional()) * set_greed()
+                            quoteOrderQty=get_min_notional() * set_greed())
 
 
 open_market()
