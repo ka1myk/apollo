@@ -2,6 +2,7 @@ import argparse
 import json
 
 from binance.client import Client
+from telegram_exception_alerts import Alerter
 
 with open('variables.json') as v:
     variables = json.load(v)
@@ -13,8 +14,13 @@ coin = parser.parse_args()
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 symbol = coin.coin + variables['currency']
 
-info = client.get_symbol_info(symbol)
-price = client.get_avg_price(symbol=symbol)['price']
+bot_token = variables['telegram']['bot_token']
+bot_chatID = variables['telegram']['bot_chatID']
+tg_alert = Alerter(bot_token=bot_token, chat_id=bot_chatID)
+
+
+def get_symbol_info():
+    return client.get_symbol_info(symbol)
 
 
 # why 13440?
@@ -29,14 +35,15 @@ def set_greed():
 
 
 def get_min_notional():
-    for y in info['filters']:
+    for y in get_symbol_info()['filters']:
         if y['filterType'] == 'MIN_NOTIONAL':
             return float(y['minNotional'])
 
 
-def open_market():
+@tg_alert
+def go_baby_spot():
     client.order_market_buy(symbol=symbol, side='BUY', type='MARKET',
                             quoteOrderQty=get_min_notional() * set_greed())
 
 
-open_market()
+go_baby_spot()

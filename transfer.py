@@ -1,12 +1,17 @@
 import json
 
 from binance.client import Client
+from telegram_exception_alerts import Alerter
 
 with open('variables.json') as v:
     variables = json.load(v)
 
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 currency = variables['currency']
+
+bot_token = variables['telegram']['bot_token']
+bot_chatID = variables['telegram']['bot_chatID']
+tg_alert = Alerter(bot_token=bot_token, chat_id=bot_chatID)
 
 
 def get_free_currency():
@@ -48,7 +53,12 @@ def coin_from_spot_to_margin():
                                            amount=float(client.get_asset_balance(asset=x)["free"]))
 
 
-coin_from_spot_to_futures()
-coin_from_spot_to_margin()
-if get_free_currency() > 0:
-    busd_from_futures_to_spot()
+@tg_alert
+def go_baby_transfer():
+    coin_from_spot_to_futures()
+    coin_from_spot_to_margin()
+    if get_free_currency() > 0:
+        busd_from_futures_to_spot()
+
+
+go_baby_transfer()
