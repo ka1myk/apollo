@@ -4,6 +4,10 @@
     "key": "",
     "secret": ""
   },
+  "telegram": {
+    "bot_token": "",
+    "bot_chatID": ""
+  },
   "currency": "BUSD",
   "coin": {
     "SOL": {
