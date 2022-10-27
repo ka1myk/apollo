@@ -5,8 +5,14 @@ import math
 from binance.client import Client
 from binance.helpers import round_step_size
 
+from telegram_exception_alerts import Alerter
+
 with open('variables.json') as v:
     variables = json.load(v)
+
+bot_token = variables['telegram']['bot_token']
+bot_chatID = variables['telegram']['bot_chatID']
+tg_alert = Alerter(bot_token=bot_token, chat_id=bot_chatID)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--coin', type=str, required=True)
@@ -18,10 +24,14 @@ times_a_week_futures = variables['coin'][coin.coin]['times_a_week_futures']
 
 client.futures_change_leverage(symbol=symbol, leverage=2)
 
-info = client.futures_exchange_info()
 
-fees = float(client.get_trade_fee(symbol=symbol)[0]["makerCommission"]) + float(
-    client.get_trade_fee(symbol=symbol)[0]["takerCommission"])
+def get_symbol_info():
+    return client.futures_exchange_info()
+
+
+def get_fees():
+    return float(client.get_trade_fee(symbol=symbol)[0]["makerCommission"]) + float(
+        client.get_trade_fee(symbol=symbol)[0]["takerCommission"])
 
 
 # why 13440?
@@ -36,13 +46,13 @@ def set_greed():
 
 
 def get_quantity_precision(symbol: str) -> int:
-    for x in info['symbols']:
+    for x in get_symbol_info()['symbols']:
         if x['symbol'] == symbol:
             return int(x['quantityPrecision'])
 
 
 def get_notional(symbol: str) -> float:
-    for x in info['symbols']:
+    for x in get_symbol_info()['symbols']:
         if x['symbol'] == symbol:
             for y in x['filters']:
                 if y['filterType'] == 'MIN_NOTIONAL':
@@ -55,7 +65,7 @@ def round_up(n, decimals=0):
 
 
 def get_tick_size(symbol: str) -> float:
-    for x in info['symbols']:
+    for x in get_symbol_info()['symbols']:
         if x['symbol'] == symbol:
             for y in x['filters']:
                 if y['filterType'] == 'PRICE_FILTER':
@@ -90,7 +100,7 @@ def open_market():
 
 def create_grid(short_position_amt, grid, short_take_profit_price):
     for x in grid:
-        x = x - fees
+        x = x - get_fees()
         client.futures_create_order(symbol=symbol,
                                     quantity=round(short_position_amt / len(grid),
                                                    get_quantity_precision(symbol)),
@@ -129,5 +139,10 @@ def create_limit():
         create_grid(short_position_amt, grid, short_take_profit_price)
 
 
-open_market()
-create_limit()
+@tg_alert
+def go_baby_futures():
+    open_market()
+    create_limit()
+
+
+go_baby_futures()
