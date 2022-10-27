@@ -1,3 +1,4 @@
+#TODO add grid [-5%, -10%, -15%, -20%, -25%] of avg_price and refresh after each market buy
 import argparse
 import json
 
