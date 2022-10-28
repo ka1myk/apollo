@@ -59,7 +59,7 @@ def get_rounded_price(price):
 
 
 def get_quote_order_qty() -> float:
-    return float(get_min_notional()) * set_greed()
+    return float(get_min_notional()) * set_greed() * 1.3
 
 
 def spot_create_market_buy():
@@ -72,7 +72,7 @@ def spot_create_market_buy():
 def spot_create_grid_limit_buy(grid):
     for x in grid:
         client.order_limit(symbol=symbol,
-                           quantity=float(client.get_all_orders(symbol=symbol)[0]["origQty"]) * (grid.index(x) + 2),
+                           quantity=float(client.get_all_orders(symbol=symbol)[-1]["origQty"]),
                            price=get_rounded_price(get_avg_price() * x),
                            side='BUY',
                            type='LIMIT',
