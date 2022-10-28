@@ -1,8 +1,9 @@
-#TODO add grid [-5%, -10%, -15%, -20%, -25%] of avg_price and refresh after each market buy
 import argparse
 import json
 
 from binance.client import Client
+from binance.helpers import round_step_size
+
 from telegram_exception_alerts import Alerter
 
 with open('variables.json') as v:
@@ -19,9 +20,15 @@ bot_token = variables['telegram']['bot_token']
 bot_chatID = variables['telegram']['bot_chatID']
 tg_alert = Alerter(bot_token=bot_token, chat_id=bot_chatID)
 
+grid = [0.90, 0.85, 0.80]
+
 
 def get_symbol_info():
     return client.get_symbol_info(symbol)
+
+
+def get_avg_price():
+    return float(client.get_avg_price(symbol=symbol)['price'])
 
 
 # why 13440?
@@ -36,15 +43,53 @@ def set_greed():
 
 
 def get_min_notional():
-    for y in get_symbol_info()['filters']:
-        if y['filterType'] == 'MIN_NOTIONAL':
-            return float(y['minNotional'])
+    for x in get_symbol_info()["filters"]:
+        if x['filterType'] == 'MIN_NOTIONAL':
+            return x['minNotional']
+
+
+def get_tick_size():
+    for x in get_symbol_info()["filters"]:
+        if x['filterType'] == 'PRICE_FILTER':
+            return x['tickSize']
+
+
+def get_rounded_price(price):
+    return round_step_size(price, get_tick_size())
+
+
+def get_quote_order_qty() -> float:
+    return float(get_min_notional()) * set_greed()
+
+
+def spot_create_market_buy():
+    client.order_market_buy(symbol=symbol,
+                            side='BUY',
+                            type='MARKET',
+                            quoteOrderQty=get_quote_order_qty())
+
+
+def spot_create_grid_limit_buy(grid):
+    for x in grid:
+        client.order_limit(symbol=symbol,
+                           quantity=float(client.get_all_orders(symbol=symbol)[0]["origQty"]) * (grid.index(x) + 2),
+                           price=get_rounded_price(get_avg_price() * x),
+                           side='BUY',
+                           type='LIMIT',
+                           timeInForce="GTC"
+                           )
+
+
+def cancel_orders():
+    for x in client.get_open_orders(symbol=symbol):
+        client.cancel_order(symbol=symbol, orderId=x["orderId"])
 
 
 @tg_alert
 def go_baby_spot():
-    client.order_market_buy(symbol=symbol, side='BUY', type='MARKET',
-                            quoteOrderQty=get_min_notional() * set_greed())
+    cancel_orders()
+    spot_create_market_buy()
+    spot_create_grid_limit_buy(grid)
 
 
 go_baby_spot()

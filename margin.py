@@ -87,23 +87,23 @@ def margin_create_market_sell():
 
 
 def margin_create_limit_sell():
-    index_price_with_sell_profit_and_precision = round(
+    avg_price_with_sell_profit_and_precision = round(
         float(get_avg_price()) * float(secrets.choice(sell_profit) + get_fees()), get_price_precision(symbol))
 
     quantity = float(client.get_all_margin_orders(symbol=symbol, limit=1)[0]["origQty"])
     client.create_margin_order(symbol=symbol, side='SELL', type='LIMIT', timeInForce="GTC",
                                quantity=quantity,
-                               price=index_price_with_sell_profit_and_precision)
+                               price=avg_price_with_sell_profit_and_precision)
 
 
 def margin_create_limit_buy():
-    index_price_with_buy_profit_and_precision = round(
+    avg_price_with_buy_profit_and_precision = round(
         float(get_avg_price()) * float(secrets.choice(buy_profit) - get_fees()), get_price_precision(symbol))
 
     quantity = float(client.get_all_margin_orders(symbol=symbol, limit=1)[0]["origQty"])
     client.create_margin_order(symbol=symbol, side='BUY', type='LIMIT', timeInForce="GTC",
                                quantity=quantity,
-                               price=index_price_with_buy_profit_and_precision)
+                               price=avg_price_with_buy_profit_and_precision)
 
 
 @tg_alert
