@@ -23,4 +23,5 @@ for x in client.options_exchange_info()["optionSymbols"]:
     if float(x["expiryDate"]) > serverTime + (1000 * 60 * 60 * 24 * 70) and \
             x["side"] == "CALL" and \
             float(x["strikePrice"]) > get_avg_price * 1.3:
-        print(x["symbol"], client.options_mark_price(symbol=x["symbol"])[0]["markPrice"])
+        markPrice = float(client.options_mark_price(symbol=x["symbol"])[0]["markPrice"])
+        client.options_place_order(symbol=x["symbol"], side="BUY", type="LIMIT", quantity=x["minQty"], price=markPrice)
