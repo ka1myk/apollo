@@ -1,32 +1,33 @@
 shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
 @reboot sleep 10; tmuxp load /root/apollo/session.yaml
 
-10 0 * * *                            sudo shutdown -r
-5  0 * * *                            cd /root/apollo && python3 transfer.py
+0  14 * * MON,TUE,WED,THU,FRI,SAT,SUN  cd /root/apollo && python3 spot.py --coin SOL
+0  16 * * MON,TUE,WED,THU,FRI,SAT      cd /root/apollo && python3 spot.py --coin BTC
+0  18 * * MON,TUE,WED,THU,FRI          cd /root/apollo && python3 spot.py --coin BNB
+0  20 * * MON,TUE,WED,THU              cd /root/apollo && python3 spot.py --coin DOT
+0  22 * * MON,TUE,WED                  cd /root/apollo && python3 spot.py --coin XRP
+0  23 * * MON,TUE                      cd /root/apollo && python3 spot.py --coin ADA
+0  0  * * MON                          cd /root/apollo && python3 spot.py --coin ETH
 
-0 0   * * MON                         cd /root/apollo && python3 futures.py --coin SOL
-0 2   * * MON,TUE                     cd /root/apollo && python3 futures.py --coin BTC
-0 4   * * MON,TUE,WED                 cd /root/apollo && python3 futures.py --coin BNB
-0 6   * * MON,TUE,WED,THU             cd /root/apollo && python3 futures.py --coin DOT
-0 8   * * MON,TUE,WED,THU,FRI         cd /root/apollo && python3 futures.py --coin XRP
-0 10  * * MON,TUE,WED,THU,FRI,SAT     cd /root/apollo && python3 futures.py --coin ADA
-0 12  * * MON,TUE,WED,THU,FRI,SAT,SUN cd /root/apollo && python3 futures.py --coin ETH
+15 1  * * *                            cd /root/apollo && python3 margin.py --pair SOLBTC
+15 3  * * *                            cd /root/apollo && python3 margin.py --pair ADABTC
+15 5  * * *                            cd /root/apollo && python3 margin.py --pair XRPETH
+15 7  * * *                            cd /root/apollo && python3 margin.py --pair BNBETH
+15 9  * * *                            cd /root/apollo && python3 margin.py --pair ETHBTC
+15 11 * * *                            cd /root/apollo && python3 margin.py --pair DOTBTC
+15 13 * * *                            cd /root/apollo && python3 margin.py --pair ADAETH
+15 15 * * *                            cd /root/apollo && python3 margin.py --pair SOLETH
+15 17 * * *                            cd /root/apollo && python3 margin.py --pair BNBBTC
+15 19 * * *                            cd /root/apollo && python3 margin.py --pair XRPBTC
 
-30 14 * * MON,TUE,WED,THU,FRI,SAT,SUN cd /root/apollo && python3 spot.py --coin SOL
-30 16 * * MON,TUE,WED,THU,FRI,SAT     cd /root/apollo && python3 spot.py --coin BTC
-30 18 * * MON,TUE,WED,THU,FRI         cd /root/apollo && python3 spot.py --coin BNB
-30 20 * * MON,TUE,WED,THU             cd /root/apollo && python3 spot.py --coin DOT
-30 22 * * MON,TUE,WED                 cd /root/apollo && python3 spot.py --coin XRP
-30 23 * * MON,TUE                     cd /root/apollo && python3 spot.py --coin ADA
-30 0  * * MON                         cd /root/apollo && python3 spot.py --coin ETH
+30 0  * * MON                          cd /root/apollo && python3 futures.py --coin SOL
+30 2  * * MON,TUE                      cd /root/apollo && python3 futures.py --coin BTC
+30 4  * * MON,TUE,WED                  cd /root/apollo && python3 futures.py --coin BNB
+30 6  * * MON,TUE,WED,THU              cd /root/apollo && python3 futures.py --coin DOT
+30 8  * * MON,TUE,WED,THU,FRI          cd /root/apollo && python3 futures.py --coin XRP
+30 10 * * MON,TUE,WED,THU,FRI,SAT      cd /root/apollo && python3 futures.py --coin ADA
+30 12 * * MON,TUE,WED,THU,FRI,SAT,SUN  cd /root/apollo && python3 futures.py --coin ETH
 
-15 1 * * *                            cd /root/apollo && python3 margin.py --pair SOLBTC
-15 3 * * *                            cd /root/apollo && python3 margin.py --pair ADABTC
-15 5 * * *                            cd /root/apollo && python3 margin.py --pair XRPETH
-15 7 * * *                            cd /root/apollo && python3 margin.py --pair BNBETH
-15 9 * * *                            cd /root/apollo && python3 margin.py --pair ETHBTC
-15 11 * * *                           cd /root/apollo && python3 margin.py --pair DOTBTC
-15 13 * * *                           cd /root/apollo && python3 margin.py --pair ADAETH
-15 15 * * *                           cd /root/apollo && python3 margin.py --pair SOLETH
-15 17 * * *                           cd /root/apollo && python3 margin.py --pair BNBBTC
-15 19 * * *                           cd /root/apollo && python3 margin.py --pair XRPBTC
+45 0  * * *                            cd /root/apollo && python3 option.py
+45 8  * * *                            cd /root/apollo && python3 transfer.py
+45 16 * * *                            sudo shutdown -r
