@@ -1,10 +1,4 @@
-#Useful links:
-#https://docs.glassnode.com/api/transactions#percent-volume-in-profit
-#https://coinglass.github.io/API-Reference/#exchange-open-interest
-#https://alternative.me/crypto/
-#https://www.coingecko.com/en/api
-#https://www.cryptometer.io/liquidation-data
-#https://www.futuresboard.xyz/
+#!/bin/bash
 
 apt-get update &&
 apt-get upgrade &&
