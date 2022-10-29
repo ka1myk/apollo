@@ -10,17 +10,14 @@ from telegram_exception_alerts import Alerter
 with open('variables.json') as v:
     variables = json.load(v)
 
-bot_token = variables['telegram']['bot_token']
-bot_chatID = variables['telegram']['bot_chatID']
-tg_alert = Alerter(bot_token=bot_token, chat_id=bot_chatID)
+client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
+tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--pair', type=str, required=True)
 args = vars(parser.parse_args())
 
 symbol = args['pair']
-
-client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 
 sell_profit = [1.005, 1.01, 1.015, 1.02, 1.025, 1.03, 1.035, 1.04, 1.045, 1.05]
 buy_profit = [0.995, 0.99, 0.985, 0.98, 0.975, 0.97, 0.965, 0.96, 0.955, 0.95]

@@ -7,11 +7,9 @@ with open('variables.json') as v:
     variables = json.load(v)
 
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
-currency = variables['currency']
+tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
 
-bot_token = variables['telegram']['bot_token']
-bot_chatID = variables['telegram']['bot_chatID']
-tg_alert = Alerter(bot_token=bot_token, chat_id=bot_chatID)
+currency = variables['currency']
 
 
 def get_free_currency():
@@ -29,7 +27,7 @@ def busd_from_futures_to_spot():
                                            endTime=client.get_server_time()['serverTime'])
 
     for x in profit:
-        client.futures_account_transfer(asset="BUSD",
+        client.futures_account_transfer(asset=variables['currency'],
                                         amount=float(x['income']),
                                         type=2,
                                         timestamp=client.get_server_time()['serverTime'])
