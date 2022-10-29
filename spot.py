@@ -20,7 +20,7 @@ bot_token = variables['telegram']['bot_token']
 bot_chatID = variables['telegram']['bot_chatID']
 tg_alert = Alerter(bot_token=bot_token, chat_id=bot_chatID)
 
-grid = [0.90, 0.85, 0.80]
+grid = [0.85, 0.80]
 
 
 def get_symbol_info():

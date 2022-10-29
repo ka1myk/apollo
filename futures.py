@@ -22,7 +22,7 @@ client = Client(variables['binance_01']['key'], variables['binance_01']['secret'
 symbol = coin.coin + variables['currency']
 times_a_week_futures = variables['coin'][coin.coin]['times_a_week_futures']
 
-client.futures_change_leverage(symbol=symbol, leverage=2)
+client.futures_change_leverage(symbol=symbol, leverage=1)
 
 
 def get_symbol_info():
