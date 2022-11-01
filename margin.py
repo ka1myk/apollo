@@ -1,3 +1,8 @@
+#TODO check option margin and add more
+#TODO add ip to telegram alert
+#TODO dashboard PnL margin
+#TODO dashboard PnL options
+
 import argparse
 import json
 import secrets
