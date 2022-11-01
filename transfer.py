@@ -61,11 +61,19 @@ def currency_from_option_to_spot():
             client.options_funds_transfer(currency="USDT", type="OUT", amount=round(float(x["realizedProfit"]), 1) / 2)
 
 
+def usdt_to_busd_on_spot():
+    if float(client.get_asset_balance(asset='USDT')['free']) > 10:
+        client.create_order(symbol="BUSDUSDT",
+                            side='BUY',
+                            type='MARKET',
+                            quoteOrderQty=round(float(client.get_asset_balance(asset='USDT')['free'])))
+
 @tg_alert
 def go_baby_transfer():
     coin_from_margin_to_spot()
     coin_from_spot_to_futures()
     currency_from_option_to_spot()
+    usdt_to_busd_on_spot()
     if get_free_currency_on_futures() > 0:
         profit_from_futures_to_spot()
 
