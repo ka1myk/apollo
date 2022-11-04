@@ -1,5 +1,6 @@
 import json
 from telegram_exception_alerts import Alerter
+import numpy as np
 
 from binance.client import BaseClient
 from binance.client import Client
@@ -15,6 +16,8 @@ tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variabl
 currency = variables['currency']
 serverTime = client.get_server_time()['serverTime']
 margin_all_pairs = client.get_margin_all_pairs()
+
+pretty_qty = lambda x: np.format_float_positional(x, trim='-')
 
 
 def get_free_currency_on_futures():
@@ -50,8 +53,8 @@ def coin_from_margin_to_spot():
     for y in margin_all_pairs:
         for x in client.get_margin_trades(symbol=y["symbol"]):
             if x['isMaker'] == True and x["time"] > serverTime - 1000 * 60 * 60 * 24:
-                client.transfer_margin_to_spot(asset=str(x["symbol"])[:3],
-                                               amount=float(x["qty"]) * 0.005)
+                client.transfer_margin_to_spot(asset=y["base"],
+                                               amount=pretty_qty(float(x["qty"]) * 0.005))
 
 
 def currency_from_option_to_spot():
@@ -67,6 +70,7 @@ def usdt_to_busd_on_spot():
                             side='BUY',
                             type='MARKET',
                             quoteOrderQty=round(float(client.get_asset_balance(asset='USDT')['free'])))
+
 
 @tg_alert
 def go_baby_transfer():
