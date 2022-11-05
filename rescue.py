@@ -105,8 +105,10 @@ def create_limit():
 
 @tg_alert
 def go_baby_rescue():
-    open_market()
-    create_limit()
+    long_position_amt = abs(float(client.futures_position_information(symbol=symbol)[1]["positionAmt"]))
+    if long_position_amt > 0:
+        open_market()
+        create_limit()
 
 
 go_baby_rescue()
