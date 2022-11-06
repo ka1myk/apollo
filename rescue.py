@@ -1,6 +1,6 @@
-import argparse
 import json
 import math
+import secrets
 
 from binance.client import Client
 from binance.helpers import round_step_size
@@ -13,11 +13,17 @@ with open('variables.json') as v:
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--coin', type=str, required=True)
-coin = parser.parse_args()
 
-symbol = coin.coin + variables['currency']
+def get_long_symbol():
+    symbol = []
+    for x in client.futures_account()["positions"]:
+        if x["positionSide"] == "LONG" and float(x["entryPrice"]) > 0:
+            symbol.append(x["symbol"])
+
+    return symbol
+
+
+symbol = secrets.choice(get_long_symbol())
 
 
 def get_symbol_info():
@@ -102,6 +108,7 @@ def create_limit():
                                 type='LIMIT',
                                 timeInForce="GTC"
                                 )
+
 
 @tg_alert
 def go_baby_rescue():
