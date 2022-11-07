@@ -12,7 +12,7 @@ with open('variables.json') as v:
 
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
-
+greed_random = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 def get_long_symbol():
     symbol = []
@@ -40,7 +40,7 @@ def get_fees():
 # len(coins) * week budget in $ * weeks in month * amount of month continuous trade
 def set_greed():
     if float(client.futures_account()['totalWalletBalance']) < 13440:
-        greed = 1
+        greed = secrets.choice(greed_random)
     else:
         greed = round(float(client.futures_account()['totalWalletBalance']) / 13440)
     return int(greed)
