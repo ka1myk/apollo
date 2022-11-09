@@ -125,15 +125,15 @@ def create_limit():
         create_grid(short_position_amt, grid, short_take_profit_price)
 
     if 1 < amount_of_close_orders <= 2:
-        grid = [0.90, 0.85]
+        grid = [0.85, 0.75]
         create_grid(short_position_amt, grid, short_take_profit_price)
 
     if 2 < amount_of_close_orders <= 3:
-        grid = [0.80, 0.75, 0.70]
+        grid = [0.65, 0.55, 0.45]
         create_grid(short_position_amt, grid, short_take_profit_price)
 
     if amount_of_close_orders > 3:
-        grid = [0.65, 0.60, 0.55, 0.50]
+        grid = [0.35, 0.25, 0.15, 0.05]
         create_grid(short_position_amt, grid, short_take_profit_price)
 
 
