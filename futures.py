@@ -121,19 +121,19 @@ def create_limit():
     amount_of_close_orders = short_position_amt / (order_qty * times_a_week_futures)
 
     if amount_of_close_orders <= 1:
-        grid = [0.97]
+        grid = [0.95]
         create_grid(short_position_amt, grid, short_take_profit_price)
 
     if 1 < amount_of_close_orders <= 2:
-        grid = [0.94, 0.88]
+        grid = [0.90, 0.85]
         create_grid(short_position_amt, grid, short_take_profit_price)
 
     if 2 < amount_of_close_orders <= 3:
-        grid = [0.85, 0.82, 0.79]
+        grid = [0.80, 0.75, 0.70]
         create_grid(short_position_amt, grid, short_take_profit_price)
 
     if amount_of_close_orders > 3:
-        grid = [0.76, 0.70, 0.63, 0.57]
+        grid = [0.65, 0.60, 0.55, 0.50]
         create_grid(short_position_amt, grid, short_take_profit_price)
 
 
