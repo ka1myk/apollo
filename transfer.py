@@ -22,12 +22,20 @@ pretty_qty = lambda x: np.format_float_positional(x, trim='-')
 
 def get_free_currency_on_futures():
     for x in client.futures_account_balance():
-        if x['asset'] == currency:
-            return float(x['balance'])
+        if x['asset'] == currency and float(x['balance']) > 0:
+            return True
+
+
+def get_free_coin_on_margin():
+    coins = variables['coin'].keys()
+    for x in coins:
+        for y in client.get_margin_account()["userAssets"]:
+            if y["asset"] in x and y["free"] == 0:
+                return True
 
 
 # 1000 * 60 * 60 * 24 is interval for 24 hours
-def profit_from_futures_to_spot():
+def busd_from_futures_to_spot():
     profit = client.futures_income_history(incomeType="REALIZED_PNL",
                                            startTime=serverTime - 1000 * 60 * 60 * 24,
                                            endTime=serverTime)
@@ -49,6 +57,14 @@ def coin_from_spot_to_futures():
                                             timestamp=serverTime)
 
 
+def coin_from_spot_to_margin():
+    coins = variables['coin'].keys()
+    for x in coins:
+        if float(client.get_asset_balance(asset=x)["free"]) > 0:
+            client.transfer_spot_to_margin(asset=x,
+                                           amount=float(client.get_asset_balance(asset=x)["free"]))
+
+
 def coin_from_margin_to_spot():
     for y in margin_all_pairs:
         for x in client.get_margin_trades(symbol=y["symbol"]):
@@ -57,7 +73,7 @@ def coin_from_margin_to_spot():
                                                amount=pretty_qty(float(x["qty"]) * 0.005))
 
 
-def currency_from_option_to_spot():
+def usdt_from_option_to_spot():
     for x in client.options_user_trades():
         if round(float(x["realizedProfit"]), 1) > 0 and serverTime > float(x["time"]) > float(
                 serverTime - (1000 * 60 * 60 * 24)):
@@ -74,12 +90,14 @@ def usdt_to_busd_on_spot():
 
 @tg_alert
 def go_baby_transfer():
+    if get_free_coin_on_margin():
+        coin_from_spot_to_margin()
     coin_from_margin_to_spot()
     coin_from_spot_to_futures()
-    currency_from_option_to_spot()
+    usdt_from_option_to_spot()
     usdt_to_busd_on_spot()
-    if get_free_currency_on_futures() > 0:
-        profit_from_futures_to_spot()
+    if get_free_currency_on_futures():
+        busd_from_futures_to_spot()
 
 
 go_baby_transfer()
