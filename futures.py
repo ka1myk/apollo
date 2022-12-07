@@ -120,22 +120,13 @@ def create_limit():
     order_qty = round(min_notional(symbol) * multiplier_of_twice_BTC(symbol), get_quantity_precision(symbol))
     amount_of_close_orders = short_position_amt / (order_qty * times_a_week_futures)
 
-    if amount_of_close_orders <= 1:
-        grid = [0.95]
-        create_grid(short_position_amt, grid, short_take_profit_price)
+    grid = [0.95, 0.85, 0.75, 0.65, 0.55, 0.45, 0.35, 0.25, 0.15, 0.05]
 
-    if 1 < amount_of_close_orders <= 2:
-        grid = [0.85, 0.75]
-        create_grid(short_position_amt, grid, short_take_profit_price)
+    if amount_of_close_orders > len(grid):
+        amount_of_close_orders = len(grid)
 
-    if 2 < amount_of_close_orders <= 3:
-        grid = [0.65, 0.55, 0.45]
-        create_grid(short_position_amt, grid, short_take_profit_price)
-
-    if amount_of_close_orders > 3:
-        grid = [0.35, 0.25, 0.15, 0.05]
-        create_grid(short_position_amt, grid, short_take_profit_price)
-
+    for x in range(amount_of_close_orders):
+        create_grid(short_position_amt, grid[x], short_take_profit_price)
 
 @tg_alert
 def go_baby_futures():
