@@ -18,7 +18,7 @@ coin = parser.parse_args()
 
 symbol = coin.coin + variables['currency']
 
-grid = [0.85]
+grid = [0.90, 0.85, 0.80]
 
 
 def get_symbol_info():
