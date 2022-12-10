@@ -94,8 +94,8 @@ def go_baby_transfer():
         coin_from_spot_to_margin()
     coin_from_margin_to_spot()
     coin_from_spot_to_futures()
-    usdt_from_option_to_spot()
-    usdt_to_busd_on_spot()
+#   usdt_from_option_to_spot()
+#   usdt_to_busd_on_spot()
     if get_free_currency_on_futures():
         busd_from_futures_to_spot()
 
