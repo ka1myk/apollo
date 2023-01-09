@@ -1,9 +1,8 @@
-#TODO check option margin and add more
-#TODO add ip to telegram alert
-#TODO dashboard PnL margin
-#TODO dashboard PnL options
+# TODO check option margin and add more
+# TODO add ip to telegram alert
+# TODO dashboard PnL margin
+# TODO dashboard PnL options
 
-import argparse
 import json
 import secrets
 
@@ -18,14 +17,22 @@ with open('variables.json') as v:
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--pair', type=str, required=True)
-args = vars(parser.parse_args())
-
-symbol = args['pair']
-
 sell_profit = [1.005, 1.01, 1.015, 1.02, 1.025, 1.03, 1.035, 1.04, 1.045, 1.05]
-buy_profit  = [0.995, 0.99, 0.985, 0.98, 0.975, 0.97, 0.965, 0.96, 0.955, 0.95]
+buy_profit = [0.995, 0.99, 0.985, 0.98, 0.975, 0.97, 0.965, 0.96, 0.955, 0.95]
+
+
+def get_random_tradeale_pair_on_margin():
+    coins = variables['coin'].keys()
+    for x in coins:
+        temp = []
+        for y in client.get_margin_all_pairs():
+            if y["base"] in coins and y["quote"] in coins and y["isMarginTrade"] == True and y["base"] not in temp:
+                temp.append(y["symbol"])
+    margin_tradeable_pairs = list(dict.fromkeys(temp))
+    return secrets.choice(margin_tradeable_pairs)
+
+
+symbol = get_random_tradeale_pair_on_margin()
 
 
 def get_fees():

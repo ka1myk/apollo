@@ -9,27 +9,5 @@
     "bot_chatID": ""
   },
   "currency": "BUSD",
-  "coin": {
-    "SOL": {
-      "times_a_week_futures": 1
-    },
-    "BTC": {
-      "times_a_week_futures": 2
-    },
-    "BNB": {
-      "times_a_week_futures": 3
-    },
-    "DOT": {
-      "times_a_week_futures": 4
-    },
-    "XRP": {
-      "times_a_week_futures": 5
-    },
-    "ADA": {
-      "times_a_week_futures": 6
-    },
-    "ETH": {
-      "times_a_week_futures": 7
-    }
-  }
+  "coin": ["SOL", "BTC", "BNB", "DOT", "XRP", "ADA", "ETH"]
 }
