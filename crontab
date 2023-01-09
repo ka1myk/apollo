@@ -3,15 +3,7 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 
 0  */6 * * *    cd /root/apollo && python3 spot.py
 15 */6 * * *    cd /root/apollo && python3 margin.py
-
-
-30 0  * * MON                          cd /root/apollo && python3 futures.py --coin SOL
-30 2  * * MON,TUE                      cd /root/apollo && python3 futures.py --coin BTC
-30 4  * * MON,TUE,WED                  cd /root/apollo && python3 futures.py --coin BNB
-30 6  * * MON,TUE,WED,THU              cd /root/apollo && python3 futures.py --coin DOT
-30 8  * * MON,TUE,WED,THU,FRI          cd /root/apollo && python3 futures.py --coin XRP
-30 10 * * MON,TUE,WED,THU,FRI,SAT      cd /root/apollo && python3 futures.py --coin ADA
-30 12 * * MON,TUE,WED,THU,FRI,SAT,SUN  cd /root/apollo && python3 futures.py --coin ETH
+30 */6 * * *    cd /root/apollo && python3 futures.py
 
 45 8  * * *                            cd /root/apollo && python3 transfer.py
 45 16 * * *                            sudo shutdown -r

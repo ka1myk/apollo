@@ -39,10 +39,10 @@ def get_fees():
 # 7 * 40 * 4 * 12 = 13440$ for 12 month
 # len(coins) * week budget in $ * weeks in month * amount of month continuous trade
 def set_greed():
-    if float(client.futures_account()['totalWalletBalance']) < 13440:
+    if float(client.futures_account()['totalWalletBalance']) < variables['budget_for_greed_increase_in_currency']:
         greed = secrets.choice(greed_random)
     else:
-        greed = round(float(client.futures_account()['totalWalletBalance']) / 13440)
+        greed = round(float(client.futures_account()['totalWalletBalance']) / variables['budget_for_greed_increase_in_currency'])
     return int(greed)
 
 
