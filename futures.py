@@ -1,6 +1,6 @@
-import argparse
 import json
 import math
+import secrets
 
 from binance.client import Client
 from binance.helpers import round_step_size
@@ -13,13 +13,7 @@ with open('variables.json') as v:
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--coin', type=str, required=True)
-coin = parser.parse_args()
-
-symbol = coin.coin + variables['currency']
-times_a_week_futures = variables['coin'][coin.coin]['times_a_week_futures']
-
+symbol = secrets.choice(variables['coin']) + variables['currency']
 client.futures_change_leverage(symbol=symbol, leverage=1)
 
 
@@ -36,10 +30,11 @@ def get_fees():
 # 7 * 40 * 4 * 12 = 13440$ for 12 month
 # len(coins) * week budget in $ * weeks in month * amount of month continuous trade
 def set_greed():
-    if float(client.futures_account()['totalWalletBalance']) < 13440:
+    if float(client.futures_account()['totalWalletBalance']) < variables['budget_for_greed_increase_in_currency']:
         greed = 1
     else:
-        greed = round(float(client.futures_account()['totalWalletBalance']) / 13440)
+        greed = round(
+            float(client.futures_account()['totalWalletBalance']) / variables['budget_for_greed_increase_in_currency'])
     return int(greed)
 
 
@@ -80,16 +75,9 @@ def min_notional(symbol: str) -> float:
         get_quantity_precision(symbol))
 
 
-def multiplier_of_twice_BTC(symbol: str) -> float:
-    return round(
-        (2 * (min_notional("BTCBUSD") * float(client.futures_mark_price(symbol="BTCBUSD")["markPrice"]))) / (
-                min_notional(symbol) * float(
-            client.futures_mark_price(symbol=symbol)["markPrice"])) / times_a_week_futures, 2)
-
-
 def open_market():
     client.futures_create_order(symbol=symbol,
-                                quantity=round(min_notional(symbol) * multiplier_of_twice_BTC(symbol) * set_greed(),
+                                quantity=round(min_notional(symbol) * set_greed(),
                                                get_quantity_precision(symbol)),
                                 side='SELL',
                                 positionSide='SHORT',
@@ -117,16 +105,17 @@ def create_limit():
     short_take_profit_price = get_rounded_price(symbol, float(
         client.futures_position_information(symbol=symbol)[2]["entryPrice"]))
 
-    order_qty = round(min_notional(symbol) * multiplier_of_twice_BTC(symbol), get_quantity_precision(symbol))
-    amount_of_close_orders = short_position_amt / (order_qty * times_a_week_futures)
+    order_qty = round(min_notional(symbol), get_quantity_precision(symbol))
+    amount_of_close_orders = short_position_amt / order_qty
 
-    grid = [0.95, 0.85, 0.75, 0.65, 0.55, 0.45, 0.35, 0.25, 0.15, 0.05]
+    futures_limit_short_grid = variables['futures_limit_short_grid']
 
-    if amount_of_close_orders > len(grid):
-        amount_of_close_orders = len(grid)
+    if amount_of_close_orders > len(futures_limit_short_grid):
+        amount_of_close_orders = len(futures_limit_short_grid)
 
     for x in range(amount_of_close_orders):
-        create_grid(short_position_amt, grid[x], short_take_profit_price)
+        create_grid(short_position_amt, futures_limit_short_grid[x], short_take_profit_price)
+
 
 @tg_alert
 def go_baby_futures():

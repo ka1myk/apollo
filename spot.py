@@ -13,7 +13,7 @@ client = Client(variables['binance_01']['key'], variables['binance_01']['secret'
 tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
 
 symbol = secrets.choice(variables['coin']) + variables['currency']
-spot_limit_buy_grid = variables['spot_limit_buy_grid']
+spot_limit_long_grid = variables['spot_limit_long_grid']
 
 
 def get_symbol_info():
@@ -28,11 +28,10 @@ def get_avg_price():
 # 7 * 40 * 4 * 12 = 13440$ for 12 month with greed 1, greed increase only by int
 # len(coins) * week budget in $ * weeks in month * amount of month continuous trade
 def set_greed():
-    if float(client.get_asset_balance(asset='BUSD')['free']) < variables['spot_budget_for_greed_increase_in_currency']:
+    if float(client.get_asset_balance(asset='BUSD')['free']) < variables['budget_for_greed_increase_in_currency']:
         greed = 1
     else:
-        greed = round(float(client.get_asset_balance(asset='BUSD')['free']) / variables[
-            'spot_budget_for_greed_increase_in_currency'])
+        greed = round(float(client.get_asset_balance(asset='BUSD')['free']) / variables['budget_for_greed_increase_in_currency'])
     return int(greed)
 
 
@@ -83,7 +82,7 @@ def cancel_orders():
 def go_baby_spot():
     cancel_orders()
     spot_create_market_buy()
-    spot_create_grid_limit_buy(spot_limit_buy_grid)
+    spot_create_grid_limit_buy(spot_limit_long_grid)
 
 
 go_baby_spot()

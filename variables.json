@@ -10,6 +10,7 @@
   },
   "currency": "BUSD",
   "coin": ["SOL", "BTC", "BNB", "DOT", "XRP", "ADA", "ETH"],
-  "spot_limit_buy_grid": [0.95, 0.90, 0.85, 0.80, 0.75, 0.70, 0.65, 0.60, 0.55, 0.50],
-  "spot_budget_for_greed_increase_in_currency": 13440
+  "spot_limit_long_grid": [0.95, 0.90, 0.85, 0.80, 0.75, 0.70, 0.65, 0.60, 0.55, 0.50],
+  "futures_limit_short_grid": [0.95, 0.85, 0.75, 0.65, 0.55, 0.45, 0.35, 0.25, 0.15, 0.05],
+  "budget_for_greed_increase_in_currency": 13440
 }
