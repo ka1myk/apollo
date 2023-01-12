@@ -2,10 +2,7 @@ import json
 from telegram_exception_alerts import Alerter
 import numpy as np
 
-from binance.client import BaseClient
 from binance.client import Client
-
-BaseClient.OPTIONS_URL = 'https://eapi.binance.{}/eapi'
 
 with open('variables.json') as v:
     variables = json.load(v)
@@ -73,29 +70,12 @@ def coin_from_margin_to_spot():
                                                amount=pretty_qty(float(x["qty"]) * 0.005))
 
 
-def usdt_from_option_to_spot():
-    for x in client.options_user_trades():
-        if round(float(x["realizedProfit"]), 1) > 0 and serverTime > float(x["time"]) > float(
-                serverTime - (1000 * 60 * 60 * 24)):
-            client.options_funds_transfer(currency="USDT", type="OUT", amount=round(float(x["realizedProfit"]), 1) / 2)
-
-
-def usdt_to_busd_on_spot():
-    if float(client.get_asset_balance(asset='USDT')['free']) > 10:
-        client.create_order(symbol="BUSDUSDT",
-                            side='BUY',
-                            type='MARKET',
-                            quoteOrderQty=round(float(client.get_asset_balance(asset='USDT')['free'])))
-
-
 @tg_alert
 def go_baby_transfer():
     if get_free_coin_on_margin():
         coin_from_spot_to_margin()
     coin_from_margin_to_spot()
     coin_from_spot_to_futures()
-#   usdt_from_option_to_spot()
-#   usdt_to_busd_on_spot()
     if get_free_currency_on_futures():
         busd_from_futures_to_spot()
 
