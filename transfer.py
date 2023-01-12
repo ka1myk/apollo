@@ -13,6 +13,7 @@ tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variabl
 currency = variables['currency']
 serverTime = client.get_server_time()['serverTime']
 margin_all_pairs = client.get_margin_all_pairs()
+coins = variables['coin']
 
 pretty_qty = lambda x: np.format_float_positional(x, trim='-')
 
@@ -24,7 +25,6 @@ def get_free_currency_on_futures():
 
 
 def get_free_coin_on_margin():
-    coins = variables['coin'].keys()
     for x in coins:
         for y in client.get_margin_account()["userAssets"]:
             if y["asset"] in x and y["free"] == 0:
@@ -45,7 +45,6 @@ def busd_from_futures_to_spot():
 
 
 def coin_from_spot_to_futures():
-    coins = variables['coin'].keys()
     for x in coins:
         if float(client.get_asset_balance(asset=x)["free"]) > 0:
             client.futures_account_transfer(asset=x,
@@ -55,7 +54,6 @@ def coin_from_spot_to_futures():
 
 
 def coin_from_spot_to_margin():
-    coins = variables['coin'].keys()
     for x in coins:
         if float(client.get_asset_balance(asset=x)["free"]) > 0:
             client.transfer_spot_to_margin(asset=x,

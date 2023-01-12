@@ -14,10 +14,10 @@ tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variabl
 
 margin_sell_profit = variables['margin_sell_profit']
 margin_buy_profit = variables['margin_buy_profit']
+coins = variables['coin']
 
 
 def get_random_tradeale_pair_on_margin():
-    coins = variables['coin'].keys()
     for x in coins:
         temp = []
         for y in client.get_margin_all_pairs():
