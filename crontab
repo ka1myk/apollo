@@ -4,6 +4,7 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 0  */6 * * *    cd /root/apollo && python3 spot.py
 15 */6 * * *    cd /root/apollo && python3 margin.py
 30 */6 * * *    cd /root/apollo && python3 futures.py
+45 */6 * * *    cd /root/apollo && python3 earn.py
 
 45 8  * * *     cd /root/apollo && python3 transfer.py
 45 16 * * *     sudo shutdown -r

@@ -14,6 +14,7 @@ client = Client(variables['binance_01']['key'], variables['binance_01']['secret'
 tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
 greed_random = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
+
 def get_long_symbol():
     symbol = []
     for x in client.futures_account()["positions"]:
@@ -42,7 +43,8 @@ def set_greed():
     if float(client.futures_account()['totalWalletBalance']) < variables['budget_for_greed_increase_in_currency']:
         greed = secrets.choice(greed_random)
     else:
-        greed = round(float(client.futures_account()['totalWalletBalance']) / variables['budget_for_greed_increase_in_currency'])
+        greed = round(
+            float(client.futures_account()['totalWalletBalance']) / variables['budget_for_greed_increase_in_currency'])
     return int(greed)
 
 
