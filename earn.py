@@ -23,14 +23,12 @@ for x in client.get_lending_product_list():
     for y in free_coins_on_spot:
         if x["asset"] in free_coins_on_spot and float(client.get_asset_balance(asset=y)["free"]) > float(
                 x["minPurchaseAmount"]):
-            coins_flexible.append(x["productId"])
+            coins_flexible.append((x["productId"], x["minPurchaseAmount"]))
 
 for x in client.get_fixed_activity_project_list(type="CUSTOMIZED_FIXED"):
     if x["asset"] in free_coins_on_spot and float(client.get_asset_balance(asset=y)["free"]) > float(x["lotSize"]):
-        coins_fixed.append(x["projectId"])
+        coins_fixed.append((x["projectId"], x["lotSize"]))
 
-#if secrets.randbelow(2) == 1:
-    # print(secrets.choice(list(dict.fromkeys(coins_flexible))))
-client.purchase_lending_product(productId=secrets.choice(list(dict.fromkeys(coins_flexible))), amount="")
-#else:
-#    print(secrets.choice(list(dict.fromkeys(coins_fixed))))
+
+print(secrets.choice(list(dict.fromkeys(coins_flexible))))
+print(secrets.choice(list(dict.fromkeys(coins_fixed))))
