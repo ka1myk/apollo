@@ -1,5 +1,4 @@
 import json
-import secrets
 import time
 
 from binance.client import Client
@@ -20,4 +19,4 @@ for x in coins:
                                             amount=float(client.get_asset_balance(asset=x)["free"]))
             time.sleep(1)
         except:
-            print(1)
+            print("Let's do it again")
