@@ -1,3 +1,4 @@
+#TODO endless process
 import json
 from telegram_exception_alerts import Alerter
 import numpy as np

@@ -28,10 +28,12 @@ def get_avg_price():
 # 7 * 40 * 4 * 12 = 13440$ for 12 month with greed 1, greed increase only by int
 # len(coins) * week budget in $ * weeks in month * amount of month continuous trade
 def set_greed():
-    if float(client.get_asset_balance(asset='BUSD')['free']) < variables['budget_for_greed_increase_in_currency']:
+    if float(client.get_asset_balance(asset=variables['currency'])['free']) < variables[
+        'budget_for_greed_increase_in_currency']:
         greed = 1
     else:
-        greed = round(float(client.get_asset_balance(asset='BUSD')['free']) / variables['budget_for_greed_increase_in_currency'])
+        greed = round(float(client.get_asset_balance(asset=variables['currency'])['free']) / variables[
+            'budget_for_greed_increase_in_currency'])
     return int(greed)
 
 
@@ -47,12 +49,19 @@ def get_tick_size():
             return x['tickSize']
 
 
+def get_lot_size(symbol):
+    for x in get_symbol_info()["filters"]:
+        if x['filterType'] == 'LOT_SIZE':
+            return x['stepSize']
+
+
 def get_rounded_price(price):
     return round_step_size(price, get_tick_size())
 
 
+# do not modify 1.15!
 def get_quote_order_qty() -> float:
-    return float(get_min_notional()) * set_greed() * 1.3
+    return float(get_min_notional()) * set_greed() * 1.15
 
 
 def spot_create_market_buy():
@@ -65,7 +74,8 @@ def spot_create_market_buy():
 def spot_create_grid_limit_buy(grid):
     for x in grid:
         client.order_limit(symbol=symbol,
-                           quantity=float(client.get_all_orders(symbol=symbol)[-1]["origQty"]),
+                           quantity=round_step_size(float(client.get_all_orders(symbol=symbol)[-1]["origQty"]) * 1 / x,
+                                                    get_lot_size(symbol)),
                            price=get_rounded_price(get_avg_price() * x),
                            side='BUY',
                            type='LIMIT',

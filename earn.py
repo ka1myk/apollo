@@ -1,3 +1,4 @@
+# TODO buy fixed products
 import json
 import time
 

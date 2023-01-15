@@ -1,3 +1,6 @@
+#TODO fix create grid short lower avg price with 1/x (deeper and more volume to buy)
+#TODO create grid short upper avg price 1/x (upper and more volume to buy)
+
 import json
 import math
 import secrets
@@ -15,6 +18,7 @@ tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variabl
 
 symbol = secrets.choice(variables['coin']) + variables['currency']
 client.futures_change_leverage(symbol=symbol, leverage=1)
+futures_limit_short_grid = variables['futures_limit_short_grid']
 
 
 def get_symbol_info():
@@ -84,11 +88,11 @@ def open_market():
                                 type='MARKET')
 
 
-def create_grid(short_position_amt, grid, short_take_profit_price):
-    for x in grid:
+def create_grid(short_position_amt, futures_limit_short_grid, short_take_profit_price):
+    for x in futures_limit_short_grid:
         x = x - get_fees()
         client.futures_create_order(symbol=symbol,
-                                    quantity=round(short_position_amt / len(grid),
+                                    quantity=round(short_position_amt / len(futures_limit_short_grid),
                                                    get_quantity_precision(symbol)),
                                     price=get_rounded_price(symbol, short_take_profit_price * x),
                                     side='BUY',
@@ -108,18 +112,16 @@ def create_limit():
     order_qty = round(min_notional(symbol), get_quantity_precision(symbol))
     amount_of_close_orders = short_position_amt / order_qty
 
-    futures_limit_short_grid = variables['futures_limit_short_grid']
-
     if amount_of_close_orders > len(futures_limit_short_grid):
         amount_of_close_orders = len(futures_limit_short_grid)
 
-    for x in range(amount_of_close_orders):
+    for x in range(int(amount_of_close_orders)):
         create_grid(short_position_amt, futures_limit_short_grid[x], short_take_profit_price)
 
 
 @tg_alert
 def go_baby_futures():
-    open_market()
+#    open_market()
     create_limit()
 
 

@@ -17,7 +17,7 @@ margin_buy_profit = variables['margin_buy_profit']
 coins = variables['coin']
 
 
-def get_random_tradeale_pair_on_margin():
+def get_random_tradeable_pair_on_margin():
     for x in coins:
         temp = []
         for y in client.get_margin_all_pairs():
@@ -27,7 +27,7 @@ def get_random_tradeale_pair_on_margin():
     return secrets.choice(margin_tradeable_pairs)
 
 
-symbol = get_random_tradeale_pair_on_margin()
+symbol = get_random_tradeable_pair_on_margin()
 
 
 def get_fees():
