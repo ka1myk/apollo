@@ -11,9 +11,7 @@ with open('variables.json') as v:
 
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
-
 symbol = secrets.choice(variables['coin']) + variables['currency']
-spot_limit_long_grid = variables['spot_limit_long_grid']
 
 
 def get_symbol_info():
@@ -26,11 +24,11 @@ def get_avg_price():
 
 def set_greed():
     if float(client.get_asset_balance(asset=variables['currency'])['free']) < variables[
-        'budget_for_greed_increase_in_currency']:
+            'budget_up_to_1_greed']:
         greed = 1
     else:
         greed = round(float(client.get_asset_balance(asset=variables['currency'])['free']) / variables[
-            'budget_for_greed_increase_in_currency'])
+            'budget_up_to_1_greed'])
     return int(greed)
 
 
@@ -85,7 +83,7 @@ def cancel_orders():
 def go_baby_spot():
     cancel_orders()
     spot_create_market_buy()
-    spot_create_grid_limit_buy(spot_limit_long_grid)
+    spot_create_grid_limit_buy(variables['spot_limit_long_grid'])
 
 
 go_baby_spot()
