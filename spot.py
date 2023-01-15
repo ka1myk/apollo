@@ -12,20 +12,14 @@ with open('variables.json') as v:
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
 symbol = secrets.choice(variables['coin']) + variables['currency']
+symbol_info = client.get_symbol_info(symbol)
 
 
-def get_symbol_info():
-    return client.get_symbol_info(symbol)
-
-
-def get_avg_price():
-    return float(client.get_avg_price(symbol=symbol)['price'])
-
-
+# do not modify 1.15
 def set_greed():
     if float(client.get_asset_balance(asset=variables['currency'])['free']) < variables[
         'budget_up_to_1_greed']:
-        greed = 1
+        greed = 1.15
     else:
         greed = round(float(client.get_asset_balance(asset=variables['currency'])['free']) / variables[
             'budget_up_to_1_greed'])
@@ -33,31 +27,31 @@ def set_greed():
 
 
 def get_min_notional():
-    for x in get_symbol_info()["filters"]:
+    for x in symbol_info["filters"]:
         if x['filterType'] == 'MIN_NOTIONAL':
             return x['minNotional']
 
 
 def get_tick_size():
-    for x in get_symbol_info()["filters"]:
+    for x in symbol_info["filters"]:
         if x['filterType'] == 'PRICE_FILTER':
             return x['tickSize']
 
 
 def get_lot_size():
-    for x in get_symbol_info()["filters"]:
+    for x in symbol_info["filters"]:
         if x['filterType'] == 'LOT_SIZE':
             return x['stepSize']
 
 
-# do not modify 1.15!
-def get_quote_order_qty():
-    return float(get_min_notional()) * set_greed() * 1.15
+def cancel_orders():
+    for x in client.get_open_orders(symbol=symbol):
+        client.cancel_order(symbol=symbol, orderId=x["orderId"])
 
 
 def spot_create_market_buy():
     client.order_market_buy(symbol=symbol,
-                            quoteOrderQty=get_quote_order_qty(),
+                            quoteOrderQty=float(get_min_notional()) * set_greed(),
                             side='BUY',
                             type='MARKET'
                             )
@@ -68,16 +62,12 @@ def spot_create_grid_limit_buy(grid):
         client.order_limit(symbol=symbol,
                            quantity=round_step_size(float(client.get_all_orders(symbol=symbol)[-1]["origQty"]) * 1 / x,
                                                     get_lot_size()),
-                           price=round_step_size(get_avg_price() * x, get_tick_size()),
+                           price=round_step_size(float(client.get_avg_price(symbol=symbol)['price']) * x,
+                                                 get_tick_size()),
                            side='BUY',
                            type='LIMIT',
                            timeInForce="GTC"
                            )
-
-
-def cancel_orders():
-    for x in client.get_open_orders(symbol=symbol):
-        client.cancel_order(symbol=symbol, orderId=x["orderId"])
 
 
 @tg_alert

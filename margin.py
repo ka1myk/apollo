@@ -24,6 +24,7 @@ def get_random_tradeable_pair_on_margin():
 
 
 symbol = get_random_tradeable_pair_on_margin()
+symbol_info = client.get_symbol_info(symbol)
 
 
 def get_fees():
@@ -31,50 +32,37 @@ def get_fees():
         client.get_trade_fee(symbol=symbol)[0]["takerCommission"])
 
 
-def get_symbol_info():
-    return client.get_symbol_info(symbol)
-
-
-#  need use avg_price because market_orders not return price!
-def get_avg_price():
-    return client.get_avg_price(symbol=symbol)['price']
-
-
 def set_greed():
     if float(client.get_margin_account()['totalAssetOfBtc']) * float(
             client.get_avg_price(symbol="BTCBUSD")['price']) < variables['budget_up_to_1_greed']:
-        greed = 1
+        greed = 1.15
     else:
-        greed = round(float(client.get_margin_account()['totalAssetOfBtc']) * float(
-            client.get_avg_price(symbol="BTCBUSD")['price']) / variables['budget_up_to_1_greed'])
+        greed = float(client.get_margin_account()['totalAssetOfBtc']) * float(
+            client.get_avg_price(symbol="BTCBUSD")['price']) / variables['budget_up_to_1_greed']
     return greed
 
 
 def get_min_notional():
-    for y in get_symbol_info()['filters']:
+    for y in symbol_info['filters']:
         if y['filterType'] == 'MIN_NOTIONAL':
             return y['minNotional']
 
 
 def get_tick_size():
-    for y in get_symbol_info()['filters']:
+    for y in symbol_info['filters']:
         if y['filterType'] == 'PRICE_FILTER':
             return y['tickSize']
 
 
 def get_lot_size():
-    for x in get_symbol_info()["filters"]:
+    for x in symbol_info["filters"]:
         if x['filterType'] == 'LOT_SIZE':
             return x['stepSize']
 
 
-def get_quote_order_qty():
-    return float(get_min_notional()) * set_greed()
-
-
 def margin_create_market_buy():
     client.create_margin_order(symbol=symbol,
-                               quoteOrderQty=get_quote_order_qty(),
+                               quoteOrderQty=round_step_size(float(get_min_notional()) * set_greed(), get_tick_size()),
                                side='BUY',
                                type='MARKET'
                                )
@@ -82,7 +70,7 @@ def margin_create_market_buy():
 
 def margin_create_market_sell():
     client.create_margin_order(symbol=symbol,
-                               quoteOrderQty=get_quote_order_qty(),
+                               quoteOrderQty=round_step_size(float(get_min_notional()) * set_greed(), get_tick_size()),
                                side='SELL',
                                type='MARKET'
                                )
@@ -90,11 +78,9 @@ def margin_create_market_sell():
 
 def margin_create_limit_sell():
     client.create_margin_order(symbol=symbol,
-                               quantity=round_step_size(
-                                   float(client.get_all_margin_orders(symbol=symbol, limit=1)[0]["origQty"]),
-                                   get_lot_size()),
+                               quantity=client.get_all_margin_orders(symbol=symbol, limit=1)[0]["origQty"],
                                price=round_step_size(
-                                   float(get_avg_price()) * float(
+                                   float(client.get_avg_price(symbol=symbol)['price']) * float(
                                        secrets.choice(variables['margin_sell_profit']) + get_fees()),
                                    get_tick_size()),
                                side='SELL',
@@ -105,11 +91,9 @@ def margin_create_limit_sell():
 
 def margin_create_limit_buy():
     client.create_margin_order(symbol=symbol,
-                               quantity=round_step_size(
-                                   float(client.get_all_margin_orders(symbol=symbol, limit=1)[0]["origQty"]),
-                                   get_lot_size()),
+                               quantity=client.get_all_margin_orders(symbol=symbol, limit=1)[0]["origQty"],
                                price=round_step_size(
-                                   float(get_avg_price()) * float(
+                                   float(client.get_avg_price(symbol=symbol)['price']) * float(
                                        secrets.choice(variables['margin_buy_profit']) - get_fees()),
                                    get_tick_size()),
                                side='BUY',
