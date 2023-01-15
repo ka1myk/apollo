@@ -11,12 +11,11 @@ with open('variables.json') as v:
 
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
-coins = variables['coin']
 
 
 @tg_alert
 def go_baby_earn():
-    for x in coins:
+    for x in variables['coin']:
         if float(client.get_asset_balance(asset=x)["free"]) > 0:
             try:
                 client.purchase_lending_product(productId=x + str("001"),
