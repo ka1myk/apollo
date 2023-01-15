@@ -1,4 +1,4 @@
-#TODO endless process
+# TODO endless process
 import json
 from telegram_exception_alerts import Alerter
 import numpy as np
@@ -64,7 +64,7 @@ def coin_from_spot_to_margin():
 def coin_from_margin_to_spot():
     for y in margin_all_pairs:
         for x in client.get_margin_trades(symbol=y["symbol"]):
-            if x['isMaker'] == True and x["time"] > serverTime - 1000 * 60 * 60 * 24:
+            if x['isMaker'] is True and x["time"] > serverTime - 1000 * 60 * 60 * 24:
                 client.transfer_margin_to_spot(asset=y["base"],
                                                amount=pretty_qty(float(x["qty"]) * 0.005))
 
