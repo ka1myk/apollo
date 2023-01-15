@@ -33,7 +33,7 @@ def get_free_coin_on_margin():
 
 
 # 1000 * 60 * 60 * 24 is interval for 24 hours
-def busd_from_futures_to_spot():
+def currency_from_futures_to_spot():
     profit = client.futures_income_history(incomeType="REALIZED_PNL",
                                            startTime=serverTime - 1000 * 60 * 60 * 24,
                                            endTime=serverTime)
@@ -76,7 +76,7 @@ def go_baby_transfer():
     coin_from_margin_to_spot()
     coin_from_spot_to_futures()
     if get_free_currency_on_futures():
-        busd_from_futures_to_spot()
+        currency_from_futures_to_spot()
 
 
 go_baby_transfer()

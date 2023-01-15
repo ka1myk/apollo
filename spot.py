@@ -24,12 +24,12 @@ def get_avg_price():
 
 def set_greed():
     if float(client.get_asset_balance(asset=variables['currency'])['free']) < variables[
-            'budget_up_to_1_greed']:
+        'budget_up_to_1_greed']:
         greed = 1
     else:
         greed = round(float(client.get_asset_balance(asset=variables['currency'])['free']) / variables[
             'budget_up_to_1_greed'])
-    return int(greed)
+    return greed
 
 
 def get_min_notional():
@@ -57,9 +57,10 @@ def get_quote_order_qty():
 
 def spot_create_market_buy():
     client.order_market_buy(symbol=symbol,
+                            quoteOrderQty=get_quote_order_qty(),
                             side='BUY',
-                            type='MARKET',
-                            quoteOrderQty=get_quote_order_qty())
+                            type='MARKET'
+                            )
 
 
 def spot_create_grid_limit_buy(grid):
