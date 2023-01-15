@@ -44,7 +44,7 @@ def get_lot_size():
             return x['stepSize']
 
 
-def cancel_orders():
+def spot_cancel_orders():
     for x in client.get_open_orders(symbol=symbol):
         client.cancel_order(symbol=symbol, orderId=x["orderId"])
 
@@ -72,7 +72,7 @@ def spot_create_grid_limit_buy(grid):
 
 @tg_alert
 def go_baby_spot():
-    cancel_orders()
+    spot_cancel_orders()
     spot_create_market_buy()
     spot_create_grid_limit_buy(variables['spot_limit_long_grid'])
 
