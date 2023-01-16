@@ -1,13 +1,9 @@
 # TODO fix create grid short lower avg price with 1/x (deeper and more volume to buy)
 # TODO create grid short upper avg price 1/x (upper and more volume to buy)
-
 import json
-import math
 import secrets
-
 from binance.client import Client
 from binance.helpers import round_step_size
-
 from telegram_exception_alerts import Alerter
 
 with open('variables.json') as v:
@@ -16,8 +12,7 @@ with open('variables.json') as v:
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
 
-# symbol = secrets.choice(variables['coin']) + variables['currency']
-symbol = "BTCBUSD"
+symbol = secrets.choice(variables['coin']) + variables['currency']
 symbol_info = client.futures_exchange_info()
 client.futures_change_leverage(symbol=symbol, leverage=1)
 
@@ -53,7 +48,7 @@ def get_fees():
 
 def set_greed():
     if float(client.futures_account()['totalWalletBalance']) < variables['budget_up_to_1_greed']:
-        greed = 1.25
+        greed = variables['greed']
     else:
         greed = round(
             float(client.futures_account()['totalWalletBalance']) / variables['budget_up_to_1_greed'])
@@ -83,9 +78,7 @@ def futures_create_grid_limit_short_down():
     client.futures_cancel_all_open_orders(symbol=symbol)
 
     amount_of_close_orders = int(abs(float(client.futures_position_information(symbol=symbol)[2]["positionAmt"]) /
-                                     round_step_size((float(get_notional()) / float(
-                                         client.futures_mark_price(symbol=symbol)["markPrice"])) * set_greed(),
-                                                     get_lot_size())))
+                                     float(get_quantity())))
 
     if amount_of_close_orders > len(variables['futures_limit_short_grid_down']):
         amount_of_close_orders = len(variables['futures_limit_short_grid_down'])
@@ -123,8 +116,8 @@ def futures_create_grid_limit_short_up():
 
 @tg_alert
 def go_baby_futures():
-    #    futures_create_market_short()
-    #    futures_create_grid_limit_short_down()
+    futures_create_market_short()
+    futures_create_grid_limit_short_down()
     futures_create_grid_limit_short_up()
 
 

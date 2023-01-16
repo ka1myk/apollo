@@ -35,7 +35,7 @@ def get_fees():
 def set_greed():
     if float(client.get_margin_account()['totalAssetOfBtc']) * float(
             client.get_avg_price(symbol="BTCBUSD")['price']) < variables['budget_up_to_1_greed']:
-        greed = 1.25
+        greed = variables['greed']
     else:
         greed = float(client.get_margin_account()['totalAssetOfBtc']) * float(
             client.get_avg_price(symbol="BTCBUSD")['price']) / variables['budget_up_to_1_greed']

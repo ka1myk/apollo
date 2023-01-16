@@ -1,9 +1,7 @@
 # TODO buy fixed products
 import json
 import time
-
 from telegram_exception_alerts import Alerter
-
 from binance.client import Client
 
 with open('variables.json') as v:

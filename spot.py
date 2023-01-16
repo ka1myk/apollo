@@ -1,9 +1,7 @@
 import json
 import secrets
-
 from binance.client import Client
 from binance.helpers import round_step_size
-
 from telegram_exception_alerts import Alerter
 
 with open('variables.json') as v:
@@ -14,12 +12,10 @@ tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variabl
 symbol = secrets.choice(variables['coin']) + variables['currency']
 symbol_info = client.get_symbol_info(symbol)
 
-
-# do not modify 1.15
 def set_greed():
     if float(client.get_asset_balance(asset=variables['currency'])['free']) < variables[
         'budget_up_to_1_greed']:
-        greed = 1.25
+        greed = variables['greed']
     else:
         greed = round(float(client.get_asset_balance(asset=variables['currency'])['free']) / variables[
             'budget_up_to_1_greed'])
