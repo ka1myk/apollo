@@ -16,7 +16,7 @@ tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variabl
 def get_random_tradeable_pair_on_margin():
     temp = []
     for y in client.get_margin_all_pairs():
-        if y["base"] in variables['coin'] and y["quote"] in variables['coin'] and y["isMarginTrade"] == True and y[
+        if y["base"] in variables['coin'] and y["quote"] in variables['coin'] and y["isMarginTrade"] is True and y[
             "base"] not in temp:
             temp.append(y["symbol"])
     margin_tradeable_pairs = list(dict.fromkeys(temp))
