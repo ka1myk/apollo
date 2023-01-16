@@ -16,7 +16,8 @@ with open('variables.json') as v:
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
 
-symbol = secrets.choice(variables['coin']) + variables['currency']
+# symbol = secrets.choice(variables['coin']) + variables['currency']
+symbol = "BTCBUSD"
 symbol_info = client.futures_exchange_info()
 client.futures_change_leverage(symbol=symbol, leverage=1)
 
@@ -52,28 +53,52 @@ def get_fees():
 
 def set_greed():
     if float(client.futures_account()['totalWalletBalance']) < variables['budget_up_to_1_greed']:
-        greed = 1
+        greed = 1.25
     else:
         greed = round(
             float(client.futures_account()['totalWalletBalance']) / variables['budget_up_to_1_greed'])
     return greed
 
 
+def get_quantity():
+    quantity = round_step_size((float(get_notional()) / float(
+        client.futures_mark_price(symbol=symbol)["markPrice"])) * set_greed(),
+                               get_lot_size())
+
+    if float(quantity) < float(get_lot_size()):
+        quantity = get_lot_size()
+
+    return quantity
+
+
 def futures_create_market_short():
     client.futures_create_order(symbol=symbol,
-                                quantity=round_step_size(get_notional() * set_greed(), get_lot_size()),
+                                quantity=get_quantity(),
                                 side='SELL',
                                 positionSide='SHORT',
                                 type='MARKET')
 
 
-def futures_create_grid_limit_short_down(short_position_amt, futures_limit_short_grid, short_take_profit_price):
-    for x in futures_limit_short_grid:
-        x = x - get_fees()
+def futures_create_grid_limit_short_down():
+    client.futures_cancel_all_open_orders(symbol=symbol)
+
+    amount_of_close_orders = int(abs(float(client.futures_position_information(symbol=symbol)[2]["positionAmt"]) /
+                                     round_step_size((float(get_notional()) / float(
+                                         client.futures_mark_price(symbol=symbol)["markPrice"])) * set_greed(),
+                                                     get_lot_size())))
+
+    if amount_of_close_orders > len(variables['futures_limit_short_grid_down']):
+        amount_of_close_orders = len(variables['futures_limit_short_grid_down'])
+
+    for x in range(amount_of_close_orders):
         client.futures_create_order(symbol=symbol,
-                                    quantity=round(short_position_amt / len(futures_limit_short_grid),
-                                                   get_quantity_precision(symbol)),
-                                    price=get_rounded_price(symbol, short_take_profit_price * x),
+                                    quantity=round_step_size(abs((float(
+                                        client.futures_position_information(symbol=symbol)[2]["positionAmt"]))) / int(
+                                        amount_of_close_orders), get_lot_size()),
+                                    price=round_step_size(float(
+                                        client.futures_position_information(symbol=symbol)[2][
+                                            "entryPrice"]) * variables['futures_limit_short_grid_down'][x],
+                                                          get_tick_size()),
                                     side='BUY',
                                     positionSide='SHORT',
                                     type='LIMIT',
@@ -85,7 +110,7 @@ def futures_create_grid_limit_short_up():
     for x in variables['futures_limit_short_grid_up']:
         x = x - get_fees()
         client.futures_create_order(symbol=symbol,
-                                    quantity=round_step_size(get_notional() * set_greed(), get_lot_size()),
+                                    quantity=get_quantity(),
                                     price=round_step_size(float(
                                         client.futures_position_information(symbol=symbol)[2]["entryPrice"]) * x,
                                                           get_tick_size()),
@@ -96,27 +121,10 @@ def futures_create_grid_limit_short_up():
                                     )
 
 
-def create_limit():
-    client.futures_cancel_all_open_orders(symbol=symbol)
-
-    short_position_amt = abs(float(client.futures_position_information(symbol=symbol)[2]["positionAmt"]))
-    short_take_profit_price = get_rounded_price(symbol, float(
-        client.futures_position_information(symbol=symbol)[2]["entryPrice"]))
-
-    order_qty = round(min_notional(symbol), get_quantity_precision(symbol))
-    amount_of_close_orders = short_position_amt / order_qty
-
-    if amount_of_close_orders > len(futures_limit_short_grid):
-        amount_of_close_orders = len(futures_limit_short_grid)
-
-    for x in range(int(amount_of_close_orders)):
-        create_grid(short_position_amt, futures_limit_short_grid[x], short_take_profit_price)
-
-
 @tg_alert
 def go_baby_futures():
-    #    open_market()
-    futures_create_grid_limit_short_down()
+    #    futures_create_market_short()
+    #    futures_create_grid_limit_short_down()
     futures_create_grid_limit_short_up()
 
 
