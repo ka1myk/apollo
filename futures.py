@@ -19,8 +19,6 @@ tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variabl
 symbol = secrets.choice(variables['coin']) + variables['currency']
 symbol_info = client.futures_exchange_info()
 client.futures_change_leverage(symbol=symbol, leverage=1)
-futures_limit_short_grid_up = variables['futures_limit_short_grid_up']
-futures_limit_short_grid_down = variables['futures_limit_short_grid_down']
 
 
 def get_notional():
@@ -63,8 +61,7 @@ def set_greed():
 
 def futures_create_market_short():
     client.futures_create_order(symbol=symbol,
-                                quantity=round_step_size(min_notional(symbol) * set_greed(),
-                                                         get_quantity_precision(symbol)),
+                                quantity=round_step_size(get_notional() * set_greed(), get_lot_size()),
                                 side='SELL',
                                 positionSide='SHORT',
                                 type='MARKET')
@@ -83,18 +80,21 @@ def futures_create_grid_limit_short_down(short_position_amt, futures_limit_short
                                     timeInForce="GTC"
                                     )
 
-def futures_create_grid_limit_short_up(short_position_amt, futures_limit_short_grid, short_take_profit_price):
-    for x in futures_limit_short_grid:
+
+def futures_create_grid_limit_short_up():
+    for x in variables['futures_limit_short_grid_up']:
         x = x - get_fees()
         client.futures_create_order(symbol=symbol,
-                                    quantity=round(short_position_amt / len(futures_limit_short_grid),
-                                                   get_quantity_precision(symbol)),
-                                    price=get_rounded_price(symbol, short_take_profit_price * x),
+                                    quantity=round_step_size(get_notional() * set_greed(), get_lot_size()),
+                                    price=round_step_size(float(
+                                        client.futures_position_information(symbol=symbol)[2]["entryPrice"]) * x,
+                                                          get_tick_size()),
                                     side='SELL',
                                     positionSide='SHORT',
                                     type='LIMIT',
                                     timeInForce="GTC"
                                     )
+
 
 def create_limit():
     client.futures_cancel_all_open_orders(symbol=symbol)

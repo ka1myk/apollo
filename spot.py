@@ -19,7 +19,7 @@ symbol_info = client.get_symbol_info(symbol)
 def set_greed():
     if float(client.get_asset_balance(asset=variables['currency'])['free']) < variables[
         'budget_up_to_1_greed']:
-        greed = 1.15
+        greed = 1.25
     else:
         greed = round(float(client.get_asset_balance(asset=variables['currency'])['free']) / variables[
             'budget_up_to_1_greed'])
