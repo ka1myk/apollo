@@ -1,2 +1,3 @@
+numpy
 python-binance
 telegram_exception_alerts
