@@ -1,4 +1,5 @@
 # TODO endless process
+# TODO remove numpy import
 import json
 from telegram_exception_alerts import Alerter
 import numpy as np
