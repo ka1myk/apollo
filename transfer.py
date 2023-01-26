@@ -1,4 +1,3 @@
-# TODO endless process
 # TODO remove numpy import
 import json
 from telegram_exception_alerts import Alerter
@@ -49,10 +48,13 @@ def currency_from_futures_to_spot():
 def coin_from_spot_to_futures():
     for x in coins:
         if float(client.get_asset_balance(asset=x)["free"]) > 0:
-            client.futures_account_transfer(asset=x,
-                                            amount=float(client.get_asset_balance(asset=x)["free"]),
-                                            type=1,
-                                            timestamp=serverTime)
+            try:
+                client.futures_account_transfer(asset=x,
+                                                amount=float(client.get_asset_balance(asset=x)["free"]),
+                                                type=1,
+                                                timestamp=serverTime)
+            except:
+                print("Let's do it again")
 
 
 def coin_from_spot_to_margin():
