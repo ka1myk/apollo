@@ -68,18 +68,23 @@ def coin_from_margin_to_spot():
     for y in margin_all_pairs:
         for x in client.get_margin_trades(symbol=y["symbol"]):
             if x['isMaker'] is True and x["time"] > serverTime - 1000 * 60 * 60 * 24:
-                client.transfer_margin_to_spot(asset=y["base"],
-                                               amount=pretty_qty(float(x["qty"]) * 0.005))
+                try:
+                    client.transfer_margin_to_spot(asset=y["base"],
+                                                   amount=pretty_qty(float(x["qty"]) * 0.005))
+                except:
+                    print("Let's do it again")
 
 
-@tg_alert
-def go_baby_transfer():
-    if get_free_coin_on_margin():
-        coin_from_spot_to_margin()
-    coin_from_margin_to_spot()
-    coin_from_spot_to_futures()
-    if get_free_currency_on_futures():
-        currency_from_futures_to_spot()
+# @tg_alert
+# def go_baby_transfer():
+#     if get_free_coin_on_margin():
+#         coin_from_spot_to_margin()
+#     coin_from_margin_to_spot()
+#     coin_from_spot_to_futures()
+#     if get_free_currency_on_futures():
+#         currency_from_futures_to_spot()
+#
+#
+# go_baby_transfer()
 
-
-go_baby_transfer()
+coin_from_margin_to_spot()
