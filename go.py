@@ -1,3 +1,4 @@
+# TODO add binance another user as argument
 import secrets
 import subprocess
 

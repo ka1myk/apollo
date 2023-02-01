@@ -1,4 +1,5 @@
 # TODO remove numpy import
+# TODO add binance another user as argument
 import json
 from telegram_exception_alerts import Alerter
 import numpy as np

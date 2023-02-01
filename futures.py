@@ -1,5 +1,6 @@
 # TODO fix create grid short lower avg price with 1/x (deeper and more volume to buy)
 # TODO create grid short upper avg price 1/x (upper and more volume to buy)
+# TODO add binance another user as argument
 import json
 import secrets
 from binance.client import Client

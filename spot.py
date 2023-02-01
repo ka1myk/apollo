@@ -1,3 +1,4 @@
+# TODO add binance another user as argument
 import json
 import secrets
 from binance.client import Client
@@ -9,8 +10,26 @@ with open('/root/apollo/variables.json') as v:
 
 client = Client(variables['binance_01']['key'], variables['binance_01']['secret'])
 tg_alert = Alerter(bot_token=variables['telegram']['bot_token'], chat_id=variables['telegram']['bot_chatID'])
-symbol = secrets.choice(variables['coin']) + variables['currency']
+
+
+# if margin trading or not - choose symbol to buy#
+if float(client.get_margin_account()["totalAssetOfBtc"]) != 0:
+    my_dict = {"coin": [], "balance": []}
+    for x in client.get_margin_account()["userAssets"]:
+        if float(x["netAsset"]) != 0:
+            my_dict["coin"].append(x["asset"])
+            my_dict["balance"].append(round(
+                float(x["netAsset"]) * float(
+                    client.get_avg_price(symbol=x["asset"] + variables['currency'])['price']), 4))
+
+    symbol = my_dict["coin"][my_dict["balance"].index(min(my_dict["balance"]))] + variables['currency']
+
+else:
+
+    symbol = secrets.choice(variables['coin']) + variables['currency']
+
 symbol_info = client.get_symbol_info(symbol)
+
 
 def set_greed():
     if float(client.get_asset_balance(asset=variables['currency'])['free']) < variables[
