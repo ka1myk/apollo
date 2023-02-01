@@ -26,13 +26,6 @@ def get_free_currency_on_futures():
             return True
 
 
-def get_free_coin_on_margin():
-    for x in coins:
-        for y in client.get_margin_account()["userAssets"]:
-            if y["asset"] in x and y["free"] == 0:
-                return True
-
-
 # 1000 * 60 * 60 * 24 is interval for 24 hours
 def currency_from_futures_to_spot():
     profit = client.futures_income_history(incomeType="REALIZED_PNL",
@@ -62,7 +55,7 @@ def coin_from_spot_to_margin():
     for x in coins:
         if float(client.get_asset_balance(asset=x)["free"]) > 0:
             client.transfer_spot_to_margin(asset=x,
-                                           amount=float(client.get_asset_balance(asset=x)["free"]))
+                                           amount=float(client.get_asset_balance(asset=x)["free"]) * 0.5)
 
 
 def coin_from_margin_to_spot():
@@ -76,16 +69,13 @@ def coin_from_margin_to_spot():
                     print("Let's do it again")
 
 
-# @tg_alert
-# def go_baby_transfer():
-#     if get_free_coin_on_margin():
-#         coin_from_spot_to_margin()
-#     coin_from_margin_to_spot()
-#     coin_from_spot_to_futures()
-#     if get_free_currency_on_futures():
-#         currency_from_futures_to_spot()
-#
-#
-# go_baby_transfer()
+@tg_alert
+def go_baby_transfer():
+    coin_from_spot_to_margin()
+    coin_from_margin_to_spot()
+    coin_from_spot_to_futures()
+    if get_free_currency_on_futures():
+        currency_from_futures_to_spot()
 
-coin_from_margin_to_spot()
+
+go_baby_transfer()
