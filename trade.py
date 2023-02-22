@@ -90,7 +90,7 @@ def futures_short():
 
 
             except:
-                print("Let's do it again")
+                print("futures_short")
 
 
 def is_short_position_on_futures():
@@ -109,7 +109,7 @@ def currency_from_futures_to_spot():
                                                 type=2,
                                                 timestamp=serverTime)
             except:
-                print("Let's do it again")
+                print("currency_from_futures_to_spot.futures_account_transfer")
 
 
 def get_undervalued_asset():
@@ -139,21 +139,15 @@ def spot_long():
     for x in client.get_account()["balances"]:
         matchObj = re.search("^((?!USD).)*$", x["asset"])
         if not matchObj and float(x["free"]) > 10:
-            symbol_info = client.get_symbol_info(get_undervalued_asset() + x["asset"])
-
-            def get_min_notional():
-                for x in symbol_info["filters"]:
-                    if x['filterType'] == 'MIN_NOTIONAL':
-                        return x['minNotional']
 
             try:
                 client.order_market_buy(symbol=get_undervalued_asset() + x["asset"],
-                                        quoteOrderQty=float(get_min_notional()),
+                                        quoteOrderQty=float(x["free"]),
                                         side='BUY',
                                         type='MARKET'
                                         )
             except:
-                print("Let's do it again")
+                print("spot_long.order_market_buy")
 
 
 def coin_from_spot_to_futures():
@@ -165,11 +159,11 @@ def coin_from_spot_to_futures():
                                                 type=1,
                                                 timestamp=serverTime)
             except:
-                print("Let's do it again")
+                print("coin_from_spot_to_futures.futures_account_transfer")
 
 
-# futures_short()
-# if not is_short_position_on_futures():
-#    currency_from_futures_to_spot()
+futures_short()
+if not is_short_position_on_futures():
+    currency_from_futures_to_spot()
 spot_long()
-# coin_from_spot_to_futures()
+coin_from_spot_to_futures()
