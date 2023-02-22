@@ -8,10 +8,9 @@ parser.add_argument('--key', type=str, required=True)
 parser.add_argument('--secret', type=str, required=True)
 client = Client(parser.parse_args().key, parser.parse_args().secret)
 
-greed = 1.25
+greed = 1.3
 priceChangePercent = 10
-hours_to_look_back = 24
-futures_limit_short_grid_close = [0.99, 0.95, 0.91]
+futures_limit_short_grid_close = [0.99, 0.96, 0.93]
 serverTime = client.get_server_time()['serverTime']
 
 
@@ -101,18 +100,16 @@ def is_short_position_on_futures():
 
 
 def currency_from_futures_to_spot():
-    profit = client.futures_income_history(incomeType="REALIZED_PNL",
-                                           startTime=serverTime - 1000 * 60 * 60 * hours_to_look_back,
-                                           endTime=serverTime)
-
-    try:
-        for x in profit:
-            client.futures_account_transfer(asset=x["asset"],
-                                            amount=float(x['income']),
-                                            type=2,
-                                            timestamp=serverTime)
-    except:
-        print("Let's do it again")
+    for x in client.futures_account_balance():
+        matchObj = re.search("^((?!USD).)*$", x["asset"])
+        if not matchObj:
+            try:
+                client.futures_account_transfer(asset=x["asset"],
+                                                amount=float(x['withdrawAvailable']),
+                                                type=2,
+                                                timestamp=serverTime)
+            except:
+                print("Let's do it again")
 
 
 def get_undervalued_asset():
@@ -127,11 +124,11 @@ def get_undervalued_asset():
             my = 0
             ny = 0
 
-            for x in candles:
-                my = my + float(x[4])
+            for y in candles:
+                my = my + float(y[4])
                 ny = ny + 1
 
-            my_dict["symbol"].append(symbol)
+            my_dict["symbol"].append(x["asset"])
             my_dict["balance"].append(round(float(avg_price) / (my / ny), 2))
     symbol = my_dict["symbol"][my_dict["balance"].index(min(my_dict["balance"]))]
 
@@ -139,18 +136,24 @@ def get_undervalued_asset():
 
 
 def spot_long():
-    symbol_info = client.get_symbol_info(get_undervalued_asset())
+    for x in client.get_account()["balances"]:
+        matchObj = re.search("^((?!USD).)*$", x["asset"])
+        if not matchObj and float(x["free"]) > 10:
+            symbol_info = client.get_symbol_info(get_undervalued_asset() + x["asset"])
 
-    def get_min_notional():
-        for x in symbol_info["filters"]:
-            if x['filterType'] == 'MIN_NOTIONAL':
-                return x['minNotional']
+            def get_min_notional():
+                for x in symbol_info["filters"]:
+                    if x['filterType'] == 'MIN_NOTIONAL':
+                        return x['minNotional']
 
-    client.order_market_buy(symbol=get_undervalued_asset(),
-                            quoteOrderQty=float(get_min_notional()) * greed,
-                            side='BUY',
-                            type='MARKET'
-                            )
+            try:
+                client.order_market_buy(symbol=get_undervalued_asset() + x["asset"],
+                                        quoteOrderQty=float(get_min_notional()),
+                                        side='BUY',
+                                        type='MARKET'
+                                        )
+            except:
+                print("Let's do it again")
 
 
 def coin_from_spot_to_futures():
@@ -165,8 +168,8 @@ def coin_from_spot_to_futures():
                 print("Let's do it again")
 
 
-futures_short()
-if not is_short_position_on_futures():
-    currency_from_futures_to_spot()
-    spot_long()
-    coin_from_spot_to_futures()
+# futures_short()
+# if not is_short_position_on_futures():
+#    currency_from_futures_to_spot()
+spot_long()
+# coin_from_spot_to_futures()
