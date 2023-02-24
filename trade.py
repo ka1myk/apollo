@@ -1,4 +1,5 @@
 import re
+import time
 import argparse
 from binance.client import Client
 from binance.helpers import round_step_size
@@ -8,10 +9,19 @@ parser.add_argument('--key', type=str, required=True)
 parser.add_argument('--secret', type=str, required=True)
 client = Client(parser.parse_args().key, parser.parse_args().secret)
 
-greed = 1.3
 priceChangePercent = 10
+budget_up_to_1_greed = 1000
+min_notional_corrector = 1.2
 futures_limit_short_grid_close = [0.99, 0.96, 0.93]
 serverTime = client.get_server_time()['serverTime']
+
+
+def set_greed():
+    if float(client.futures_account()['totalWalletBalance']) < budget_up_to_1_greed:
+        greed = 1
+    else:
+        greed = round(float(client.futures_account()['totalWalletBalance']) / budget_up_to_1_greed, 1)
+    return greed
 
 
 def futures_short():
@@ -48,7 +58,8 @@ def futures_short():
 
                 def get_quantity():
                     quantity = round_step_size((float(get_notional()) / float(
-                        client.futures_mark_price(symbol=z["symbol"])["markPrice"])) * greed,
+                        client.futures_mark_price(symbol=z["symbol"])[
+                            "markPrice"])) * min_notional_corrector * set_greed(),
                                                get_lot_size())
 
                     if float(quantity) < float(get_lot_size()):
@@ -63,6 +74,7 @@ def futures_short():
                                             type='MARKET')
 
                 client.futures_cancel_all_open_orders(symbol=z["symbol"])
+                time.sleep(1)
 
                 amount_of_close_orders = int(
                     abs(float(client.futures_position_information(symbol=z["symbol"])[2]["positionAmt"]) /
