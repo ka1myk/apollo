@@ -74,7 +74,7 @@ def futures_short():
                                             type='MARKET')
 
                 client.futures_cancel_all_open_orders(symbol=z["symbol"])
-                time.sleep(1)
+                time.sleep(2)
 
                 amount_of_close_orders = int(
                     abs(float(client.futures_position_information(symbol=z["symbol"])[2]["positionAmt"]) /
