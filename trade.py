@@ -11,7 +11,7 @@ client = Client(parser.parse_args().key, parser.parse_args().secret)
 
 priceChangePercent = 10
 budget_up_to_1_greed = 1000
-min_notional_corrector = 1.5
+min_notional_corrector = 1.2
 futures_limit_short_grid_close = [0.99, 0.96, 0.93]
 serverTime = client.get_server_time()['serverTime']
 
@@ -74,7 +74,7 @@ def futures_short():
                                             type='MARKET')
 
                 client.futures_cancel_all_open_orders(symbol=z["symbol"])
-                time.sleep(5)
+                time.sleep(2)
 
                 amount_of_close_orders = int(
                     abs(float(client.futures_position_information(symbol=z["symbol"])[2]["positionAmt"]) /
