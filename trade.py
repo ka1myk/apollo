@@ -12,7 +12,7 @@ client = Client(parser.parse_args().key, parser.parse_args().secret)
 priceChangePercent = 10
 budget_up_to_1_greed = 1000
 min_notional_corrector = 1.2
-futures_limit_short_grid_close = [0.99, 0.96, 0.93]
+futures_limit_short_grid_close = [0.99, 0.97, 0.95, 0.93]
 serverTime = client.get_server_time()['serverTime']
 
 
