@@ -10,17 +10,16 @@ parser.add_argument('--secret', type=str, required=True)
 client = Client(parser.parse_args().key, parser.parse_args().secret)
 
 priceChangePercent = 10
-budget_up_to_1_greed = 1000
-min_notional_corrector = 1.2
-futures_limit_short_grid_close = [0.99, 0.97, 0.95, 0.93]
+budget_to_increase_greed = 1200
+futures_limit_short_grid_close = [0.99, 0.96, 0.93, 0.90]
 serverTime = client.get_server_time()['serverTime']
 
 
-def set_greed():
-    if float(client.futures_account()['totalWalletBalance']) < budget_up_to_1_greed:
-        greed = 1
+def set_greed_and_min_notional_corrector():
+    if float(client.futures_account()['totalWalletBalance']) < budget_to_increase_greed:
+        greed = 1.2
     else:
-        greed = round(float(client.futures_account()['totalWalletBalance']) / budget_up_to_1_greed, 1)
+        greed = round(float(client.futures_account()['totalWalletBalance']) / budget_to_increase_greed, 1)
     return greed
 
 
@@ -59,8 +58,7 @@ def futures_short():
                 def get_quantity():
                     quantity = round_step_size((float(get_notional()) / float(
                         client.futures_mark_price(symbol=z["symbol"])[
-                            "markPrice"])) * min_notional_corrector * set_greed(),
-                                               get_lot_size())
+                            "markPrice"])) * set_greed_and_min_notional_corrector(), get_lot_size())
 
                     if float(quantity) < float(get_lot_size()):
                         quantity = get_lot_size()
