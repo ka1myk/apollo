@@ -11,7 +11,7 @@ client = Client(parser.parse_args().key, parser.parse_args().secret)
 
 priceChangePercent = 10
 budget_to_increase_greed = 1200
-futures_limit_short_grid_close = [0.98, 0.97, 0.95, 0.93, 0.89, 0.87, 0.83, 0.77, 0.75, 0.71]
+futures_limit_short_grid_close = [0.98, 0.97, 0.95, 0.93, 0.89, 0.87, 0.83, 0.77, 0.75, 0.71, 0.69, 0.63, 0.59, 0.57]
 serverTime = client.get_server_time()['serverTime']
 
 
