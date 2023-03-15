@@ -189,6 +189,7 @@ def coin_from_spot_to_futures():
             except:
                 print("coin_from_spot_to_futures.futures_account_transfer")
 
+
 if set_limit_simultaneously_coins_in_short():
     futures_short()
 if not is_short_position_on_futures():
