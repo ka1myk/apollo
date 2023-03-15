@@ -16,7 +16,7 @@ client = Client(parser.parse_args().key, parser.parse_args().secret)
 
 priceChangePercent = 10
 budget_to_increase_greed = 1200
-futures_limit_short_grid_close = [0.99, 0.97, 0.94, 0.90]
+futures_limit_short_grid_close = [0.99, 0.96, 0.93, 0.90, 0.87, 0.84]
 serverTime = client.get_server_time()['serverTime']
 
 
@@ -177,11 +177,8 @@ def coin_from_spot_to_futures():
                 print("coin_from_spot_to_futures.futures_account_transfer")
 
 
-# futures_short()
-# if not is_short_position_on_futures():
-#     currency_from_futures_to_spot()
-# spot_long()
-# coin_from_spot_to_futures()
-
-print(client.futures_account()["assets"])
-# print(get_undervalued_asset())
+futures_short()
+if not is_short_position_on_futures():
+    currency_from_futures_to_spot()
+spot_long()
+coin_from_spot_to_futures()
