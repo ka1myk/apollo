@@ -1,8 +1,3 @@
-## if BTC is 66% and more, then buy 1 of altcoins
-## spot not market, but long deep grid
-## set count of active coins 10 coins to 1000$
-
-
 import re
 import time
 import argparse
@@ -15,6 +10,7 @@ parser.add_argument('--secret', type=str, required=True)
 client = Client(parser.parse_args().key, parser.parse_args().secret)
 
 priceChangePercent = 10
+part_of_BTC_in_profile = 0.66
 budget_to_increase_greed = 1200
 futures_limit_short_grid_close = [0.99, 0.96, 0.93, 0.90, 0.87, 0.84]
 serverTime = client.get_server_time()['serverTime']
@@ -26,6 +22,16 @@ def set_greed_and_min_notional_corrector():
     else:
         greed = round(float(client.futures_account()['totalWalletBalance']) / budget_to_increase_greed, 1)
     return greed
+
+
+def set_limit_simultaneously_coins_in_short():
+    y = 0
+    for x in client.futures_position_information():
+        if float(x["positionAmt"]) < 0:
+            y = y + 1
+
+    if y < int(set_greed_and_min_notional_corrector() * 10):
+        return True
 
 
 def futures_short():
@@ -147,6 +153,13 @@ def get_undervalued_asset():
             my_dict["balance"].append(round(float(avg_price) / (my / ny), 2))
     symbol = my_dict["symbol"][my_dict["balance"].index(min(my_dict["balance"]))]
 
+    for x in client.futures_account_balance():
+        totalWalletBalance = round(float((client.futures_account()["totalWalletBalance"])))
+        if x["asset"] == "BTC":
+            if round(float(x["balance"]) * float(client.get_avg_price(symbol=x["asset"] + "USDT")['price'])) < (
+                    totalWalletBalance * part_of_BTC_in_profile):
+                symbol = "BTC"
+
     return symbol
 
 
@@ -176,8 +189,8 @@ def coin_from_spot_to_futures():
             except:
                 print("coin_from_spot_to_futures.futures_account_transfer")
 
-
-futures_short()
+if set_limit_simultaneously_coins_in_short():
+    futures_short()
 if not is_short_position_on_futures():
     currency_from_futures_to_spot()
 spot_long()
