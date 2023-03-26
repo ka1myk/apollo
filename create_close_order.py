@@ -27,7 +27,7 @@ for z in client.futures_position_information():
                 count_sell_orders = count_sell_orders + 1
 
         if count_buy_orders != len(futures_limit_short_grid_close):
-            client.futures_get_open_orders(symbol)
+            client.futures_cancel_all_open_orders(symbol=symbol)
             break
 
         if count_sell_orders != len(futures_limit_short_grid_open):
