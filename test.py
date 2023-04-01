@@ -20,7 +20,6 @@ def set_greed_and_min_notional_corrector():
 
 
 def open_new_positions():
-
     symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
     for x in client.futures_ticker():
         symbol_and_priceChangePercent["symbol"].append(x["symbol"])
@@ -31,10 +30,14 @@ def open_new_positions():
         if float(z["positionAmt"]) < 0:
             exist_position.append(z["symbol"])
 
-    if symbol_and_priceChangePercent not in exist_position:
 
-        x = range(-1, -int(set_greed_and_min_notional_corrector()), -1)
-        for n in x:
+    x = range(-1, -int(set_greed_and_min_notional_corrector()), -1)
+    for n in x:
+        if symbol_and_priceChangePercent["symbol"][
+            symbol_and_priceChangePercent["priceChangePercent"].index(
+                sorted(symbol_and_priceChangePercent["priceChangePercent"])[
+                    n])] not in exist_position:
+
             symbol_info = client.futures_exchange_info()
             client.futures_change_leverage(symbol=symbol_and_priceChangePercent["symbol"][
                 symbol_and_priceChangePercent["priceChangePercent"].index(
