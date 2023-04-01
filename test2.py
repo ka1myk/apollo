@@ -7,19 +7,7 @@ parser.add_argument('--key', type=str, required=True)
 parser.add_argument('--secret', type=str, required=True)
 client = Client(parser.parse_args().key, parser.parse_args().secret)
 
-budget_to_increase_greed = 1200
 futures_limit_short_grid_close = [0.99]
-futures_limit_short_grid_open = [1.025, 1.05, 1.10, 1.20, 1.40]
-serverTime = client.get_server_time()['serverTime']
-
-
-def set_greed_and_min_notional_corrector():
-    if float(client.futures_account()['totalWalletBalance']) < budget_to_increase_greed:
-        greed = 1.2
-    else:
-        greed = round(float(client.futures_account()['totalWalletBalance']) / budget_to_increase_greed, 1)
-
-    return greed
 
 
 def close_grid_limit(symbol):
