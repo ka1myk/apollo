@@ -11,9 +11,10 @@ budget_to_increase_greed = 1200
 futures_limit_short_grid_close = [0.99]
 futures_limit_short_grid_open = [1.025, 1.05, 1.10, 1.20, 1.40]
 
+symbol_info = client.futures_exchange_info()
+
 
 def open_grid_limit(symbol):
-    symbol_info = client.futures_exchange_info()
     client.futures_change_leverage(symbol=symbol, leverage=1)
 
     def set_greed_and_min_notional_corrector():
@@ -71,7 +72,6 @@ def open_grid_limit(symbol):
 
 
 def close_grid_limit(symbol):
-    symbol_info = client.futures_exchange_info()
     client.futures_change_leverage(symbol=symbol, leverage=1)
 
     def get_notional():
@@ -152,4 +152,19 @@ def close_exist_positions():
                 close_grid_limit(symbol)
 
 
+def open_orders_to_cancel():
+    open_orders = []
+    positions = []
+
+    for x in client.futures_get_open_orders():
+        open_orders.append(x["symbol"])
+    for y in client.futures_position_information():
+        if float(y["positionAmt"]) < 0:
+            positions.append(y["symbol"])
+
+    for x in list(set(open_orders) - set(positions)):
+        client.futures_cancel_all_open_orders(symbol=x)
+
+
 close_exist_positions()
+open_orders_to_cancel()
