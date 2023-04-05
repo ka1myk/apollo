@@ -7,7 +7,7 @@ parser.add_argument('--key', type=str, required=True)
 parser.add_argument('--secret', type=str, required=True)
 client = Client(parser.parse_args().key, parser.parse_args().secret)
 
-budget_to_increase_greed = 1200
+budget_to_increase_greed = 3000
 
 
 def set_greed_and_min_notional_corrector():
