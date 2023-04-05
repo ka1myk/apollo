@@ -7,9 +7,9 @@ parser.add_argument('--key', type=str, required=True)
 parser.add_argument('--secret', type=str, required=True)
 client = Client(parser.parse_args().key, parser.parse_args().secret)
 
-budget_to_increase_greed = 1200
+budget_to_increase_greed = 3000
 futures_limit_short_grid_close = [0.99]
-futures_limit_short_grid_open = [1.025, 1.05, 1.10, 1.20, 1.40]
+futures_limit_short_grid_open = [1.03, 1.09, 1.21, 1.40]
 
 symbol_info = client.futures_exchange_info()
 
