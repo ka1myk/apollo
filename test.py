@@ -30,7 +30,7 @@ def open_new_positions():
         if float(z["positionAmt"]) < 0:
             exist_position.append(z["symbol"])
 
-    x = range(-1, -int(set_greed_and_min_notional_corrector()), -1)
+    x = range(-1, -int(set_greed_and_min_notional_corrector() * 2), -1)
     for n in x:
         if symbol_and_priceChangePercent["symbol"][
             symbol_and_priceChangePercent["priceChangePercent"].index(
