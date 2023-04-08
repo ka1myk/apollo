@@ -146,6 +146,7 @@ def close_exist_positions():
 
             if count_sell_orders != len(futures_limit_short_grid_open):
                 client.futures_cancel_all_open_orders(symbol=symbol)
+                close_grid_limit(symbol)
                 open_grid_limit(symbol)
 
             if count_buy_orders == 0:
