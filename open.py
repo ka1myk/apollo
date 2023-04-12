@@ -37,53 +37,60 @@ def open_new_positions():
                 sorted(symbol_and_priceChangePercent["priceChangePercent"])[
                     n])] not in exist_position:
 
-            symbol_info = client.futures_exchange_info()
-            client.futures_change_leverage(symbol=symbol_and_priceChangePercent["symbol"][
-                symbol_and_priceChangePercent["priceChangePercent"].index(
-                    sorted(symbol_and_priceChangePercent["priceChangePercent"])[
-                        n])], leverage=1)
+            try:
+                symbol_info = client.futures_exchange_info()
+                client.futures_change_leverage(symbol=symbol_and_priceChangePercent["symbol"][
+                    symbol_and_priceChangePercent["priceChangePercent"].index(
+                        sorted(symbol_and_priceChangePercent["priceChangePercent"])[
+                            n])], leverage=1)
 
-            def get_notional():
-                for x in symbol_info['symbols']:
-                    if x['symbol'] == symbol_and_priceChangePercent["symbol"][
-                        symbol_and_priceChangePercent["priceChangePercent"].index(
-                            sorted(symbol_and_priceChangePercent["priceChangePercent"])[
-                                n])]:
-                        for y in x['filters']:
-                            if y['filterType'] == 'MIN_NOTIONAL':
-                                return y['notional']
+                def get_notional():
+                    for x in symbol_info['symbols']:
+                        if x['symbol'] == symbol_and_priceChangePercent["symbol"][
+                            symbol_and_priceChangePercent["priceChangePercent"].index(
+                                sorted(symbol_and_priceChangePercent["priceChangePercent"])[
+                                    n])]:
+                            for y in x['filters']:
+                                if y['filterType'] == 'MIN_NOTIONAL':
+                                    return y['notional']
 
-            def get_lot_size():
-                for x in symbol_info['symbols']:
-                    if x['symbol'] == symbol_and_priceChangePercent["symbol"][
-                        symbol_and_priceChangePercent["priceChangePercent"].index(
-                            sorted(symbol_and_priceChangePercent["priceChangePercent"])[
-                                n])]:
-                        for y in x['filters']:
-                            if y['filterType'] == 'LOT_SIZE':
-                                return y['stepSize']
+                def get_lot_size():
+                    for x in symbol_info['symbols']:
+                        if x['symbol'] == symbol_and_priceChangePercent["symbol"][
+                            symbol_and_priceChangePercent["priceChangePercent"].index(
+                                sorted(symbol_and_priceChangePercent["priceChangePercent"])[
+                                    n])]:
+                            for y in x['filters']:
+                                if y['filterType'] == 'LOT_SIZE':
+                                    return y['stepSize']
 
-            def get_quantity():
-                quantity = round_step_size((float(get_notional()) / float(
-                    client.futures_mark_price(symbol=symbol_and_priceChangePercent["symbol"][
-                        symbol_and_priceChangePercent["priceChangePercent"].index(
-                            sorted(symbol_and_priceChangePercent["priceChangePercent"])[
-                                n])])[
-                        "markPrice"])) * set_greed_and_min_notional_corrector(), get_lot_size())
+                def get_quantity():
+                    quantity = round_step_size((float(get_notional()) / float(
+                        client.futures_mark_price(symbol=symbol_and_priceChangePercent["symbol"][
+                            symbol_and_priceChangePercent["priceChangePercent"].index(
+                                sorted(symbol_and_priceChangePercent["priceChangePercent"])[
+                                    n])])[
+                            "markPrice"])) * set_greed_and_min_notional_corrector(), get_lot_size())
 
-                if float(quantity) < float(get_lot_size()):
-                    quantity = get_lot_size()
+                    if float(quantity) < float(get_lot_size()):
+                        quantity = get_lot_size()
 
-                return quantity
+                    return quantity
 
-            client.futures_create_order(symbol=symbol_and_priceChangePercent["symbol"][
-                symbol_and_priceChangePercent["priceChangePercent"].index(
-                    sorted(symbol_and_priceChangePercent["priceChangePercent"])[
-                        n])],
-                                        quantity=get_quantity(),
-                                        side='SELL',
-                                        positionSide='SHORT',
-                                        type='MARKET')
+                client.futures_create_order(symbol=symbol_and_priceChangePercent["symbol"][
+                    symbol_and_priceChangePercent["priceChangePercent"].index(
+                        sorted(symbol_and_priceChangePercent["priceChangePercent"])[
+                            n])],
+                                            quantity=get_quantity(),
+                                            side='SELL',
+                                            positionSide='SHORT',
+                                            type='MARKET')
+
+            except:
+                print("open_new_positions fail with ", symbol_and_priceChangePercent["symbol"][
+                          symbol_and_priceChangePercent["priceChangePercent"].index(
+                              sorted(symbol_and_priceChangePercent["priceChangePercent"])[
+                                  n])])
 
 
 open_new_positions()

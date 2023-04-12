@@ -9,14 +9,12 @@ client = Client(parser.parse_args().key, parser.parse_args().secret)
 
 budget_to_increase_greed = 2000
 futures_limit_short_grid_close = [0.99]
-futures_limit_short_grid_open = [1.03, 1.09, 1.21, 1.40]
+futures_limit_short_grid_open = [1.03, 1.09, 1.21, 1.45]
 
 symbol_info = client.futures_exchange_info()
 
 
 def open_grid_limit(symbol):
-    client.futures_change_leverage(symbol=symbol, leverage=1)
-
     def set_greed_and_min_notional_corrector():
         if float(client.futures_account()['totalWalletBalance']) < budget_to_increase_greed:
             greed = 1.2
@@ -72,8 +70,6 @@ def open_grid_limit(symbol):
 
 
 def close_grid_limit(symbol):
-    client.futures_change_leverage(symbol=symbol, leverage=1)
-
     def get_notional():
         for x in symbol_info['symbols']:
             if x['symbol'] == symbol:
@@ -144,13 +140,10 @@ def close_exist_positions():
                 if x["side"] == "SELL":
                     count_sell_orders = count_sell_orders + 1
 
-            if count_sell_orders != len(futures_limit_short_grid_open):
+            if count_sell_orders != len(futures_limit_short_grid_open) or count_buy_orders == 0:
                 client.futures_cancel_all_open_orders(symbol=symbol)
                 close_grid_limit(symbol)
                 open_grid_limit(symbol)
-
-            if count_buy_orders == 0:
-                close_grid_limit(symbol)
 
 
 def open_orders_to_cancel():
