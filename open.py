@@ -7,7 +7,7 @@ parser.add_argument('--key', type=str, required=True)
 parser.add_argument('--secret', type=str, required=True)
 client = Client(parser.parse_args().key, parser.parse_args().secret)
 
-budget_to_increase_greed = 2000
+budget_to_increase_greed = 2500
 
 
 def set_greed_and_min_notional_corrector():
@@ -30,7 +30,7 @@ def open_new_positions():
         if float(z["positionAmt"]) < 0:
             exist_position.append(z["symbol"])
 
-    x = range(-1, -int(set_greed_and_min_notional_corrector() * 3), -1)
+    x = range(-1, -int(set_greed_and_min_notional_corrector() * 2), -1)
     for n in x:
         if symbol_and_priceChangePercent["symbol"][
             symbol_and_priceChangePercent["priceChangePercent"].index(
