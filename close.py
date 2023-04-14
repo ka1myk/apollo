@@ -9,7 +9,7 @@ client = Client(parser.parse_args().key, parser.parse_args().secret)
 
 budget_to_increase_greed = 2500
 futures_limit_short_grid_close = [0.99]
-futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27]
+futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27, 1.39]
 
 symbol_info = client.futures_exchange_info()
 
@@ -140,13 +140,35 @@ def close_exist_positions():
                 if x["side"] == "SELL":
                     count_sell_orders = count_sell_orders + 1
 
-            if count_sell_orders == 0 or count_buy_orders == 0:
-                client.futures_cancel_all_open_orders(symbol=symbol)
+            if count_buy_orders == 0:
                 close_grid_limit(symbol)
+
+            if count_sell_orders == 0:
                 open_grid_limit(symbol)
 
 
-def open_orders_to_cancel():
+def cancel_close_order_if_filled():
+    for z in client.futures_position_information():
+        if float(z["positionAmt"]) < 0:
+            symbol = z["symbol"]
+
+            count_buy_orders = 0
+            count_sell_orders = 0
+
+            for x in client.futures_get_open_orders(symbol=symbol):
+                if x["side"] == "BUY":
+                    count_buy_orders = count_buy_orders + 1
+
+                if x["side"] == "SELL":
+                    count_sell_orders = count_sell_orders + 1
+
+            if count_sell_orders != len(futures_limit_short_grid_open):
+                for x in client.futures_get_open_orders(symbol=symbol):
+                    if x["side"] == "BUY":
+                        client.futures_cancel_order(symbol=symbol, orderId=x["orderId"])
+
+
+def cancel_open_orders_without_position():
     open_orders = []
     positions = []
 
@@ -160,5 +182,6 @@ def open_orders_to_cancel():
         client.futures_cancel_all_open_orders(symbol=x)
 
 
+cancel_close_order_if_filled()
 close_exist_positions()
-open_orders_to_cancel()
+cancel_open_orders_without_position()
