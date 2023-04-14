@@ -9,7 +9,7 @@ client = Client(parser.parse_args().key, parser.parse_args().secret)
 
 budget_to_increase_greed = 2500
 futures_limit_short_grid_close = [0.99]
-futures_limit_short_grid_open = [1.03, 1.09, 1.21, 1.45]
+futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27]
 
 symbol_info = client.futures_exchange_info()
 
@@ -140,7 +140,7 @@ def close_exist_positions():
                 if x["side"] == "SELL":
                     count_sell_orders = count_sell_orders + 1
 
-            if count_sell_orders != len(futures_limit_short_grid_open) or count_buy_orders == 0:
+            if count_sell_orders == 0 or count_buy_orders == 0:
                 client.futures_cancel_all_open_orders(symbol=symbol)
                 close_grid_limit(symbol)
                 open_grid_limit(symbol)
