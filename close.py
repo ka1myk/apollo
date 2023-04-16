@@ -9,7 +9,7 @@ client = Client(parser.parse_args().key, parser.parse_args().secret)
 
 budget_to_increase_greed = 2500
 futures_limit_short_grid_close = [0.99]
-futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27, 1.39]
+futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27, 1.39, 1.51, 1.63]
 
 symbol_info = client.futures_exchange_info()
 
