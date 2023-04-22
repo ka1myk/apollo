@@ -14,61 +14,6 @@ futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27, 1.39, 1.51,
 symbol_info = client.futures_exchange_info()
 
 
-def open_grid_limit(symbol):
-    def set_greed_and_min_notional_corrector():
-        if float(client.futures_account()['totalWalletBalance']) < budget_to_increase_greed:
-            greed = 1.2
-        else:
-            greed = round(float(client.futures_account()['totalWalletBalance']) / budget_to_increase_greed, 1)
-
-        return greed
-
-    def get_notional():
-        for x in symbol_info['symbols']:
-            if x['symbol'] == symbol:
-                for y in x['filters']:
-                    if y['filterType'] == 'MIN_NOTIONAL':
-                        return y['notional']
-
-    def get_tick_size():
-        for x in symbol_info['symbols']:
-            if x['symbol'] == symbol:
-                for y in x['filters']:
-                    if y['filterType'] == 'PRICE_FILTER':
-                        return y['tickSize']
-
-    def get_lot_size():
-        for x in symbol_info['symbols']:
-            if x['symbol'] == symbol:
-                for y in x['filters']:
-                    if y['filterType'] == 'LOT_SIZE':
-                        return y['stepSize']
-
-    def get_quantity():
-        quantity = round_step_size((float(get_notional()) / float(
-            client.futures_mark_price(symbol=symbol)[
-                "markPrice"])) * set_greed_and_min_notional_corrector(), get_lot_size())
-
-        if float(quantity) < float(get_lot_size()):
-            quantity = get_lot_size()
-
-        return quantity
-
-    for x in futures_limit_short_grid_open:
-        client.futures_create_order(symbol=symbol,
-                                    quantity=get_quantity(),
-                                    price=round_step_size(float(
-                                        client.futures_position_information(symbol=symbol)[2][
-                                            "markPrice"]) * (
-                                                              x),
-                                                          get_tick_size()),
-                                    side='SELL',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
-
-
 def close_grid_limit(symbol):
     def get_notional():
         for x in symbol_info['symbols']:
@@ -183,5 +128,65 @@ def cancel_open_orders_without_position():
 
 
 cancel_close_order_if_filled()
+
+
 close_exist_positions()
 cancel_open_orders_without_position()
+
+
+
+
+
+def open_grid_limit(symbol):
+    def set_greed_and_min_notional_corrector():
+        if float(client.futures_account()['totalWalletBalance']) < budget_to_increase_greed:
+            greed = 1.2
+        else:
+            greed = round(float(client.futures_account()['totalWalletBalance']) / budget_to_increase_greed, 1)
+
+        return greed
+
+    def get_notional():
+        for x in symbol_info['symbols']:
+            if x['symbol'] == symbol:
+                for y in x['filters']:
+                    if y['filterType'] == 'MIN_NOTIONAL':
+                        return y['notional']
+
+    def get_tick_size():
+        for x in symbol_info['symbols']:
+            if x['symbol'] == symbol:
+                for y in x['filters']:
+                    if y['filterType'] == 'PRICE_FILTER':
+                        return y['tickSize']
+
+    def get_lot_size():
+        for x in symbol_info['symbols']:
+            if x['symbol'] == symbol:
+                for y in x['filters']:
+                    if y['filterType'] == 'LOT_SIZE':
+                        return y['stepSize']
+
+    def get_quantity():
+        quantity = round_step_size((float(get_notional()) / float(
+            client.futures_mark_price(symbol=symbol)[
+                "markPrice"])) * set_greed_and_min_notional_corrector(), get_lot_size())
+
+        if float(quantity) < float(get_lot_size()):
+            quantity = get_lot_size()
+
+        return quantity
+
+    for x in futures_limit_short_grid_open:
+        client.futures_create_order(symbol=symbol,
+                                    quantity=get_quantity(),
+                                    price=round_step_size(float(
+                                        client.futures_position_information(symbol=symbol)[2][
+                                            "markPrice"]) * (
+                                                              x),
+                                                          get_tick_size()),
+                                    side='SELL',
+                                    positionSide='SHORT',
+                                    type='LIMIT',
+                                    timeInForce="GTC"
+                                    )
