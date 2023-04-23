@@ -7,8 +7,8 @@ min_notional = 7
 futures_limit_short_grid_close = [0.99]
 futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27, 1.39, 1.51, 1.63, 1.87, 2.11, 2.35]
 
-client = Client("Ny8b20OD7T3dXm96SVKmpbtJQA9rxmeh26BclnXGYYV3GDjktrVTAsJcLOqRIp2V",
-                "Nu4UemnKHnjwOx05ZFg9oT8NTV8ull95X7n7Oa8jZ9M9bT6e6DZJPD9YJagbAkGe")
+client = Client("",
+                "")
 
 symbol_info = client.futures_exchange_info()
 

@@ -18,7 +18,7 @@ def open_grid_limit(symbol):
 def close_grid_limit(symbol):
     amount_of_close_orders = int(
         abs(float(client.futures_position_information(symbol=symbol)[2]["positionAmt"]) /
-            float(get_quantity())))
+            float(get_quantity(symbol))))
 
     if amount_of_close_orders > len(futures_limit_short_grid_close):
         amount_of_close_orders = len(futures_limit_short_grid_close)
