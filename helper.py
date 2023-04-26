@@ -17,7 +17,7 @@ def futures_tickers_to_short():
     allAvailible = []
     for futures in client.futures_ticker():
         matchObj = re.search("^((?!_).)*$", futures["symbol"])
-        if matchObj:
+        if matchObj and budget_to_one_short(futures["symbol"]) <= min_notional:
             allAvailible.append(futures["symbol"])
 
     existPosition = []
@@ -84,6 +84,10 @@ def get_quantity(symbol):
         quantity = get_lot_size(symbol)
 
     return quantity
+
+
+def budget_to_one_short(symbol):
+    return round(float(get_quantity(symbol)) * float(client.futures_mark_price(symbol=symbol)["markPrice"]), 1)
 
 
 budgetContract = round(len(futures_limit_short_grid_open) * set_greed_and_min_notional_corrector() * min_notional)
