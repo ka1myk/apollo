@@ -1,4 +1,5 @@
 import re
+import json
 import secrets
 from binance.client import Client
 from binance.helpers import round_step_size
@@ -11,6 +12,9 @@ client = Client("",
                 "")
 
 symbol_info = client.futures_exchange_info()
+
+with open('variables.json') as v:
+    shortReady = json.load(v)
 
 
 def futures_tickers_to_short():
