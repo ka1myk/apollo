@@ -12,6 +12,7 @@ client = Client("",
                 "")
 
 symbol_info = client.futures_exchange_info()
+serverTime = client.get_server_time()['serverTime']
 
 
 def futures_tickers_to_short():

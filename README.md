@@ -22,6 +22,7 @@ Crontab (type: crontab -e):
 shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
 @reboot sleep 10; tmuxp load /root/apollo/session.yaml
 
-*/10   * * *    cd /root/apollo && python3 open.py  
-0-58/2 * * *    cd /root/apollo && python3 close.py 
+1       * * * * cd /root/apollo && python3 fill.py && cd /root/apollo && python3 transfer.py
+5-59/2  * * * * cd /root/apollo && python3 close.py
+5-59/10 * * * * cd /root/apollo && python3 open.py
 ~~~
