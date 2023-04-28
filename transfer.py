@@ -1,4 +1,8 @@
+import secrets
+
 from helper import *
+
+spot_grid = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73, 0.61, 0.49, 0.37]
 
 
 def transfer_free_USD_to_spot():
@@ -36,14 +40,36 @@ def dust_to_bnb():
 
 
 def buy_coins_on_spot():
-    if float(client.get_asset_balance(asset='BUSD')['free']) > 10:
+    if float(client.get_asset_balance(asset='BUSD')['free']) > 20:
+        try:
+            client.create_order(symbol="BTCBUSD",
+                                side='BUY',
+                                type='MARKET',
+                                quoteOrderQty=float(client.get_asset_balance(asset='BUSD')['free']) * 0.5)
+
+            client.order_limit(symbol="BTCBUSD",
+                               quantity=round_step_size(
+                                   float(client.get_all_orders(symbol="BTCBUSD")[-1]["origQty"]),
+                                   get_lot_size(symbol="BTCBUSD")),
+                               price=round_step_size(
+                                   float(client.get_avg_price(symbol="BTCBUSD")['price']) * secrets.choice(spot_grid),
+                                   get_tick_size(symbol="BTCBUSD")),
+                               side='BUY',
+                               type='LIMIT',
+                               timeInForce="GTC"
+                               )
+
+        except:
+            print("fail to buy limit BTC for BUSD")
+
+    else:
         try:
             client.create_order(symbol="BTCBUSD",
                                 side='BUY',
                                 type='MARKET',
                                 quoteOrderQty=float(client.get_asset_balance(asset='BUSD')['free']))
         except:
-            print("fail to buy BTC for BUSD")
+            print("fail to buy market BTC for BUSD")
 
 
 def transfer_free_spot_coin_to_futures():
