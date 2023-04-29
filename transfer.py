@@ -1,5 +1,3 @@
-import secrets
-
 from helper import *
 
 spot_grid = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73, 0.61, 0.49, 0.37]
@@ -92,7 +90,7 @@ def to_the_moon_and_back():
         buy_coins_on_spot()
         transfer_free_spot_coin_to_futures()
     except:
-        print("may the Force be with you")
+        print("may the force be with you")
 
 
 to_the_moon_and_back()
