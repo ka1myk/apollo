@@ -1,5 +1,7 @@
 from helper import *
 
+# deltaTime is for 7 days #
+deltaTime = 1000 * 60 * 60 * 24 * 7
 spot_grid = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73, 0.61, 0.49, 0.37]
 
 
@@ -38,20 +40,26 @@ def dust_to_bnb():
 
 
 def buy_coins_on_spot():
+    symbol = "BTCBUSD"
+
+    for x in client.get_open_orders(symbol=symbol):
+        if x["time"] < serverTime - deltaTime:
+            client.cancel_order(symbol=symbol, orderId=x["orderId"])
+
     if float(client.get_asset_balance(asset='BUSD')['free']) > 20:
         try:
-            client.create_order(symbol="BTCBUSD",
+            client.create_order(symbol=symbol,
                                 side='BUY',
                                 type='MARKET',
                                 quoteOrderQty=float(client.get_asset_balance(asset='BUSD')['free']) * 0.5)
 
-            client.order_limit(symbol="BTCBUSD",
+            client.order_limit(symbol=symbol,
                                quantity=round_step_size(
-                                   float(client.get_all_orders(symbol="BTCBUSD")[-1]["origQty"]),
-                                   get_lot_size(symbol="BTCBUSD")),
+                                   float(client.get_all_orders(symbol=symbol)[-1]["origQty"]),
+                                   get_lot_size(symbol=symbol)),
                                price=round_step_size(
-                                   float(client.get_avg_price(symbol="BTCBUSD")['price']) * secrets.choice(spot_grid),
-                                   get_tick_size(symbol="BTCBUSD")),
+                                   float(client.get_avg_price(symbol=symbol)['price']) * secrets.choice(spot_grid),
+                                   get_tick_size(symbol=symbol)),
                                side='BUY',
                                type='LIMIT',
                                timeInForce="GTC"
@@ -62,7 +70,7 @@ def buy_coins_on_spot():
 
     else:
         try:
-            client.create_order(symbol="BTCBUSD",
+            client.create_order(symbol=symbol,
                                 side='BUY',
                                 type='MARKET',
                                 quoteOrderQty=float(client.get_asset_balance(asset='BUSD')['free']))
