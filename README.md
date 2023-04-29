@@ -21,5 +21,5 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 
 1       * * * * cd /root/apollo && python3 fill.py && cd /root/apollo && python3 transfer.py
 5-59/2  * * * * cd /root/apollo && python3 close.py
-5-59/9  * * * * cd /root/apollo && python3 open.py
+5-59/27 * * * * cd /root/apollo && python3 open.py
 ~~~

@@ -1,9 +1,5 @@
 from helper import *
 
-# deltaTime is for 7 days #
-deltaTime = 1000 * 60 * 60 * 24 * 7
-spot_grid = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73, 0.61, 0.49, 0.37]
-
 
 def transfer_free_USD_to_spot():
     for x in client.futures_account_balance():

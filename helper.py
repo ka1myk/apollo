@@ -8,6 +8,10 @@ min_notional = 7
 futures_limit_short_grid_close = [0.99]
 futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27, 1.39, 1.51, 1.63, 1.87, 2.11, 2.35]
 
+# last digit is for days #
+deltaTime = 1000 * 60 * 60 * 24 * 7
+spot_grid = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73, 0.61, 0.49, 0.37]
+
 client = Client("",
                 "")
 
