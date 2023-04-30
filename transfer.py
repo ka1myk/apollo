@@ -20,10 +20,9 @@ def usdt_to_busd_on_spot():
             client.create_order(symbol="BUSDUSDT",
                                 side='BUY',
                                 type='MARKET',
-                                quoteOrderQty=round(float(client.get_asset_balance(asset='USDT')['free'])))
+                                quoteOrderQty=math.floor(float(client.get_asset_balance(asset='USDT')['free'])))
 
             dust_to_bnb()
-
         except:
             print("fail to convert USDT to BUSD")
 
@@ -47,12 +46,10 @@ def buy_coins_on_spot():
             client.create_order(symbol=symbol,
                                 side='BUY',
                                 type='MARKET',
-                                quoteOrderQty=float(client.get_asset_balance(asset='BUSD')['free']) * 0.5)
+                                quoteOrderQty=math.floor(float(client.get_asset_balance(asset='BUSD')['free']) * 0.5))
 
             client.order_limit(symbol=symbol,
-                               quantity=round_step_size(
-                                   float(client.get_all_orders(symbol=symbol)[-1]["origQty"]),
-                                   get_lot_size(symbol=symbol)),
+                               quantity=client.get_all_orders(symbol=symbol)[-1]["origQty"],
                                price=round_step_size(
                                    float(client.get_avg_price(symbol=symbol)['price']) * secrets.choice(spot_grid),
                                    get_tick_size(symbol=symbol)),
