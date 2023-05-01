@@ -41,6 +41,15 @@ def buy_coins_on_spot():
         if x["time"] < serverTime - deltaTime:
             client.cancel_order(symbol=symbol, orderId=x["orderId"])
 
+    if 10 > float(client.get_asset_balance(asset='BUSD')['free']) > 20:
+        try:
+            client.create_order(symbol=symbol,
+                                side='BUY',
+                                type='MARKET',
+                                quoteOrderQty=float(client.get_asset_balance(asset='BUSD')['free']))
+        except:
+            print("fail to buy market BTC for BUSD")
+
     if float(client.get_asset_balance(asset='BUSD')['free']) > 20:
         try:
             client.create_order(symbol=symbol,
@@ -60,15 +69,6 @@ def buy_coins_on_spot():
 
         except:
             print("fail to buy limit BTC for BUSD")
-
-    else:
-        try:
-            client.create_order(symbol=symbol,
-                                side='BUY',
-                                type='MARKET',
-                                quoteOrderQty=float(client.get_asset_balance(asset='BUSD')['free']))
-        except:
-            print("fail to buy market BTC for BUSD")
 
 
 def transfer_free_spot_coin_to_futures():
@@ -94,4 +94,6 @@ def to_the_moon_and_back():
         print("may the force be with you")
 
 
-to_the_moon_and_back()
+# to_the_moon_and_back()
+
+print(client.get_asset_balance(asset='BUSD')["free"])
