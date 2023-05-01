@@ -94,6 +94,4 @@ def to_the_moon_and_back():
         print("may the force be with you")
 
 
-# to_the_moon_and_back()
-
-print(client.get_asset_balance(asset='BUSD')["free"])
+to_the_moon_and_back()
