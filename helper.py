@@ -7,11 +7,11 @@ from binance.client import Client
 from binance.helpers import round_step_size
 
 # can be extended up to 10 #
-min_notional = 7
+min_notional = 10
 # profit is 1% #
 futures_limit_short_grid_close = [0.99]
-# 3 times 3%, 3 times 6%, 3 times 12%, 3 times 24% #
-futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27, 1.39, 1.51, 1.63, 1.87, 2.11, 2.35]
+# 3 times 3%, 3 times 6%, 3 times 12% #
+futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27, 1.39, 1.51, 1.63]
 # 3180 is 53 minutes * 60 secs #
 max_secs_to_wait_before_new_position = 3180
 # last digit is for days to cancel not filled limit orders #
