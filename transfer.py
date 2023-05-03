@@ -16,6 +16,7 @@ def transfer_free_USD_to_spot():
 
 def usdt_to_busd_on_spot():
     if float(client.get_asset_balance(asset='USDT')['free']) > 10:
+        print("usdt free balance", client.get_asset_balance(asset='USDT')['free'])
         try:
             client.create_order(symbol="BUSDUSDT",
                                 side='BUY',
@@ -28,8 +29,10 @@ def usdt_to_busd_on_spot():
 
 
 def dust_to_bnb():
+    print("bnb free balance before dust_to_bnb()", client.get_asset_balance(asset='BNB')['free'])
     try:
         client.transfer_dust(asset="USDT")
+        print("bnb free balance after dust_to_bnb()", client.get_asset_balance(asset='BNB')['free'])
     except:
         print("fail to dust USDT to BNB")
 
@@ -39,9 +42,10 @@ def buy_coins_on_spot():
 
     for x in client.get_open_orders(symbol=symbol):
         if x["time"] < serverTime - deltaTime:
+            print("cancel order", symbol, x["orderId"], "create time", x["time"])
             client.cancel_order(symbol=symbol, orderId=x["orderId"])
 
-    if 10 > float(client.get_asset_balance(asset='BUSD')['free']) > 20:
+    if 10 < float(client.get_asset_balance(asset='BUSD')['free']) < 20:
         try:
             client.create_order(symbol=symbol,
                                 side='BUY',
@@ -50,7 +54,7 @@ def buy_coins_on_spot():
         except:
             print("fail to buy market BTC for BUSD")
 
-    if float(client.get_asset_balance(asset='BUSD')['free']) > 20:
+    if 20 < float(client.get_asset_balance(asset='BUSD')['free']):
         try:
             client.create_order(symbol=symbol,
                                 side='BUY',
