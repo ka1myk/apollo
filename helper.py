@@ -13,7 +13,7 @@ futures_limit_short_grid_close = [0.995]
 # 3 times 3%, 3 times 6%, 3 times 12% #
 futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27]
 # 3180 is 53 minutes * 60 secs #
-max_secs_to_wait_before_new_position = 1500
+max_secs_to_wait_before_new_position = 590
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # most likely, it will not fall by less than 0.79, so lower limit orders can be cancelled and move to funding #
@@ -27,18 +27,31 @@ serverTime = client.get_server_time()['serverTime']
 
 
 def futures_tickers_to_short():
+
+    futures_account_balance_asset = []
+    for x in client.futures_account_balance():
+        matchObj = re.search("^((?!USD).)*$", x["asset"])
+
+        if matchObj:
+            futures_account_balance_asset.append(x["asset"]+"USDT")
+
     allAvailible = []
     for futures in client.futures_ticker():
-        matchObj = re.search("^((?!_).)*$", futures["symbol"])
-        if matchObj and budget_to_one_short(futures["symbol"]) <= min_notional:
+
+        remove_quarterly_contract = re.search("^((?!_).)*$", futures["symbol"])
+        remove_BUSD_contract = re.search("^.*USDT$", futures["symbol"])
+
+        if remove_quarterly_contract and remove_BUSD_contract and budget_to_one_short(
+                futures["symbol"]) <= min_notional:
             allAvailible.append(futures["symbol"])
 
     existPosition = []
     for z in client.futures_position_information():
+
         if float(z["positionAmt"]) < 0:
             existPosition.append(z["symbol"])
 
-    shortReady = set(allAvailible) - set(existPosition)
+    shortReady = set(allAvailible) - set(existPosition) - set(futures_account_balance_asset)
     return list(shortReady)
 
 
