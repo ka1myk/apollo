@@ -7,17 +7,17 @@ from binance.client import Client
 from binance.helpers import round_step_size
 
 # can be extended up to 10 #
-min_notional = 10
+min_notional = 6
 # profit is 1% #
-futures_limit_short_grid_close = [0.99]
+futures_limit_short_grid_close = [0.995]
 # 3 times 3%, 3 times 6%, 3 times 12% #
-futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27, 1.39, 1.51, 1.63]
+futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27]
 # 3180 is 53 minutes * 60 secs #
-max_secs_to_wait_before_new_position = 3180
+max_secs_to_wait_before_new_position = 1500
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # most likely, it will not fall by less than 0.79, so lower limit orders can be cancelled and move to funding #
-spot_grid = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73, 0.61, 0.49, 0.37]
+spot_grid = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
 
 client = Client("",
                 "")
