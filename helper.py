@@ -6,14 +6,14 @@ import secrets
 from binance.client import Client
 from binance.helpers import round_step_size
 
-# can be extended up to 10 #
+# min_notional can be extended #
 min_notional = 6
-# profit is 1% #
+# profit is 0.5% #
 futures_limit_short_grid_close = [0.995]
-# 3 times 3%, 3 times 6%, 3 times 12% #
+# 3 times 3%, 3 times 6% #
 futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27]
-# 3180 is 53 minutes * 60 secs #
-max_secs_to_wait_before_new_position = 590
+# 60 secs * 5 minutes #
+max_secs_to_wait_before_new_position = 60 * 5
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # most likely, it will not fall by less than 0.79, so lower limit orders can be cancelled and move to funding #
@@ -27,13 +27,12 @@ serverTime = client.get_server_time()['serverTime']
 
 
 def futures_tickers_to_short():
-
     futures_account_balance_asset = []
     for x in client.futures_account_balance():
         matchObj = re.search("^((?!USD).)*$", x["asset"])
 
         if matchObj:
-            futures_account_balance_asset.append(x["asset"]+"USDT")
+            futures_account_balance_asset.append(x["asset"] + "USDT")
 
     allAvailible = []
     for futures in client.futures_ticker():
@@ -56,10 +55,13 @@ def futures_tickers_to_short():
 
 
 def budget_to_increase_greed():
-    contracts_amount = 0
-    for futures in client.futures_ticker():
-        contracts_amount = contracts_amount + 1
-    budget_to_increase_greed = contracts_amount * len(futures_limit_short_grid_open) * min_notional
+
+    with open('variables.json', 'r') as f:
+        contracts = f.read()
+
+    count_for_greed = json.loads(contracts)
+
+    budget_to_increase_greed = len(count_for_greed) * len(futures_limit_short_grid_open) * min_notional
 
     return budget_to_increase_greed
 
