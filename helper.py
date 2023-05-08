@@ -8,6 +8,8 @@ from binance.helpers import round_step_size
 
 # min_notional can be extended #
 min_notional = 6
+# min_notional_corrector need to correct error of not creating close orders #
+min_notional_corrector = 1.2
 # profit is 0.5% #
 futures_limit_short_grid_close = [0.995]
 # callbackRate can be from 0.1% to 5% #
@@ -18,7 +20,7 @@ futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27]
 max_secs_to_wait_before_new_position = 60 * 5
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
-# most likely, it will not fall by less than 0.79, so lower limit orders can be cancelled and move to funding #
+# most likely, it will not fall less than 0.79, so lower limit orders can be cancelled and moved to funding #
 spot_grid = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
 
 client = Client("",
@@ -57,7 +59,6 @@ def futures_tickers_to_short():
 
 
 def budget_to_increase_greed():
-
     with open('variables.json', 'r') as f:
         contracts = f.read()
 
@@ -68,14 +69,10 @@ def budget_to_increase_greed():
     return budget_to_increase_greed
 
 
-def set_greed_and_min_notional_corrector():
-    if float(client.futures_account()['totalWalletBalance']) < budget_to_increase_greed():
-        greed = 1.2
-    else:
-        greed = round(float(client.futures_account()['totalWalletBalance']) / budget_to_increase_greed(), 1)
+def set_greed():
+    greed = round(float(client.futures_account()['totalWalletBalance']) / budget_to_increase_greed(), 1)
 
     return greed
-
 
 def futures_change_leverage(symbol):
     client.futures_change_leverage(symbol=symbol, leverage=1)
@@ -108,7 +105,7 @@ def get_lot_size(symbol):
 def get_quantity(symbol):
     quantity = round_step_size((float(get_notional(symbol)) / float(
         client.futures_mark_price(symbol=symbol)[
-            "markPrice"])) * set_greed_and_min_notional_corrector(), get_lot_size(symbol))
+            "markPrice"])) * set_greed() * min_notional_corrector, get_lot_size(symbol))
 
     if float(quantity) < float(get_lot_size(symbol)):
         quantity = get_lot_size(symbol)
@@ -120,5 +117,5 @@ def budget_to_one_short(symbol):
     return round(float(get_quantity(symbol)) * float(client.futures_mark_price(symbol=symbol)["markPrice"]), 1)
 
 
-budgetContract = round(len(futures_limit_short_grid_open) * set_greed_and_min_notional_corrector() * min_notional)
+budgetContract = round(len(futures_limit_short_grid_open) * set_greed() * min_notional_corrector * min_notional)
 availableBalance = round(float(client.futures_account()["availableBalance"]))
