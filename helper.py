@@ -9,7 +9,7 @@ from binance.helpers import round_step_size
 # min_notional can be extended #
 min_notional = 6
 # min_notional_corrector need to correct error of not creating close orders #
-min_notional_corrector = 1.2
+min_notional_corrector = 1.5
 # profit is 0.5% #
 futures_limit_short_grid_close = [0.995]
 # callbackRate can be from 0.1% to 5% #
@@ -74,6 +74,7 @@ def set_greed():
 
     return greed
 
+
 def futures_change_leverage(symbol):
     client.futures_change_leverage(symbol=symbol, leverage=1)
 
@@ -103,9 +104,8 @@ def get_lot_size(symbol):
 
 
 def get_quantity(symbol):
-    quantity = round_step_size((float(get_notional(symbol)) / float(
-        client.futures_mark_price(symbol=symbol)[
-            "markPrice"])) * set_greed() * min_notional_corrector, get_lot_size(symbol))
+    quantity = round_step_size((float(get_notional(symbol)) * set_greed() * min_notional_corrector / float(
+        client.futures_mark_price(symbol=symbol)["markPrice"])), get_lot_size(symbol))
 
     if float(quantity) < float(get_lot_size(symbol)):
         quantity = get_lot_size(symbol)
