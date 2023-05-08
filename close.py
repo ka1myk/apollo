@@ -29,14 +29,15 @@ def close_grid_limit(symbol):
                                         client.futures_position_information(symbol=symbol)[2][
                                             "positionAmt"]))) / int(
                                         amount_of_close_orders), get_lot_size(symbol)),
-                                    price=round_step_size(float(
+                                    stopPrice=round_step_size(float(
                                         client.futures_position_information(symbol=symbol)[2][
                                             "entryPrice"]) * (futures_limit_short_grid_close[x]),
                                                           get_tick_size(symbol)),
                                     side='BUY',
+                                    timeInForce="GTC",
                                     positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
+                                    type='TRAILING_STOP_MARKET',
+                                    callbackRate=callbackRate
                                     )
 
 

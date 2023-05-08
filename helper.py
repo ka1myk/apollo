@@ -10,6 +10,8 @@ from binance.helpers import round_step_size
 min_notional = 6
 # profit is 0.5% #
 futures_limit_short_grid_close = [0.995]
+# callbackRate can be from 0.1% to 5% #
+callbackRate = 0.1
 # 3 times 3%, 3 times 6% #
 futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27]
 # 60 secs * 5 minutes #
