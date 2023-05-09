@@ -1,7 +1,7 @@
 from helper import *
 
 
-def open_new_positions():
+def open_new_position():
     symbol = secrets.choice(futures_tickers_to_short())
     if get_budget_contract(symbol) <= availableBalance and budget_to_one_short(symbol) <= min_notional:
         futures_change_leverage(symbol)
@@ -13,4 +13,4 @@ def open_new_positions():
                                     type='MARKET')
 
 
-open_new_positions()
+open_new_position()

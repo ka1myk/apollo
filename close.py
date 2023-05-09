@@ -78,15 +78,13 @@ def cancel_close_order_if_filled():
             if float(z["positionAmt"]) < 0:
                 symbol = z["symbol"]
 
-                last_order = client.futures_get_all_orders(symbol=symbol)[-1]
-
-                if last_order["status"] == "FILLED" and last_order["type"] == "LIMIT" and last_order["side"] == "SELL":
-                    for x in client.futures_get_open_orders(symbol=symbol):
-                        if x["side"] == "BUY":
+                for x in client.futures_get_open_orders(symbol=symbol):
+                    if x["side"] == "BUY":
+                        if abs(float(z["positionAmt"])) / len(futures_limit_short_grid_close) != float(x["origQty"]):
                             client.futures_cancel_order(symbol=symbol, orderId=x["orderId"])
 
     except:
-        print("fail to cancel_close_order_if_filled", symbol)
+        print("fail to cancel_close_order_if_filled")
 
 
 def cancel_open_orders_without_position():

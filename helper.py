@@ -15,8 +15,8 @@ futures_limit_short_grid_close = [0.995]
 callbackRate = 0.1
 # 3 times 3%, 3 times 6% #
 futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27]
-# 60 secs * 12 minutes #
-max_secs_to_wait_before_new_position = 60 * 12
+# 60 secs * 2 minutes #
+max_secs_to_wait_before_new_position = 60 * 2
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # most likely, it will not fall less than 0.79, so lower limit orders can be cancelled and moved to funding #
