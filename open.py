@@ -1,12 +1,9 @@
 from helper import *
 
-with open('variables.json') as v:
-    shortReady = json.load(v)
-
 
 def open_new_positions():
-    if budgetContract < availableBalance:
-        symbol = secrets.choice(shortReady)
+    symbol = secrets.choice(futures_tickers_to_short())
+    if get_budget_contract(symbol) <= availableBalance and budget_to_one_short(symbol) <= min_notional:
         futures_change_leverage(symbol)
         time.sleep(secrets.randbelow(max_secs_to_wait_before_new_position))
         client.futures_create_order(symbol=symbol,

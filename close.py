@@ -32,7 +32,7 @@ def close_grid_limit(symbol):
                                         quantity=round_step_size(abs((float(
                                             client.futures_position_information(symbol=symbol)[2][
                                                 "positionAmt"]))) / int(
-                                            amount_of_close_orders), get_lot_size(symbol)),
+                                            amount_of_close_orders), get_step_size(symbol)),
                                         activationPrice=round_step_size(float(
                                             client.futures_position_information(symbol=symbol)[2][
                                                 "entryPrice"]) * (futures_limit_short_grid_close[x]),
