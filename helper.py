@@ -33,14 +33,10 @@ availableBalance = round(float(client.futures_account()["availableBalance"]))
 def futures_tickers_to_short():
     futures_account_balance_asset = []
     for x in client.futures_account_balance():
-        matchObj = re.search("^((?!USD).)*$", x["asset"])
-
-        if matchObj:
-            futures_account_balance_asset.append(x["asset"] + "USDT")
+        futures_account_balance_asset.append(x["asset"] + "USDT")
 
     allAvailible = []
     for futures in client.futures_ticker():
-
         remove_quarterly_contract = re.search("^((?!_).)*$", futures["symbol"])
         remove_BUSD_contract = re.search("^.*USDT$", futures["symbol"])
 
@@ -49,7 +45,6 @@ def futures_tickers_to_short():
 
     existPosition = []
     for z in client.futures_position_information():
-
         if float(z["positionAmt"]) < 0:
             existPosition.append(z["symbol"])
 
