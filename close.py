@@ -44,29 +44,30 @@ def close_grid_limit(symbol):
                                         callbackRate=callbackRate
                                         )
     except:
-
-        amount_of_close_orders = int(
-            abs(float(client.futures_position_information(symbol=symbol)[2]["positionAmt"]) /
-                float(get_quantity(symbol))))
-
-        if amount_of_close_orders > len(futures_limit_short_grid_close):
-            amount_of_close_orders = len(futures_limit_short_grid_close)
-
-        for x in range(amount_of_close_orders):
-            client.futures_create_order(symbol=symbol,
-                                        quantity=round_step_size(abs((float(
-                                            client.futures_position_information(symbol=symbol)[2][
-                                                "positionAmt"]))) / int(
-                                            amount_of_close_orders), get_step_size(symbol)),
-                                        price=round_step_size(float(
-                                            client.futures_position_information(symbol=symbol)[2][
-                                                "entryPrice"]) * (futures_limit_short_grid_close[x]),
-                                                              get_tick_size(symbol)),
-                                        side='BUY',
-                                        positionSide='SHORT',
-                                        type='LIMIT',
-                                        timeInForce="GTC"
-                                        )
+        print("fail to create trailing stop")
+        #
+        # amount_of_close_orders = int(
+        #     abs(float(client.futures_position_information(symbol=symbol)[2]["positionAmt"]) /
+        #         float(get_quantity(symbol))))
+        #
+        # if amount_of_close_orders > len(futures_limit_short_grid_close):
+        #     amount_of_close_orders = len(futures_limit_short_grid_close)
+        #
+        # for x in range(amount_of_close_orders):
+        #     client.futures_create_order(symbol=symbol,
+        #                                 quantity=round_step_size(abs((float(
+        #                                     client.futures_position_information(symbol=symbol)[2][
+        #                                         "positionAmt"]))) / int(
+        #                                     amount_of_close_orders), get_step_size(symbol)),
+        #                                 price=round_step_size(float(
+        #                                     client.futures_position_information(symbol=symbol)[2][
+        #                                         "entryPrice"]) * (futures_limit_short_grid_close[x]),
+        #                                                       get_tick_size(symbol)),
+        #                                 side='BUY',
+        #                                 positionSide='SHORT',
+        #                                 type='LIMIT',
+        #                                 timeInForce="GTC"
+        #                                 )
 
 
 def close_exist_positions():
