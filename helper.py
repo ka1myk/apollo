@@ -2,8 +2,12 @@ import re
 import time
 import math
 import secrets
+import argparse
 from binance.client import Client
 from binance.helpers import round_step_size
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--function', type=str, required=True)
 
 client = Client("",
                 "")
@@ -224,3 +228,126 @@ def cancel_open_orders_without_position():
             client.futures_cancel_all_open_orders(symbol=x)
     except:
         print("fail to cancel open orders without position for", open_orders)
+
+
+def transfer_free_USD_to_spot():
+    for x in client.futures_account_balance():
+        matchObj = re.search("^((?!USD).)*$", x["asset"])
+        if not matchObj and float(x["withdrawAvailable"]) > 0:
+            try:
+                client.futures_account_transfer(asset=x["asset"],
+                                                amount=float(x["withdrawAvailable"]),
+                                                type=2,
+                                                timestamp=serverTime)
+            except:
+                print("fail transfer", x["asset"], "to spot")
+
+
+def usdt_to_busd_on_spot():
+    if float(client.get_asset_balance(asset='USDT')['free']) > 10:
+        print("usdt free balance", client.get_asset_balance(asset='USDT')['free'])
+        try:
+            client.create_order(symbol="BUSDUSDT",
+                                side='BUY',
+                                type='MARKET',
+                                quoteOrderQty=math.floor(float(client.get_asset_balance(asset='USDT')['free'])))
+
+            dust_to_bnb()
+        except:
+            print("fail to convert USDT to BUSD")
+
+
+def dust_to_bnb():
+    print("bnb free balance before dust_to_bnb()", client.get_asset_balance(asset='BNB')['free'])
+    try:
+        client.transfer_dust(asset="USDT")
+        print("bnb free balance after dust_to_bnb()", client.get_asset_balance(asset='BNB')['free'])
+    except:
+        print("fail to dust USDT to BNB")
+
+
+def buy_coins_on_spot():
+    symbol = "BTCBUSD"
+
+    for x in client.get_open_orders(symbol=symbol):
+        if x["time"] < serverTime - deltaTime:
+            print("cancel order", symbol, x["orderId"], "create time", x["time"])
+            client.cancel_order(symbol=symbol, orderId=x["orderId"])
+
+    if 10 < float(client.get_asset_balance(asset='BUSD')['free']) < 20:
+        try:
+            client.create_order(symbol=symbol,
+                                side='BUY',
+                                type='MARKET',
+                                quoteOrderQty=float(client.get_asset_balance(asset='BUSD')['free']))
+        except:
+            print("fail to buy market BTC for BUSD")
+
+    if 20 < float(client.get_asset_balance(asset='BUSD')['free']):
+        try:
+            client.create_order(symbol=symbol,
+                                side='BUY',
+                                type='MARKET',
+                                quoteOrderQty=math.floor(float(client.get_asset_balance(asset='BUSD')['free']) * 0.5))
+
+            client.order_limit(symbol=symbol,
+                               quantity=client.get_all_orders(symbol=symbol)[-1]["origQty"],
+                               price=round_step_size(
+                                   float(client.get_avg_price(symbol=symbol)['price']) * secrets.choice(spot_grid),
+                                   get_tick_size(symbol=symbol)),
+                               side='BUY',
+                               type='LIMIT',
+                               timeInForce="GTC"
+                               )
+
+        except:
+            print("fail to buy limit BTC for BUSD")
+
+
+def transfer_free_spot_coin_to_futures():
+    for x in client.futures_account_balance():
+        matchObj = re.search("^((?!USD).)*$", x["asset"])
+        if matchObj and float(client.get_asset_balance(asset=x["asset"])["free"]) > 0:
+            try:
+                client.futures_account_transfer(asset=x["asset"],
+                                                amount=float(client.get_asset_balance(asset=x["asset"])["free"]),
+                                                type=1,
+                                                timestamp=serverTime)
+            except:
+                print("fail transfer", x["asset"], "to futures")
+
+
+##### --function open_for_profit #####
+def open_for_profit():
+    symbol = secrets.choice(get_futures_tickers_to_short())
+    if get_usd_for_all_grid(symbol) <= availableBalance and get_usd_for_one_short(symbol) <= min_notional:
+        set_futures_change_leverage(symbol)
+        time.sleep(secrets.randbelow(secs_to_wait))
+        client.futures_create_order(symbol=symbol,
+                                    quantity=get_quantity(symbol),
+                                    side='SELL',
+                                    positionSide='SHORT',
+                                    type='MARKET')
+
+
+##### --function close_with_profit #####
+def close_with_profit():
+    cancel_close_order_if_filled()
+    close_exist_positions()
+    cancel_open_orders_without_position()
+
+
+##### --function transfer_profit #####
+def transfer_profit():
+    transfer_free_USD_to_spot()
+    usdt_to_busd_on_spot()
+    buy_coins_on_spot()
+    transfer_free_spot_coin_to_futures()
+
+
+if parser.parse_args().function == "open":
+    open_for_profit()
+if parser.parse_args().function == "close":
+    close_with_profit()
+if parser.parse_args().function == "transfer":
+    transfer_profit()
