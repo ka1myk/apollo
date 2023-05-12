@@ -13,13 +13,17 @@ symbol = secrets.choice(variables['coin']) + variables['currency']
 symbol_info = client.get_symbol_info(symbol)
 
 def set_greed():
-    if float(client.get_asset_balance(asset=variables['currency'])['free']) < variables[
-        'budget_up_to_1_greed']:
-        greed = variables['greed']
-    else:
-        greed = round(float(client.get_asset_balance(asset=variables['currency'])['free']) / variables[
-            'budget_up_to_1_greed'])
-    return greed
+    return (
+        variables['greed']
+        if float(client.get_asset_balance(asset=variables['currency'])['free'])
+        < variables['budget_up_to_1_greed']
+        else round(
+            float(
+                client.get_asset_balance(asset=variables['currency'])['free']
+            )
+            / variables['budget_up_to_1_greed']
+        )
+    )
 
 
 def get_min_notional():

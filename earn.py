@@ -16,8 +16,10 @@ def go_baby_earn():
     for x in variables['coin']:
         if float(client.get_asset_balance(asset=x)["free"]) > 0:
             try:
-                client.purchase_lending_product(productId=x + str("001"),
-                                                amount=float(client.get_asset_balance(asset=x)["free"]))
+                client.purchase_lending_product(
+                    productId=f"{x}001",
+                    amount=float(client.get_asset_balance(asset=x)["free"]),
+                )
                 time.sleep(1)
             except:
                 print("Let's do it again")

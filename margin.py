@@ -33,13 +33,15 @@ def get_fees():
 
 
 def set_greed():
-    if float(client.get_margin_account()['totalAssetOfBtc']) * float(
-            client.get_avg_price(symbol="BTCBUSD")['price']) < variables['budget_up_to_1_greed']:
-        greed = variables['greed']
-    else:
-        greed = float(client.get_margin_account()['totalAssetOfBtc']) * float(
-            client.get_avg_price(symbol="BTCBUSD")['price']) / variables['budget_up_to_1_greed']
-    return greed
+    return (
+        variables['greed']
+        if float(client.get_margin_account()['totalAssetOfBtc'])
+        * float(client.get_avg_price(symbol="BTCBUSD")['price'])
+        < variables['budget_up_to_1_greed']
+        else float(client.get_margin_account()['totalAssetOfBtc'])
+        * float(client.get_avg_price(symbol="BTCBUSD")['price'])
+        / variables['budget_up_to_1_greed']
+    )
 
 
 def get_min_notional():

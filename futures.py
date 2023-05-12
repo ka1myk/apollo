@@ -47,12 +47,15 @@ def get_fees():
 
 
 def set_greed():
-    if float(client.futures_account()['totalWalletBalance']) < variables['budget_up_to_1_greed']:
-        greed = variables['greed']
-    else:
-        greed = round(
-            float(client.futures_account()['totalWalletBalance']) / variables['budget_up_to_1_greed'])
-    return greed
+    return (
+        variables['greed']
+        if float(client.futures_account()['totalWalletBalance'])
+        < variables['budget_up_to_1_greed']
+        else round(
+            float(client.futures_account()['totalWalletBalance'])
+            / variables['budget_up_to_1_greed']
+        )
+    )
 
 
 def get_quantity():
@@ -80,9 +83,9 @@ def futures_create_grid_limit_short_down():
     amount_of_close_orders = int(abs(float(client.futures_position_information(symbol=symbol)[2]["positionAmt"]) /
                                      float(get_quantity())))
 
-    if amount_of_close_orders > len(variables['futures_limit_short_grid_down']):
-        amount_of_close_orders = len(variables['futures_limit_short_grid_down'])
-
+    amount_of_close_orders = min(
+        amount_of_close_orders, len(variables['futures_limit_short_grid_down'])
+    )
     for x in range(amount_of_close_orders):
         client.futures_create_order(symbol=symbol,
                                     quantity=round_step_size(abs((float(
