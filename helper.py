@@ -71,10 +71,9 @@ def get_quantity_precision(symbol):
 
 
 def get_futures_tickers_to_short():
-    futures_account_balance_asset = []
-    for x in client.futures_account_balance():
-        futures_account_balance_asset.append(x["asset"] + "USDT")
-
+    futures_account_balance_asset = [
+        x["asset"] + "USDT" for x in client.futures_account_balance()
+    ]
     all_tickers = []
     for futures in client.futures_ticker():
         remove_quarterly_contract = re.search('^((?!_).)*$', futures["symbol"])
@@ -83,11 +82,11 @@ def get_futures_tickers_to_short():
         if remove_quarterly_contract and remove_busd_contract:
             all_tickers.append(futures["symbol"])
 
-    exist_positions = []
-    for z in client.futures_position_information():
-        if float(z["positionAmt"]) < 0:
-            exist_positions.append(z["symbol"])
-
+    exist_positions = [
+        z["symbol"]
+        for z in client.futures_position_information()
+        if float(z["positionAmt"]) < 0
+    ]
     short_ready = set(all_tickers) - set(exist_positions) - set(futures_account_balance_asset)
 
     return list(short_ready)
@@ -219,15 +218,12 @@ def cancel_close_order_if_filled():
 
 def cancel_open_orders_without_position():
     try:
-        open_orders = []
-        for x in client.futures_get_open_orders():
-            open_orders.append(x["symbol"])
-
-        positions = []
-        for y in client.futures_position_information():
-            if float(y["positionAmt"]) < 0:
-                positions.append(y["symbol"])
-
+        open_orders = [x["symbol"] for x in client.futures_get_open_orders()]
+        positions = [
+            y["symbol"]
+            for y in client.futures_position_information()
+            if float(y["positionAmt"]) < 0
+        ]
         for x in list(set(open_orders) - set(positions)):
             client.futures_cancel_all_open_orders(symbol=x)
 
