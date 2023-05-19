@@ -13,7 +13,7 @@ min_notional = 6
 # min_notional_corrector need to correct error of not creating close orders #
 min_notional_corrector = 1.2
 # 60 secs * minutes #
-secs_to_wait = 60 * 60
+secs_to_wait = 60 * 1
 
 # callbackRate can be from 0.1% to 5%, not 0.15% #
 callbackRate = [0.1, 0.2]
@@ -92,10 +92,9 @@ def get_futures_tickers_to_short():
 def set_greed():
     return max(
         round(
-            float(client.futures_account()['totalWalletBalance'])
-            / len(client.futures_ticker())
-            * len(futures_limit_short_grid_open)
-            * min_notional, 1),
+            float(client.futures_account()['totalWalletBalance']) / (len(client.futures_ticker()
+                                                                         * len(futures_limit_short_grid_open)
+                                                                         * min_notional)), 1),
         1
     )
 
@@ -318,6 +317,7 @@ def transfer_free_spot_coin_to_futures():
 ##### --function open_for_profit #####
 def open_for_profit():
     symbol = secrets.choice(get_futures_tickers_to_short())
+    print(symbol, get_usd_for_all_grid(symbol), get_usd_for_one_short(symbol))
     if get_usd_for_all_grid(symbol) <= availableBalance and get_usd_for_one_short(symbol) <= min_notional:
         set_futures_change_leverage(symbol)
         time.sleep(secrets.randbelow(secs_to_wait))
