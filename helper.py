@@ -1,8 +1,4 @@
-import re
-import time
-import math
-import secrets
-import argparse
+import re, time, math, secrets, argparse
 from binance.client import Client
 from binance.helpers import round_step_size
 
@@ -16,12 +12,12 @@ client = Client("",
 min_notional = 6
 # min_notional_corrector need to correct error of not creating close orders #
 min_notional_corrector = 1.2
-# 60 secs * 2 minutes #
-secs_to_wait = 60 * 2
+# 60 secs * minutes #
+secs_to_wait = 60 * 60
 
 # callbackRate can be from 0.1% to 5%, not 0.15% #
 callbackRate = [0.1, 0.2]
-# profit is from 0.5, 1, 1.5, 2, 2.5 #
+# profit is from 0.5%, 1%, 1.5%, 2%, 2.5% #
 futures_profit_percentage = [0.995, 0.99, 0.985, 0.98, 0.975]
 # 3 times 3%, 3 times 6% #
 futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27]
