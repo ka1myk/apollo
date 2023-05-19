@@ -13,7 +13,7 @@ min_notional = 6
 # min_notional_corrector need to correct error of not creating close orders #
 min_notional_corrector = 1.2
 # 60 secs * minutes #
-secs_to_wait = 60 * 1
+secs_to_wait = 60 * 60
 
 # callbackRate can be from 0.1% to 5%, not 0.15% #
 callbackRate = [0.1, 0.2]
