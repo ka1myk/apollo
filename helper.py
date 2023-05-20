@@ -9,19 +9,17 @@ client = Client("",
                 "")
 
 # min_notional can be extended #
-min_notional = 6
+min_notional = 10
 # min_notional_corrector need to correct error of not creating close orders #
 min_notional_corrector = 1.2
 # 60 secs * minutes #
-secs_to_wait = 60 * 60
-
+secs_to_wait = 60 * 59
 # callbackRate can be from 0.1% to 5%, not 0.15% #
-callbackRate = [0.1, 0.2]
-# profit is from 0.5%, 1%, 1.5%, 2%, 2.5% #
-futures_profit_percentage = [0.995, 0.99, 0.985, 0.98, 0.975]
-# 3 times 3%, 3 times 6% #
-futures_limit_short_grid_open = [1.03, 1.06, 1.09, 1.15, 1.21, 1.27]
-
+callbackRate = [0.1, 0.2, 0.3, 0.4, 0.5]
+# profit is from 0.5% to 4% #
+futures_profit_percentage = [0.995, 0.99, 0.985, 0.98, 0.975, 0.97, 0.965, 0.96]
+# 3 times 4%, 3 times 8% #
+futures_limit_short_grid_open = [1.04, 1.08, 1.12, 1.20, 1.28, 1.36]
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # most likely, it will not fall less than 0.79, so lower limit orders can be cancelled and moved to funding #
@@ -75,7 +73,6 @@ def get_futures_tickers_to_short():
     for futures in client.futures_ticker():
         remove_quarterly_contract = re.search('^((?!_).)*$', futures["symbol"])
         remove_busd_contract = re.search('^.*USDT$', futures["symbol"])
-
         if remove_quarterly_contract and remove_busd_contract:
             all_tickers.append(futures["symbol"])
 
@@ -92,9 +89,10 @@ def get_futures_tickers_to_short():
 def set_greed():
     return max(
         round(
-            float(client.futures_account()['totalWalletBalance']) / (len(client.futures_ticker()
-                                                                         * len(futures_limit_short_grid_open)
-                                                                         * min_notional)), 1),
+            float(client.futures_account()['totalWalletBalance'])
+            / (len(client.futures_ticker()
+                   * len(futures_limit_short_grid_open)
+                   * min_notional)), 1),
         1
     )
 
