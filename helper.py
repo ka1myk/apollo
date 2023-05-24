@@ -315,15 +315,17 @@ def transfer_free_spot_coin_to_futures():
 ##### --function open_for_profit #####
 def open_for_profit():
     time.sleep(secrets.randbelow(secs_to_wait))
-    for symbol in get_futures_tickers_to_short():
-        if get_usd_for_all_grid(symbol) <= availableBalance and get_usd_for_one_short(symbol) <= min_notional:
-            set_futures_change_leverage(symbol)
-            client.futures_create_order(symbol=symbol,
-                                        quantity=get_quantity(symbol),
-                                        side='SELL',
-                                        positionSide='SHORT',
-                                        type='MARKET')
-
+    try:
+        for symbol in get_futures_tickers_to_short():
+            if get_usd_for_all_grid(symbol) <= availableBalance and get_usd_for_one_short(symbol) <= min_notional:
+                set_futures_change_leverage(symbol)
+                client.futures_create_order(symbol=symbol,
+                                            quantity=get_quantity(symbol),
+                                            side='SELL',
+                                            positionSide='SHORT',
+                                            type='MARKET')
+    except Exception:
+        print("fail open short", symbol)
 
 ##### --function close_with_profit #####
 def close_with_profit():
