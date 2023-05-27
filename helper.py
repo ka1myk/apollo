@@ -14,16 +14,12 @@ min_notional = 10
 min_notional_corrector = 1.2
 # 60 secs * minutes #
 secs_to_wait = 60 * 59
-# callbackRate can be from 0.1% to 5%, not 0.15% #
-callbackRate = [0.1]
-# profit is from 0.5% to 4% #
-futures_profit_percentage = [0.995]
-# 3 times 4%, 3 times 8% #
-futures_limit_short_grid_open = [1.05, 1.15, 1.30, 1.50]
+futures_close_profit = [0.995]
+futures_open_short = [1.10]
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # most likely, it will not fall less than 0.79, so lower limit orders can be cancelled and moved to funding #
-spot_grid = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
+spot_open_long = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
 
 symbol_info = client.futures_exchange_info()
 serverTime = client.get_server_time()['serverTime']
@@ -91,7 +87,7 @@ def set_greed():
         round(
             float(client.futures_account()['totalWalletBalance'])
             / (len(client.futures_ticker()
-                   * len(futures_limit_short_grid_open)
+                   * len(futures_open_short)
                    * min_notional)), 1),
         1
     )
@@ -115,7 +111,7 @@ def get_usd_for_one_short(symbol):
 
 def get_usd_for_all_grid(symbol):
     return round(
-        len(futures_limit_short_grid_open)
+        len(futures_open_short)
         * set_greed()
         * get_usd_for_one_short(symbol)
     )
@@ -123,7 +119,7 @@ def get_usd_for_all_grid(symbol):
 
 def open_grid_limit(symbol):
     try:
-        for x in futures_limit_short_grid_open:
+        for x in futures_open_short:
             client.futures_create_order(symbol=symbol,
                                         quantity=get_quantity(symbol),
                                         price=round_step_size(float(
@@ -144,31 +140,17 @@ def close_grid_limit(symbol):
                                     quantity=round_step_size(abs((float(
                                         client.futures_position_information(symbol=symbol)[2]["positionAmt"]))),
                                         get_step_size(symbol)),
-                                    activationPrice=round_step_size(float(
-                                        client.futures_position_information(symbol=symbol)[2]["entryPrice"])
-                                                                    * secrets.choice(futures_profit_percentage),
-                                                                    get_tick_size(symbol)),
-                                    side='BUY',
-                                    timeInForce="GTC",
-                                    positionSide='SHORT',
-                                    type='TRAILING_STOP_MARKET',
-                                    callbackRate=secrets.choice(callbackRate)
-                                    )
-    except Exception:
-        client.futures_create_order(symbol=symbol,
-                                    quantity=round_step_size(abs((float(
-                                        client.futures_position_information(symbol=symbol)[2]["positionAmt"]))),
-                                        get_step_size(symbol)),
                                     price=round_step_size(float(
                                         client.futures_position_information(symbol=symbol)[2]["entryPrice"])
-                                                          * secrets.choice(futures_profit_percentage),
+                                                          * secrets.choice(futures_close_profit),
                                                           get_tick_size(symbol)),
                                     side='BUY',
                                     positionSide='SHORT',
                                     type='LIMIT',
                                     timeInForce="GTC"
                                     )
-        print("fail to create TRAILING_STOP_MARKET, but create LIMIT for", symbol)
+    except Exception:
+        print("fail to create LIMIT for", symbol)
 
 
 def close_exist_positions():
@@ -288,7 +270,7 @@ def buy_coins_on_spot():
                                quantity=client.get_all_orders(symbol=symbol)[-1]["origQty"],
                                price=round_step_size(
                                    float(client.get_avg_price(symbol=symbol)['price'])
-                                   * secrets.choice(spot_grid),
+                                   * secrets.choice(spot_open_long),
                                    get_tick_size(symbol=symbol)),
                                side='BUY',
                                type='LIMIT',
