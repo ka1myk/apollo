@@ -1,4 +1,4 @@
-import re, time, math, secrets, argparse
+import re, math, secrets, argparse
 from binance.client import Client
 from binance.helpers import round_step_size
 
@@ -9,11 +9,10 @@ client = Client("",
                 "")
 
 # min_notional can be extended #
-min_notional = 10
+min_notional = 50
 # min_notional_corrector need to correct error of not creating close orders #
 min_notional_corrector = 1.2
-# 60 secs * minutes #
-secs_to_wait = 60 * 59
+klines_interval = "1h"
 futures_close_profit = [0.995]
 futures_open_short = [1.10]
 # last digit is for days to cancel not filled limit orders #
@@ -296,8 +295,19 @@ def transfer_free_spot_coin_to_futures():
 
 ##### --function open_for_profit #####
 def open_for_profit():
-    time.sleep(secrets.randbelow(secs_to_wait))
-    symbol = secrets.choice(get_futures_tickers_to_short())
+
+    symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
+    for symbol in get_futures_tickers_to_short():
+        symbol_and_priceChangePercent["symbol"].append(symbol)
+        symbol_and_priceChangePercent["priceChangePercent"].append(
+            round(float(client.futures_klines(symbol=symbol, interval=klines_interval)[-1][2]) / float(
+                client.futures_klines(symbol=symbol, interval=klines_interval)[-1][3]), 3)
+        )
+
+    symbol = symbol_and_priceChangePercent["symbol"][
+        symbol_and_priceChangePercent["priceChangePercent"].index(
+            max(symbol_and_priceChangePercent["priceChangePercent"]))]
+
     try:
         if get_usd_for_all_grid(symbol) <= availableBalance and get_usd_for_one_short(symbol) <= min_notional:
             set_futures_change_leverage(symbol)
