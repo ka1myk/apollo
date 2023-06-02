@@ -12,7 +12,8 @@ client = Client("",
 min_notional = 50
 # min_notional_corrector need to correct error of not creating close orders #
 min_notional_corrector = 1.2
-klines_interval = "1h"
+# 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
+klines_interval = "30m"
 futures_close_profit = [0.995]
 futures_open_short = [1.10]
 # last digit is for days to cancel not filled limit orders #
@@ -295,6 +296,25 @@ def transfer_free_spot_coin_to_futures():
 
 ##### --function open_for_profit #####
 def open_for_profit():
+    """
+    https://binance-docs.github.io/apidocs/futures/en/#kline-candlestick-data
+    [
+      [
+        1499040000000,      // Open time
+        "0.01634790",       // Open
+        "0.80000000",       // High
+        "0.01575800",       // Low
+        "0.01577100",       // Close
+        "148976.11427815",  // Volume
+        1499644799999,      // Close time
+        "2434.19055334",    // Quote asset volume
+        308,                // Number of trades
+        "1756.87402397",    // Taker buy base asset volume
+        "28.46694368",      // Taker buy quote asset volume
+        "17928899.62484339" // Ignore.
+      ]
+    ]
+    """
 
     symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
     for symbol in get_futures_tickers_to_short():
