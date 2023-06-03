@@ -19,7 +19,7 @@ futures_open_short = [1.10]
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # last digit is for hours to cooldown isMarketBuy #
-last_isBuyerMaker_time = 1000 * 60 * 60
+last_isBuyerMaker_time = 1000 * 60 * 60 * 4
 # most likely, it will not fall less than 0.79, so lower limit orders can be cancelled and moved to funding #
 spot_open_long = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
 
@@ -298,54 +298,32 @@ def transfer_free_spot_coin_to_futures():
 
 ##### --function open_for_profit #####
 def open_for_profit():
-    """
-    https://binance-docs.github.io/apidocs/futures/en/#kline-candlestick-data
-    [
-      [
-        1499040000000,      // Open time
-        "0.01634790",       // Open
-        "0.80000000",       // High
-        "0.01575800",       // Low
-        "0.01577100",       // Close
-        "148976.11427815",  // Volume
-        1499644799999,      // Close time
-        "2434.19055334",    // Quote asset volume
-        308,                // Number of trades
-        "1756.87402397",    // Taker buy base asset volume
-        "28.46694368",      // Taker buy quote asset volume
-        "17928899.62484339" // Ignore.
-      ]
-    ]
-    """
-
-    symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
-    for symbol in get_futures_tickers_to_short():
-        symbol_and_priceChangePercent["symbol"].append(symbol)
-        symbol_and_priceChangePercent["priceChangePercent"].append(
-            round(float(client.futures_klines(symbol=symbol, interval=klines_interval)[-1][2]) / float(
-                client.futures_klines(symbol=symbol, interval=klines_interval)[-1][3]), 3)
-        )
-
-    symbol = symbol_and_priceChangePercent["symbol"][
-        symbol_and_priceChangePercent["priceChangePercent"].index(
-            max(symbol_and_priceChangePercent["priceChangePercent"]))]
-
     for x in client.futures_ticker():
         for x in client.futures_account_trades(symbol=x["symbol"]):
-            if (
-                    x["side"] == "BUY"
-                    and x["time"] > (serverTime - last_isBuyerMaker_time)
-                    and get_usd_for_all_grid(symbol) <= availableBalance
-                    and get_usd_for_one_short(symbol) <= min_notional
-            ):
-                set_futures_change_leverage(symbol)
-                client.futures_create_order(symbol=symbol,
-                                            quantity=get_quantity(symbol),
-                                            side='SELL',
-                                            positionSide='SHORT',
-                                            type='MARKET')
+            if x["side"] == "BUY" and x["time"] > (serverTime - last_isBuyerMaker_time):
+                ####
+                symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
+                for symbol in get_futures_tickers_to_short():
+                    symbol_and_priceChangePercent["symbol"].append(symbol)
+                    symbol_and_priceChangePercent["priceChangePercent"].append(
+                        round(float(client.futures_klines(symbol=symbol, interval=klines_interval)[-1][2]) / float(
+                            client.futures_klines(symbol=symbol, interval=klines_interval)[-1][3]), 3)
+                    )
 
-            break
+                symbol = symbol_and_priceChangePercent["symbol"][
+                    symbol_and_priceChangePercent["priceChangePercent"].index(
+                        max(symbol_and_priceChangePercent["priceChangePercent"]))]
+
+                if get_usd_for_all_grid(symbol) <= availableBalance and get_usd_for_one_short(symbol) <= min_notional:
+                    set_futures_change_leverage(symbol)
+                    client.futures_create_order(symbol=symbol,
+                                                quantity=get_quantity(symbol),
+                                                side='SELL',
+                                                positionSide='SHORT',
+                                                type='MARKET')
+                ####
+
+                break
         else:
             continue
         break
