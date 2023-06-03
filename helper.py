@@ -12,8 +12,8 @@ client = Client("",
 min_notional = 50
 # min_notional_corrector need to correct error of not creating close orders #
 min_notional_corrector = 1.2
-# 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
-klines_interval = "30m"
+# 1m, 3m (), 5m (), 15m (), 30m (+), 1h (+), 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
+klines_interval = "15m"
 futures_close_profit = [0.995]
 futures_open_short = [1.10]
 # last digit is for days to cancel not filled limit orders #
