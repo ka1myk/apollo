@@ -1,3 +1,10 @@
+# TODO add parse keys from external
+# TODO add funding rate check
+# TODO add send profit from another instance
+# TODO sum funding rate to profit
+# TODO additional ip to ubuntu to run few instance
+# TODO futuresboard refactor 
+
 import re, math, secrets, argparse
 from binance.client import Client
 from binance.helpers import round_step_size
@@ -8,18 +15,18 @@ parser.add_argument('--function', type=str, required=True)
 client = Client("",
                 "")
 
-# min_notional can be extended #
+# default = 6; min_notional can be extended #
 min_notional = 50
-# min_notional_corrector need to correct error of not creating close orders #
-min_notional_corrector = 1.2
-# 1m, 3m (), 5m (), 15m (), 30m (+), 1h (+), 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
+# default = 1.2; min_notional_corrector need to correct error of not creating close orders #
+min_notional_corrector = 4
+# 1m, 3m, 5m, 15m, 30m (+), 1h (+), 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
 klines_interval = "15m"
 futures_close_profit = [0.995]
 futures_open_short = [1.10]
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # last digit is for hours to cooldown isMarketBuy #
-last_isBuyerMaker_time = 1000 * 60 * 60 * 4
+last_isBuyerMaker_time = 1000 * 60 * 60 * 2
 # most likely, it will not fall less than 0.79, so lower limit orders can be cancelled and moved to funding #
 spot_open_long = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
 
@@ -257,7 +264,7 @@ def buy_coins_on_spot():
             client.create_order(symbol=symbol,
                                 side='BUY',
                                 type='MARKET',
-                                quoteOrderQty=float(client.get_asset_balance(asset='BUSD')['free']))
+                                quoteOrderQty=math.floor(float(client.get_asset_balance(asset='BUSD')['free'])))
         except Exception:
             print("fail to buy market BTC for BUSD")
 
