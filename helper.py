@@ -1,9 +1,9 @@
-# TODO add parse keys from external
-# TODO add funding rate check
-# TODO add send profit from another instance
-# TODO sum funding rate to profit
 # TODO additional ip to ubuntu to run few instance
-# TODO futuresboard refactor 
+# TODO add send profit from another instance
+# TODO add parse keys from external
+# TODO sum funding rate to profit
+# TODO add funding rate check
+# TODO futuresboard refactor
 
 import re, math, secrets, argparse
 from binance.client import Client
@@ -17,9 +17,9 @@ client = Client("",
 
 # default = 6; min_notional can be extended #
 min_notional = 50
-# default = 1.2; min_notional_corrector need to correct error of not creating close orders #
+# default = 1.2; min_notional_corrector needs to correct error of not creating close orders #
 min_notional_corrector = 4
-# 1m, 3m, 5m, 15m, 30m (+), 1h (+), 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
+# 1m, 3m, 5m, 15m (+), 30m (+), 1h (+), 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
 klines_interval = "15m"
 futures_close_profit = [0.995]
 futures_open_short = [1.10]
@@ -220,16 +220,19 @@ def cancel_open_orders_without_position():
 
 
 def transfer_free_USD_to_spot():
-    for x in client.futures_account_balance():
-        select_USD_asset = re.search('^((?!USD).)*$', x["asset"])
-        if not select_USD_asset and float(x["withdrawAvailable"]) > 0:
-            try:
-                client.futures_account_transfer(asset=x["asset"],
-                                                amount=float(x["withdrawAvailable"]),
-                                                type=2,
-                                                timestamp=serverTime)
-            except Exception:
-                print("fail transfer", x["asset"], "to spot")
+    try:
+        for x in client.futures_account_balance():
+            select_USD_asset = re.search('^((?!USD).)*$', x["asset"])
+            if not select_USD_asset and float(x["withdrawAvailable"]) > 0:
+                try:
+                    client.futures_account_transfer(asset=x["asset"],
+                                                    amount=float(x["withdrawAvailable"]),
+                                                    type=2,
+                                                    timestamp=serverTime)
+                except Exception:
+                    print("fail transfer", x["asset"], "to spot")
+    except Exception:
+        print("fail transfer_free_USD_to_spot")
 
 
 def usdt_to_busd_on_spot():
@@ -256,8 +259,11 @@ def buy_coins_on_spot():
     symbol = "BTCBUSD"
 
     for x in client.get_open_orders(symbol=symbol):
-        if x["time"] < serverTime - deltaTime:
-            client.cancel_order(symbol=symbol, orderId=x["orderId"])
+        try:
+            if x["time"] < serverTime - deltaTime:
+                client.cancel_order(symbol=symbol, orderId=x["orderId"])
+        except Exception:
+            print("fail to cancel orders older (serverTime - deltaTime)")
 
     if 10 < float(client.get_asset_balance(asset='BUSD')['free']) < 20:
         try:
@@ -291,16 +297,19 @@ def buy_coins_on_spot():
 
 
 def transfer_free_spot_coin_to_futures():
-    for x in client.futures_account_balance():
-        select_USD_asset = re.search('^((?!USD).)*$', x["asset"])
-        if select_USD_asset and float(client.get_asset_balance(asset=x["asset"])["free"]) > 0:
-            try:
-                client.futures_account_transfer(asset=x["asset"],
-                                                amount=float(client.get_asset_balance(asset=x["asset"])["free"]),
-                                                type=1,
-                                                timestamp=serverTime)
-            except Exception:
-                print("fail transfer", x["asset"], "to futures")
+    try:
+        for x in client.futures_account_balance():
+            select_USD_asset = re.search('^((?!USD).)*$', x["asset"])
+            if select_USD_asset and float(client.get_asset_balance(asset=x["asset"])["free"]) > 0:
+                try:
+                    client.futures_account_transfer(asset=x["asset"],
+                                                    amount=float(client.get_asset_balance(asset=x["asset"])["free"]),
+                                                    type=1,
+                                                    timestamp=serverTime)
+                except Exception:
+                    print("fail transfer", x["asset"], "to futures")
+    except Exception:
+        print("fail transfer_free_spot_coin_to_futures")
 
 
 ##### --function open_for_profit #####
