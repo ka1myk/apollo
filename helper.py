@@ -1,9 +1,9 @@
 # TODO additional ip to ubuntu to run few instance
-# TODO add send profit from another instance
+# TODO add send profit from another - instance print(client.get_deposit_address(coin='USDT'))
 # TODO add parse keys from external
 # TODO sum funding rate to profit
-# TODO add funding rate check
 # TODO futuresboard refactor
+# TODO add (serverTime - last_isBuyerMaker_time) < x["time"] < (serverTime + last_isBuyerMaker_time * 24)
 
 import re, math, secrets, argparse
 from binance.client import Client
@@ -15,10 +15,11 @@ parser.add_argument('--function', type=str, required=True)
 client = Client("",
                 "")
 
+asset = "USDT"
 # default = 6; min_notional can be extended #
 min_notional = 50
 # default = 1.2; min_notional_corrector needs to correct error of not creating close orders #
-min_notional_corrector = 4
+min_notional_corrector = 5
 # 1m, 3m, 5m, 15m (+), 30m (+), 1h (+), 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
 klines_interval = "15m"
 futures_close_profit = [0.995]
@@ -26,7 +27,7 @@ futures_open_short = [1.10]
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # last digit is for hours to cooldown isMarketBuy #
-last_isBuyerMaker_time = 1000 * 60 * 60 * 2
+last_isBuyerMaker_time = 1000 * 60 * 60 * 1
 # most likely, it will not fall less than 0.79, so lower limit orders can be cancelled and moved to funding #
 spot_open_long = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
 
@@ -37,6 +38,10 @@ availableBalance = round(float(client.futures_account()["availableBalance"]))
 
 def set_futures_change_leverage(symbol):
     client.futures_change_leverage(symbol=symbol, leverage=1)
+
+
+def set_futures_change_multi_assets_mode():
+    client.futures_change_multi_assets_mode(multiAssetsMargin="True")
 
 
 def get_notional(symbol):
@@ -70,23 +75,32 @@ def get_quantity_precision(symbol):
 
 
 def get_futures_tickers_to_short():
+    # exclude balance_asset tickers #
     futures_account_balance_asset = []
     for x in client.futures_account_balance():
-        futures_account_balance_asset.append(x["asset"] + "USDT")
+        futures_account_balance_asset.append(x["asset"] + asset)
 
+    # exclude exist_positions tickers #
     all_tickers = []
-    for futures in client.futures_ticker():
-        remove_quarterly_contract = re.search('^((?!_).)*$', futures["symbol"])
-        remove_busd_contract = re.search('^.*USDT$', futures["symbol"])
+    for x in client.futures_ticker():
+        remove_quarterly_contract = re.search('^((?!_).)*$', x["symbol"])
+        remove_busd_contract = re.search('^.*USDT$', x["symbol"])
         if remove_quarterly_contract and remove_busd_contract:
-            all_tickers.append(futures["symbol"])
+            all_tickers.append(x["symbol"])
 
+    # exclude exist_positions tickers #
     exist_positions = []
-    for z in client.futures_position_information():
-        if float(z["positionAmt"]) < 0:
-            exist_positions.append(z["symbol"])
+    for x in client.futures_position_information():
+        if float(x["positionAmt"]) < 0:
+            exist_positions.append(x["symbol"])
 
-    short_ready = set(all_tickers) - set(exist_positions) - set(futures_account_balance_asset)
+    # exclude negative fundingRate tickers #
+    fundingRate = []
+    for x in client.futures_funding_rate():
+        if float(x["fundingRate"]) < 0:
+            fundingRate.append(x["symbol"])
+
+    short_ready = set(all_tickers) - set(exist_positions) - set(futures_account_balance_asset) - set(fundingRate)
 
     return list(short_ready)
 
@@ -208,9 +222,9 @@ def cancel_open_orders_without_position():
             open_orders.append(x["symbol"])
 
         positions = []
-        for y in client.futures_position_information():
-            if float(y["positionAmt"]) < 0:
-                positions.append(y["symbol"])
+        for x in client.futures_position_information():
+            if float(x["positionAmt"]) < 0:
+                positions.append(x["symbol"])
 
         for x in list(set(open_orders) - set(positions)):
             client.futures_cancel_all_open_orders(symbol=x)
@@ -235,28 +249,8 @@ def transfer_free_USD_to_spot():
         print("fail transfer_free_USD_to_spot")
 
 
-def usdt_to_busd_on_spot():
-    if float(client.get_asset_balance(asset='USDT')['free']) > 10:
-        try:
-            client.create_order(symbol="BUSDUSDT",
-                                side='BUY',
-                                type='MARKET',
-                                quoteOrderQty=math.floor(float(client.get_asset_balance(asset='USDT')['free'])))
-
-            dust_to_bnb()
-        except Exception:
-            print("fail to convert USDT to BUSD")
-
-
-def dust_to_bnb():
-    try:
-        client.transfer_dust(asset="USDT")
-    except Exception:
-        print("fail to dust USDT to BNB")
-
-
 def buy_coins_on_spot():
-    symbol = "BTCBUSD"
+    symbol = "BTCUSDT"
 
     for x in client.get_open_orders(symbol=symbol):
         try:
@@ -265,21 +259,21 @@ def buy_coins_on_spot():
         except Exception:
             print("fail to cancel orders older (serverTime - deltaTime)")
 
-    if 10 < float(client.get_asset_balance(asset='BUSD')['free']) < 20:
+    if 10 < float(client.get_asset_balance(asset=asset)['free']) < 20:
         try:
             client.create_order(symbol=symbol,
                                 side='BUY',
                                 type='MARKET',
-                                quoteOrderQty=math.floor(float(client.get_asset_balance(asset='BUSD')['free'])))
+                                quoteOrderQty=math.floor(float(client.get_asset_balance(asset=asset)['free'])))
         except Exception:
-            print("fail to buy market BTC for BUSD")
+            print("fail to buy market BTC for", asset)
 
-    if float(client.get_asset_balance(asset='BUSD')['free']) > 20:
+    if float(client.get_asset_balance(asset=asset)['free']) > 20:
         try:
             client.create_order(symbol=symbol,
                                 side='BUY',
                                 type='MARKET',
-                                quoteOrderQty=math.floor(float(client.get_asset_balance(asset='BUSD')['free']) * 0.5))
+                                quoteOrderQty=math.floor(float(client.get_asset_balance(asset=asset)['free']) * 0.5))
 
             client.order_limit(symbol=symbol,
                                quantity=client.get_all_orders(symbol=symbol)[-1]["origQty"],
@@ -293,7 +287,12 @@ def buy_coins_on_spot():
                                )
 
         except Exception:
-            print("fail to buy limit BTC for BUSD")
+            print("fail to buy limit BTC for", asset)
+
+    try:
+        client.transfer_dust(asset=asset)
+    except Exception:
+        print("fail to dust", asset, "to BNB")
 
 
 def transfer_free_spot_coin_to_futures():
@@ -331,6 +330,7 @@ def open_for_profit():
                         max(symbol_and_priceChangePercent["priceChangePercent"]))]
 
                 if get_usd_for_all_grid(symbol) <= availableBalance and get_usd_for_one_short(symbol) <= min_notional:
+                    set_futures_change_multi_assets_mode()
                     set_futures_change_leverage(symbol)
                     client.futures_create_order(symbol=symbol,
                                                 quantity=get_quantity(symbol),
@@ -355,7 +355,6 @@ def close_with_profit():
 ##### --function transfer_profit #####
 def transfer_profit():
     transfer_free_USD_to_spot()
-    usdt_to_busd_on_spot()
     buy_coins_on_spot()
     transfer_free_spot_coin_to_futures()
 
