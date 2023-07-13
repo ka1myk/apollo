@@ -3,7 +3,6 @@
 # TODO add parse keys from external
 # TODO sum funding rate to profit
 # TODO futuresboard refactor
-# TODO add (serverTime - last_isBuyerMaker_time) < x["time"] < (serverTime + last_isBuyerMaker_time * 24)
 
 import re, math, secrets, argparse
 from binance.client import Client
@@ -19,7 +18,7 @@ asset = "USDT"
 # default = 6; min_notional can be extended #
 min_notional = 50
 # default = 1.2; min_notional_corrector needs to correct error of not creating close orders #
-min_notional_corrector = 5
+min_notional_corrector = 8
 # 1m, 3m, 5m, 15m (+), 30m (+), 1h (+), 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
 klines_interval = "15m"
 futures_close_profit = [0.995]
@@ -28,6 +27,8 @@ futures_open_short = [1.10]
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # last digit is for hours to cooldown isMarketBuy #
 last_isBuyerMaker_time = 1000 * 60 * 60 * 1
+# hours after cooldown is reseted #
+relative_hours = 6
 # most likely, it will not fall less than 0.79, so lower limit orders can be cancelled and moved to funding #
 spot_open_long = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
 
@@ -315,7 +316,9 @@ def transfer_free_spot_coin_to_futures():
 def open_for_profit():
     for x in client.futures_ticker():
         for x in client.futures_account_trades(symbol=x["symbol"]):
-            if x["side"] == "BUY" and x["time"] > (serverTime - last_isBuyerMaker_time):
+            if x["side"] == "BUY" and (
+                    (serverTime - last_isBuyerMaker_time) < x["time"] < (
+                    serverTime + last_isBuyerMaker_time * relative_hours)):
                 ####
                 symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
                 for symbol in get_futures_tickers_to_short():
