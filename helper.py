@@ -317,8 +317,8 @@ def open_for_profit():
     for x in client.futures_ticker():
         for x in client.futures_account_trades(symbol=x["symbol"]):
             if x["side"] == "BUY" and (
-                    (x["time"] + last_isBuyerMaker_time) > serverTime > (
-                    x["time"] + last_isBuyerMaker_time * relative_hours)
+                    (x["time"] + last_isBuyerMaker_time) > serverTime or
+                    (x["time"] + last_isBuyerMaker_time * relative_hours) < serverTime
             ):
                 ####
                 symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
@@ -334,13 +334,16 @@ def open_for_profit():
                         max(symbol_and_priceChangePercent["priceChangePercent"]))]
 
                 if get_usd_for_all_grid(symbol) <= availableBalance and get_usd_for_one_short(symbol) <= min_notional:
-                    set_futures_change_multi_assets_mode()
-                    set_futures_change_leverage(symbol)
-                    client.futures_create_order(symbol=symbol,
-                                                quantity=get_quantity(symbol),
-                                                side='SELL',
-                                                positionSide='SHORT',
-                                                type='MARKET')
+                    try:
+                        set_futures_change_multi_assets_mode()
+                        set_futures_change_leverage(symbol)
+                        client.futures_create_order(symbol=symbol,
+                                                    quantity=get_quantity(symbol),
+                                                    side='SELL',
+                                                    positionSide='SHORT',
+                                                    type='MARKET')
+                    except Exception:
+                        print("fail set_futures_change_multi_assets_mode or set_futures_change_leverage")
                 ####
 
                 break
