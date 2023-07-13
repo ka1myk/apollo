@@ -317,8 +317,9 @@ def open_for_profit():
     for x in client.futures_ticker():
         for x in client.futures_account_trades(symbol=x["symbol"]):
             if x["side"] == "BUY" and (
-                    (serverTime - last_isBuyerMaker_time) < x["time"] or x["time"] > (
-                    serverTime + last_isBuyerMaker_time * relative_hours)):
+                    (x["time"] + last_isBuyerMaker_time) > serverTime > (
+                    x["time"] + last_isBuyerMaker_time * relative_hours)
+            ):
                 ####
                 symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
                 for symbol in get_futures_tickers_to_short():
