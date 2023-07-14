@@ -335,7 +335,6 @@ def open_for_profit():
 
                 if get_usd_for_all_grid(symbol) <= availableBalance and get_usd_for_one_short(symbol) <= min_notional:
                     try:
-                        set_futures_change_multi_assets_mode()
                         set_futures_change_leverage(symbol)
                         client.futures_create_order(symbol=symbol,
                                                     quantity=get_quantity(symbol),
@@ -343,7 +342,7 @@ def open_for_profit():
                                                     positionSide='SHORT',
                                                     type='MARKET')
                     except Exception:
-                        print("fail set_futures_change_multi_assets_mode or set_futures_change_leverage")
+                        print("fail open_for_profit")
                 ####
 
                 break
