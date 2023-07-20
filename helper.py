@@ -12,8 +12,8 @@ from binance.helpers import round_step_size
 parser = argparse.ArgumentParser()
 parser.add_argument('--function', type=str, required=True)
 
-client = Client("Ny8b20OD7T3dXm96SVKmpbtJQA9rxmeh26BclnXGYYV3GDjktrVTAsJcLOqRIp2V",
-                "Nu4UemnKHnjwOx05ZFg9oT8NTV8ull95X7n7Oa8jZ9M9bT6e6DZJPD9YJagbAkGe")
+client = Client("",
+                "")
 
 asset = "USDT"
 # default = 6; min_notional can be extended #
@@ -148,14 +148,6 @@ def get_quantity(symbol):
         (float(get_notional(symbol)) * set_greed())
         / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
         get_quantity_precision(symbol)
-    )
-
-
-def get_usd_for_one_short(symbol):
-    return round(
-        float(get_quantity(symbol))
-        * float(client.futures_mark_price(symbol=symbol)["markPrice"]),
-        1
     )
 
 
@@ -350,16 +342,15 @@ def open_for_profit():
                     symbol_and_priceChangePercent["priceChangePercent"].index(
                         max(symbol_and_priceChangePercent["priceChangePercent"]))]
 
-                if get_usd_for_one_short(symbol) <= min_notional:
-                    try:
-                        set_futures_change_leverage(symbol)
-                        client.futures_create_order(symbol=symbol,
-                                                    quantity=get_quantity(symbol),
-                                                    side='SELL',
-                                                    positionSide='SHORT',
-                                                    type='MARKET')
-                    except Exception:
-                        print("fail open_for_profit")
+                try:
+                    set_futures_change_leverage(symbol)
+                    client.futures_create_order(symbol=symbol,
+                                                quantity=get_quantity(symbol),
+                                                side='SELL',
+                                                positionSide='SHORT',
+                                                type='MARKET')
+                except Exception:
+                    print("fail open_for_profit")
                 ####
 
                 break
