@@ -1,7 +1,8 @@
 # TODO additional ip to ubuntu to run few instance
-# TODO add send profit from another - instance print(client.get_deposit_address(coin='USDT'))
+# TODO add send profit from another - instance - print(client.get_deposit_address(coin='USDT'))
 # TODO add parse keys from external
 # TODO sum funding rate to profit
+# TODO merge all branches to main/dev
 # TODO futuresboard refactor
 
 import re, math, secrets, argparse
@@ -11,23 +12,27 @@ from binance.helpers import round_step_size
 parser = argparse.ArgumentParser()
 parser.add_argument('--function', type=str, required=True)
 
-client = Client("",
-                "")
+client = Client("Ny8b20OD7T3dXm96SVKmpbtJQA9rxmeh26BclnXGYYV3GDjktrVTAsJcLOqRIp2V",
+                "Nu4UemnKHnjwOx05ZFg9oT8NTV8ull95X7n7Oa8jZ9M9bT6e6DZJPD9YJagbAkGe")
 
 asset = "USDT"
 # default = 6; min_notional can be extended #
-min_notional = 50
+min_notional = 10
 # default = 1.2; min_notional_corrector needs to correct error of not creating close orders #
-min_notional_corrector = 8
+min_notional_corrector = 1.2
+# amount of greed to add every time new trade is placed #
+increase_percentage_of_base_greed = 0.15
+# max greed be increased times #
+max_times_base_greed_can_be_increased = 3
 # 1m, 3m, 5m, 15m (+), 30m (+), 1h (+), 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
 klines_interval = "15m"
-futures_close_profit = [0.995]
-futures_open_short = [1.10]
+futures_close_profit = 0.995
+futures_open_short = 1.10
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # last digit is for hours to cooldown isMarketBuy #
 last_isBuyerMaker_time = 1000 * 60 * 60 * 1
-# hours after cooldown is reseted #
+# cooldown will be reseted after relative_hours  #
 relative_hours = 6
 # most likely, it will not fall less than 0.79, so lower limit orders can be cancelled and moved to funding #
 spot_open_long = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
@@ -81,7 +86,7 @@ def get_futures_tickers_to_short():
     for x in client.futures_account_balance():
         futures_account_balance_asset.append(x["asset"] + asset)
 
-    # exclude exist_positions tickers #
+    # exclude BUSD and quarterly tickers #
     all_tickers = []
     for x in client.futures_ticker():
         remove_quarterly_contract = re.search('^((?!_).)*$', x["symbol"])
@@ -107,19 +112,40 @@ def get_futures_tickers_to_short():
 
 
 def set_greed():
-    return max(
-        round(
-            float(client.futures_account()['totalWalletBalance'])
-            / (len(client.futures_ticker()
-                   * len(futures_open_short)
-                   * min_notional)), 1),
-        1
-    )
+    # set base_greed #
+    base_greed = math.ceil(((float(client.futures_account()['totalWalletBalance']) * min_notional_corrector) / (
+            len(get_futures_tickers_to_short()) * min_notional)))
+
+    # get greed of last trade relative base_greed #
+    income_and_time = {"income": [], "time": []}
+
+    for x in client.futures_income_history():
+        if x["incomeType"] == "REALIZED_PNL":
+            income_and_time["income"].append(x["income"])
+            income_and_time["time"].append(x["time"])
+
+    income = income_and_time["income"][
+        income_and_time["time"].index(
+            max(income_and_time["time"]))]
+
+    greed_of_last_trade = float(income) / (1 - futures_close_profit) / (base_greed)
+
+    # to increase or not based by last maker trade with realized_pnl #
+    for x in client.futures_income_history():
+        if x["incomeType"] == "REALIZED_PNL" and x["time"] > (serverTime - last_isBuyerMaker_time):
+            greed_of_last_trade = greed_of_last_trade + (base_greed * increase_percentage_of_base_greed)
+            increased_base_greed = greed_of_last_trade
+            break
+
+        else:
+            increased_base_greed = base_greed
+
+    return min(round(increased_base_greed, 2), round((base_greed * max_times_base_greed_can_be_increased), 2))
 
 
 def get_quantity(symbol):
     return round(
-        (float(get_notional(symbol)) * min_notional_corrector)
+        (float(get_notional(symbol)) * set_greed())
         / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
         get_quantity_precision(symbol)
     )
@@ -133,32 +159,23 @@ def get_usd_for_one_short(symbol):
     )
 
 
-def get_usd_for_all_grid(symbol):
-    return round(
-        len(futures_open_short)
-        * set_greed()
-        * get_usd_for_one_short(symbol)
-    )
-
-
-def open_grid_limit(symbol):
+def create_open_limit(symbol):
     try:
-        for x in futures_open_short:
-            client.futures_create_order(symbol=symbol,
-                                        quantity=get_quantity(symbol),
-                                        price=round_step_size(float(
-                                            client.futures_position_information(symbol=symbol)[2]["markPrice"])
-                                                              * x, get_tick_size(symbol)),
-                                        side='SELL',
-                                        positionSide='SHORT',
-                                        type='LIMIT',
-                                        timeInForce="GTC"
-                                        )
+        client.futures_create_order(symbol=symbol,
+                                    quantity=get_quantity(symbol),
+                                    price=round_step_size(float(
+                                        client.futures_position_information(symbol=symbol)[2]["markPrice"])
+                                                          * futures_open_short, get_tick_size(symbol)),
+                                    side='SELL',
+                                    positionSide='SHORT',
+                                    type='LIMIT',
+                                    timeInForce="GTC"
+                                    )
     except Exception:
-        print("fail to open grid limit for", symbol)
+        print("fail to open limit for", symbol)
 
 
-def close_grid_limit(symbol):
+def create_close_limit(symbol):
     try:
         client.futures_create_order(symbol=symbol,
                                     quantity=round_step_size(abs((float(
@@ -166,7 +183,7 @@ def close_grid_limit(symbol):
                                         get_step_size(symbol)),
                                     price=round_step_size(float(
                                         client.futures_position_information(symbol=symbol)[2]["entryPrice"])
-                                                          * secrets.choice(futures_close_profit),
+                                                          * futures_close_profit,
                                                           get_tick_size(symbol)),
                                     side='BUY',
                                     positionSide='SHORT',
@@ -179,9 +196,9 @@ def close_grid_limit(symbol):
 
 def close_exist_positions():
     try:
-        for z in client.futures_position_information():
-            if float(z["positionAmt"]) < 0:
-                symbol = z["symbol"]
+        for x in client.futures_position_information():
+            if float(x["positionAmt"]) < 0:
+                symbol = x["symbol"]
 
                 count_buy_orders = 0
                 count_sell_orders = 0
@@ -194,22 +211,22 @@ def close_exist_positions():
                         count_sell_orders = count_sell_orders + 1
 
                 if count_buy_orders == 0:
-                    close_grid_limit(symbol)
+                    create_close_limit(symbol)
 
                 if count_sell_orders == 0:
-                    open_grid_limit(symbol)
+                    create_open_limit(symbol)
     except Exception:
         print("fail to create close exist positions for", symbol)
 
 
 def cancel_close_order_if_filled():
     try:
-        for z in client.futures_position_information():
-            if float(z["positionAmt"]) < 0:
-                symbol = z["symbol"]
+        for x in client.futures_position_information():
+            if float(x["positionAmt"]) < 0:
+                symbol = x["symbol"]
 
                 for x in client.futures_get_open_orders(symbol=symbol):
-                    if x["side"] == "BUY" and abs(float(z["positionAmt"])) != float(x["origQty"]):
+                    if x["side"] == "BUY" and abs(float(x["positionAmt"])) != float(x["origQty"]):
                         client.futures_cancel_order(symbol=symbol, orderId=x["orderId"])
 
     except Exception:
@@ -333,7 +350,7 @@ def open_for_profit():
                     symbol_and_priceChangePercent["priceChangePercent"].index(
                         max(symbol_and_priceChangePercent["priceChangePercent"]))]
 
-                if get_usd_for_all_grid(symbol) <= availableBalance and get_usd_for_one_short(symbol) <= min_notional:
+                if get_usd_for_one_short(symbol) <= min_notional:
                     try:
                         set_futures_change_leverage(symbol)
                         client.futures_create_order(symbol=symbol,
