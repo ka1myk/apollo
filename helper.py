@@ -27,7 +27,7 @@ min_notional = 10
 # default = 1.2; min_notional_corrector needs to correct error of not creating close orders #
 min_notional_corrector = 1.2
 # amount of greed to add every time new trade is placed #
-percentage_increase_of_base_greed = 0.05
+percentage_increase_of_base_greed = 0.01
 # max greed be increased times #
 times_base_greed_can_be_increased = 2
 # 1m, 3m, 5m (check), 15m (+), 30m (+), 1h (+), 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
@@ -36,8 +36,8 @@ percentage_futures_close = 0.995
 percentage_futures_open = 1.25
 # cooldown will be reseted after relative_hours  #
 relative_hours = 6
-# last digit is for hours to cooldown isMarketBuy #
-last_isBuyerMaker_time = 1000 * 60 * 60 * 1
+# last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.5 - 31 minutes ago #
+last_isBuyerMaker_time = 1000 * 60 * 60 * 0.25
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # most likely, it will not fall less than 0.79, so lower limit orders will be cancelled after deltaTime #
