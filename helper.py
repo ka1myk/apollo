@@ -1,9 +1,15 @@
-# TODO additional ip to ubuntu to run few instance
-# TODO add send profit from another - instance - print(client.get_deposit_address(coin='USDT'))
+# backlog
+# TODO additional ip to ubuntu to run few instances
+# TODO add send profit from another instance - print(client.get_deposit_address(coin='USDT'))
 # TODO add parse keys from external
-# TODO sum funding rate to profit
-# TODO merge all branches to main/dev
 # TODO futuresboard refactor
+# the most priority
+# TODO analisys: 23.07.23 - STMXUSDT check funding rate in history, what goes wrong?
+# TODO analisys: 23.07.23 - STMXUSDT binance increase frequency from every eight hours to every two hours
+# TODO analisys: 23.07.23 - STMXUSDT check funding rate history
+# TODO dev: max open position value based on totalWalletBalance/greed < 3
+# TODO dev: funding penalties add to profit close limit
+# TODO dev: merge all branches to main/dev
 
 import re, math, secrets, argparse
 from binance.client import Client
@@ -14,28 +20,28 @@ parser.add_argument('--function', type=str, required=True)
 
 client = Client("",
                 "")
-s
+
 asset = "USDT"
 # default = 6; min_notional can be extended #
 min_notional = 10
 # default = 1.2; min_notional_corrector needs to correct error of not creating close orders #
 min_notional_corrector = 1.2
 # amount of greed to add every time new trade is placed #
-increase_percentage_of_base_greed = 0.05
+percentage_increase_of_base_greed = 0.05
 # max greed be increased times #
-max_times_base_greed_can_be_increased = 3
-# 1m, 3m, 5m, 15m (+), 30m (+), 1h (+), 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
-klines_interval = "15m"
-futures_close_profit = 0.995
-futures_open_short = 1.10
-# last digit is for days to cancel not filled limit orders #
-deltaTime = 1000 * 60 * 60 * 24 * 7
-# last digit is for hours to cooldown isMarketBuy #
-last_isBuyerMaker_time = 1000 * 60 * 60 * 1
+times_base_greed_can_be_increased = 2
+# 1m, 3m, 5m (check), 15m (+), 30m (+), 1h (+), 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
+klines_interval = "5m"
+percentage_futures_close = 0.995
+percentage_futures_open = 1.25
 # cooldown will be reseted after relative_hours  #
 relative_hours = 6
-# most likely, it will not fall less than 0.79, so lower limit orders can be cancelled and moved to funding #
-spot_open_long = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
+# last digit is for hours to cooldown isMarketBuy #
+last_isBuyerMaker_time = 1000 * 60 * 60 * 1
+# last digit is for days to cancel not filled limit orders #
+deltaTime = 1000 * 60 * 60 * 24 * 7
+# most likely, it will not fall less than 0.79, so lower limit orders will be cancelled after deltaTime #
+percentage_spot_open = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
 
 symbol_info = client.futures_exchange_info()
 serverTime = client.get_server_time()['serverTime']
@@ -128,19 +134,19 @@ def set_greed():
         income_and_time["time"].index(
             max(income_and_time["time"]))]
 
-    greed_of_last_trade = float(income) / (1 - futures_close_profit) / (base_greed)
+    greed_of_last_trade = float(income) / (1 - percentage_futures_close) / (base_greed)
 
     # to increase or not based by last maker trade with realized_pnl #
     for x in client.futures_income_history():
         if x["incomeType"] == "REALIZED_PNL" and x["time"] > (serverTime - last_isBuyerMaker_time):
-            greed_of_last_trade = greed_of_last_trade + (base_greed * increase_percentage_of_base_greed)
+            greed_of_last_trade = greed_of_last_trade + (base_greed * percentage_increase_of_base_greed)
             increased_base_greed = greed_of_last_trade
             break
 
         else:
             increased_base_greed = base_greed
 
-    return min(round(increased_base_greed, 2), round((base_greed * max_times_base_greed_can_be_increased), 2))
+    return min(round(increased_base_greed, 2), round((base_greed * times_base_greed_can_be_increased), 2))
 
 
 def get_quantity(symbol):
@@ -157,7 +163,7 @@ def create_open_limit(symbol):
                                     quantity=get_quantity(symbol),
                                     price=round_step_size(float(
                                         client.futures_position_information(symbol=symbol)[2]["markPrice"])
-                                                          * futures_open_short, get_tick_size(symbol)),
+                                                          * percentage_futures_open, get_tick_size(symbol)),
                                     side='SELL',
                                     positionSide='SHORT',
                                     type='LIMIT',
@@ -175,7 +181,7 @@ def create_close_limit(symbol):
                                         get_step_size(symbol)),
                                     price=round_step_size(float(
                                         client.futures_position_information(symbol=symbol)[2]["entryPrice"])
-                                                          * futures_close_profit,
+                                                          * percentage_futures_close,
                                                           get_tick_size(symbol)),
                                     side='BUY',
                                     positionSide='SHORT',
@@ -289,7 +295,7 @@ def buy_coins_on_spot():
                                quantity=client.get_all_orders(symbol=symbol)[-1]["origQty"],
                                price=round_step_size(
                                    float(client.get_avg_price(symbol=symbol)['price'])
-                                   * secrets.choice(spot_open_long),
+                                   * secrets.choice(percentage_spot_open),
                                    get_tick_size(symbol=symbol)),
                                side='BUY',
                                type='LIMIT',
