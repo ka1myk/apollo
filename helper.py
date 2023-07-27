@@ -4,6 +4,8 @@
 # TODO add parse keys from external
 # TODO futuresboard refactor
 # the most priority
+# TODO dev: increase percentage_futures_close based on trade frequency
+# TODO dev: check last_isBuyerMaker_time
 # TODO analisys: 23.07.23 - STMXUSDT check funding rate in history, what goes wrong?
 # TODO analisys: 23.07.23 - STMXUSDT binance increase frequency from every eight hours to every two hours
 # TODO analisys: 23.07.23 - STMXUSDT check funding rate history
@@ -32,12 +34,12 @@ percentage_increase_of_base_greed = 0.01
 times_base_greed_can_be_increased = 2
 # 1m, 3m, 5m (check), 15m (+), 30m (+), 1h (+), 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
 klines_interval = "5m"
-percentage_futures_close = 0.995
+percentage_futures_close = 0.997
 percentage_futures_open = 1.25
 # cooldown will be reseted after relative_hours  #
-relative_hours = 6
-# last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.5 - 31 minutes ago #
-last_isBuyerMaker_time = 1000 * 60 * 60 * 0.25
+relative_hours = 1000 * 60 * 60 * 6
+# last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.16 - 10 minutes ago #
+last_isBuyerMaker_time = 1000 * 60 * 60 * 0.16
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # most likely, it will not fall less than 0.79, so lower limit orders will be cancelled after deltaTime #
@@ -333,7 +335,7 @@ def open_for_profit():
         for x in client.futures_account_trades(symbol=x["symbol"]):
             if x["side"] == "BUY" and (
                     (x["time"] + last_isBuyerMaker_time) > serverTime or
-                    (x["time"] + last_isBuyerMaker_time * relative_hours) < serverTime
+                    (x["time"] + last_isBuyerMaker_time + relative_hours) < serverTime
             ):
                 ####
                 symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
