@@ -36,10 +36,12 @@ times_base_greed_can_be_increased = 2
 klines_interval = "5m"
 percentage_futures_close = 0.997
 percentage_futures_open = 1.25
-# cooldown will be reseted after relative_hours  #
-relative_hours = 1000 * 60 * 60 * 6
+
 # last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.16 - 10 minutes ago #
-last_isBuyerMaker_time = 1000 * 60 * 60 * 0.16
+newest_edge = 1000 * 60 * 60 * 0.16
+# cooldown will be reseted after relative_hours  #
+oldest_edge = 1000 * 60 * 60 * 6
+
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
 # most likely, it will not fall less than 0.79, so lower limit orders will be cancelled after deltaTime #
@@ -140,7 +142,7 @@ def set_greed():
 
     # to increase or not based by last maker trade with realized_pnl #
     for x in client.futures_income_history():
-        if x["incomeType"] == "REALIZED_PNL" and x["time"] > (serverTime - last_isBuyerMaker_time):
+        if x["incomeType"] == "REALIZED_PNL" and x["time"] > (serverTime - newest_edge):
             greed_of_last_trade = greed_of_last_trade + (base_greed * percentage_increase_of_base_greed)
             increased_base_greed = greed_of_last_trade
             break
@@ -329,42 +331,49 @@ def transfer_free_spot_coin_to_futures():
         print("fail transfer_free_spot_coin_to_futures")
 
 
+def get_last_isBuyerMaker_time():
+    last_isBuyerMaker_time_sorting = {"time": []}
+    for x in client.futures_ticker():
+        for y in client.futures_account_trades(symbol=x["symbol"]):
+            if y["side"] == "BUY" and (
+                    (y["time"] + newest_edge) > serverTime or
+                    (y["time"] + oldest_edge) > serverTime
+
+            ):
+                last_isBuyerMaker_time_sorting["time"].append(y["time"])
+
+    return max(last_isBuyerMaker_time_sorting["time"])
+
+
+last_realized_pnl_trade = get_last_isBuyerMaker_time()
+
+
 ##### --function open_for_profit #####
 def open_for_profit():
-    for x in client.futures_ticker():
-        for x in client.futures_account_trades(symbol=x["symbol"]):
-            if x["side"] == "BUY" and (
-                    (x["time"] + last_isBuyerMaker_time) > serverTime or
-                    (x["time"] + last_isBuyerMaker_time + relative_hours) < serverTime
-            ):
-                ####
-                symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
-                for symbol in get_futures_tickers_to_short():
-                    symbol_and_priceChangePercent["symbol"].append(symbol)
-                    symbol_and_priceChangePercent["priceChangePercent"].append(
-                        round(float(client.futures_klines(symbol=symbol, interval=klines_interval)[-1][2]) / float(
-                            client.futures_klines(symbol=symbol, interval=klines_interval)[-1][3]), 3)
-                    )
+    if last_realized_pnl_trade + newest_edge > serverTime or last_realized_pnl_trade + oldest_edge < serverTime:
+        ####
+        symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
+        for symbol in get_futures_tickers_to_short():
+            symbol_and_priceChangePercent["symbol"].append(symbol)
+            symbol_and_priceChangePercent["priceChangePercent"].append(
+                round(float(client.futures_klines(symbol=symbol, interval=klines_interval)[-1][2]) / float(
+                    client.futures_klines(symbol=symbol, interval=klines_interval)[-1][3]), 3)
+            )
 
-                symbol = symbol_and_priceChangePercent["symbol"][
-                    symbol_and_priceChangePercent["priceChangePercent"].index(
-                        max(symbol_and_priceChangePercent["priceChangePercent"]))]
+        symbol = symbol_and_priceChangePercent["symbol"][
+            symbol_and_priceChangePercent["priceChangePercent"].index(
+                max(symbol_and_priceChangePercent["priceChangePercent"]))]
 
-                try:
-                    set_futures_change_leverage(symbol)
-                    client.futures_create_order(symbol=symbol,
-                                                quantity=get_quantity(symbol),
-                                                side='SELL',
-                                                positionSide='SHORT',
-                                                type='MARKET')
-                except Exception:
-                    print("fail open_for_profit")
-                ####
-
-                break
-        else:
-            continue
-        break
+        try:
+            set_futures_change_leverage(symbol)
+            client.futures_create_order(symbol=symbol,
+                                        quantity=get_quantity(symbol),
+                                        side='SELL',
+                                        positionSide='SHORT',
+                                        type='MARKET')
+        except Exception:
+            print("fail open_for_profit")
+        ####
 
 
 ##### --function close_with_profit #####
