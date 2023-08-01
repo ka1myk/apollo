@@ -3,12 +3,11 @@
 # TODO add send profit from another instance - print(client.get_deposit_address(coin='USDT'))
 # TODO add parse keys from external
 # TODO futuresboard refactor
+# TODO analysis: 23.07.23 - STMXUSDT check funding rate in history, what goes wrong?
+# TODO analysis: 23.07.23 - STMXUSDT binance increase frequency from every eight hours to every two
+# TODO analysis: 23.07.23 - STMXUSDT check funding rate history
 # the most priority
 # TODO dev: increase percentage_futures_close based on trade frequency
-# TODO dev: check last_isBuyerMaker_time
-# TODO analisys: 23.07.23 - STMXUSDT check funding rate in history, what goes wrong?
-# TODO analisys: 23.07.23 - STMXUSDT binance increase frequency from every eight hours to every two hours
-# TODO analisys: 23.07.23 - STMXUSDT check funding rate history
 # TODO dev: max open position value based on totalWalletBalance/greed < 3
 # TODO dev: funding penalties add to profit close limit
 # TODO dev: merge all branches to main/dev
@@ -39,7 +38,7 @@ percentage_futures_open = 1.25
 
 # last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.16 - 10 minutes ago #
 newest_edge = 1000 * 60 * 60 * 0.16
-# cooldown will be reseted after relative_hours  #
+# cooldown will be reseted after relative_hours. Last digit is for hours  #
 oldest_edge = 1000 * 60 * 60 * 6
 
 # last digit is for days to cancel not filled limit orders #
@@ -335,11 +334,7 @@ def get_last_isBuyerMaker_time():
     last_isBuyerMaker_time_sorting = {"time": []}
     for x in client.futures_ticker():
         for y in client.futures_account_trades(symbol=x["symbol"]):
-            if y["side"] == "BUY" and (
-                    (y["time"] + newest_edge) > serverTime or
-                    (y["time"] + oldest_edge) > serverTime
-
-            ):
+            if y["side"] == "BUY":
                 last_isBuyerMaker_time_sorting["time"].append(y["time"])
 
     return max(last_isBuyerMaker_time_sorting["time"])
