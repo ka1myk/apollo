@@ -7,7 +7,8 @@
 # TODO analysis: 23.07.23 - STMXUSDT binance increase frequency from every eight hours to every two
 # TODO analysis: 23.07.23 - STMXUSDT check funding rate history
 # the most priority
-# TODO dev: increase percentage_futures_close based on trade frequency
+# TODO dev: short only if 1w, 3d, 1d etc were flat
+# TODO dev: increase percentage_futures_close based on trade frequency (reset if > newest_edge)
 # TODO dev: max open position value based on totalWalletBalance/greed < 3
 # TODO dev: funding penalties add to profit close limit
 # TODO dev: merge all branches to main/dev
@@ -40,6 +41,8 @@ percentage_futures_open = 1.25
 newest_edge = 1000 * 60 * 60 * 0.16
 # cooldown will be reseted after relative_hours. Last digit is for hours  #
 oldest_edge = 1000 * 60 * 60 * 6
+# new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
+to_the_moon_cooldown = 1000 * 60 * 60 * 12
 
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
@@ -115,7 +118,14 @@ def get_futures_tickers_to_short():
         if float(x["fundingRate"]) < 0:
             fundingRate.append(x["symbol"])
 
-    short_ready = set(all_tickers) - set(exist_positions) - set(futures_account_balance_asset) - set(fundingRate)
+    # exclude tickers with onboardDate < deltaTime #
+    onboardDate = []
+    for x in client.futures_exchange_info()["symbols"]:
+        if float(x["onboardDate"]) > serverTime - deltaTime:
+            onboardDate.append(x["symbol"])
+
+    short_ready = set(all_tickers) - set(exist_positions) - set(futures_account_balance_asset) - set(fundingRate) - set(
+        onboardDate)
 
     return list(short_ready)
 
@@ -214,7 +224,7 @@ def close_exist_positions():
                 if count_buy_orders == 0:
                     create_close_limit(symbol)
 
-                if count_sell_orders == 0:
+                if count_sell_orders == 0 and x["updateTime"] < serverTime - to_the_moon_cooldown:
                     create_open_limit(symbol)
     except Exception:
         print("fail to create close exist positions for", symbol)
