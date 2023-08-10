@@ -7,6 +7,7 @@
 # TODO analysis: 23.07.23 - STMXUSDT check funding rate history
 # TODO dev: funding penalties add to profit close limit
 # in progress
+# TODO multiprocessing support
 # TODO futuresboard v2 install
 # TODO add base percentage_futures_close
 # TODO increase percentage_futures_close based on trade frequency (reset if > newest_edge)
@@ -46,7 +47,7 @@ base_percentage_futures_close = 0.998
 percentage_futures_open = 1.25
 
 # last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.16 - 10 minutes ago #
-newest_edge = 1000 * 60 * 60 * 0.16
+newest_edge = 1000 * 60 * 60 * 1
 # cooldown will be reseted after relative_hours. Last digit is for hours  #
 oldest_edge = 1000 * 60 * 60 * 6
 # new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
@@ -425,12 +426,14 @@ def get_last_isBuyerMaker_time():
     return max(last_isBuyerMaker_time_sorting["time"])
 
 
-last_realized_pnl_trade = get_last_isBuyerMaker_time()
-
-
 ##### --function open_for_profit #####
 def open_for_profit():
+    last_realized_pnl_trade = get_last_isBuyerMaker_time()
+
+    print(last_realized_pnl_trade)
+
     if last_realized_pnl_trade + newest_edge > serverTime or last_realized_pnl_trade + oldest_edge < serverTime:
+
 
         ####
         symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
@@ -446,7 +449,7 @@ def open_for_profit():
                 min(symbol_and_priceChangePercent["priceChangePercent"]))]
 
         try:
-            set_futures_change_leverage(symbol)
+            print(symbol)
             client.futures_create_order(symbol=symbol,
                                         quantity=get_quantity(symbol),
                                         side='SELL',
@@ -477,3 +480,5 @@ if parser.parse_args().function == "close":
     close_with_profit()
 if parser.parse_args().function == "transfer":
     transfer_profit()
+if parser.parse_args().function == "initialized":
+    set_futures_change_multi_assets_mode()
