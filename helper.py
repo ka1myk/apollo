@@ -287,7 +287,6 @@ def get_trade_fee(symbol):
     except Exception:
         trade_fee = float(client.get_trade_fee(symbol="BTCUSDT")[0]["makerCommission"]) + float(
             client.get_trade_fee(symbol="BTCUSDT")[0]["takerCommission"])
-
     return trade_fee
 
 
@@ -296,7 +295,7 @@ def create_open_limit(symbol):
         client.futures_create_order(symbol=symbol,
                                     quantity=get_quantity(symbol),
                                     price=round_step_size(float(
-                                        client.futures_position_information(symbol=symbol)[2]["markPrice"])
+                                        client.futures_position_information(symbol=symbol)[1]["markPrice"])
                                                           * percentage_futures_open, get_tick_size(symbol)),
                                     side='SELL',
                                     positionSide='SHORT',
@@ -311,10 +310,10 @@ def create_close_limit(symbol):
     try:
         client.futures_create_order(symbol=symbol,
                                     quantity=round_step_size(abs((float(
-                                        client.futures_position_information(symbol=symbol)[2]["positionAmt"]))),
+                                        client.futures_position_information(symbol=symbol)[1]["positionAmt"]))),
                                         get_step_size(symbol)),
                                     price=round_step_size(float(
-                                        client.futures_position_information(symbol=symbol)[2]["entryPrice"])
+                                        client.futures_position_information(symbol=symbol)[1]["entryPrice"])
                                                           * (base_percentage_futures_close - get_trade_fee(symbol)),
                                                           get_tick_size(symbol)),
                                     side='BUY',
