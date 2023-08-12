@@ -13,9 +13,11 @@
 # TODO increase percentage_futures_close based on trade frequency (reset if > newest_edge)
 # TODO max open position value based on totalWalletBalance/greed < 3
 # TODO merge all branches to main/dev
-
-
+import functools
 import re, math, secrets, argparse
+import time
+from random import random
+
 from binance.client import Client
 from binance.helpers import round_step_size
 
@@ -47,7 +49,7 @@ base_percentage_futures_close = 0.998
 percentage_futures_open = 1.25
 
 # last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.16 - 10 minutes ago #
-newest_edge = 1000 * 60 * 60 * 1
+newest_edge = 1000 * 60 * 60 * 0.16
 # cooldown will be reseted after relative_hours. Last digit is for hours  #
 oldest_edge = 1000 * 60 * 60 * 6
 # new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
@@ -63,44 +65,83 @@ serverTime = client.get_server_time()['serverTime']
 availableBalance = round(float(client.futures_account()["availableBalance"]))
 
 
-def set_futures_change_leverage(symbol):
-    client.futures_change_leverage(symbol=symbol, leverage=1)
+def timeit(func):
+    @functools.wraps(func)
+    def new_func(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        elapsed_time = time.time() - start_time
+        print('function [{}] finished in {} ms'.format(
+            func.__name__, int(elapsed_time * 1_000)))
+        return result
+
+    return new_func
 
 
+@timeit
+def set_futures_change_leverage():
+    for x in client.futures_ticker():
+        try:
+            client.futures_change_leverage(symbol=x["symbol"], leverage=1)
+        except Exception:
+            print("fail to set_futures_change_leverage of", x["symbol"])
+
+
+@timeit
 def set_futures_change_multi_assets_mode():
-    client.futures_change_multi_assets_mode(multiAssetsMargin="True")
+    try:
+        client.futures_change_multi_assets_mode(multiAssetsMargin="True")
+    except Exception:
+        print("fail to set_futures_change_multi_assets_mode")
 
 
+@timeit
 def get_notional(symbol):
-    for x in symbol_info['symbols']:
-        if x['symbol'] == symbol:
-            for y in x['filters']:
-                if y['filterType'] == 'MIN_NOTIONAL':
-                    return y['notional']
+    try:
+        for x in symbol_info['symbols']:
+            if x['symbol'] == symbol:
+                for y in x['filters']:
+                    if y['filterType'] == 'MIN_NOTIONAL':
+                        return y['notional']
+    except Exception:
+        print("fail to get_notional of", symbol)
 
 
+@timeit
 def get_tick_size(symbol):
-    for x in symbol_info['symbols']:
-        if x['symbol'] == symbol:
-            for y in x['filters']:
-                if y['filterType'] == 'PRICE_FILTER':
-                    return y['tickSize']
+    try:
+        for x in symbol_info['symbols']:
+            if x['symbol'] == symbol:
+                for y in x['filters']:
+                    if y['filterType'] == 'PRICE_FILTER':
+                        return y['tickSize']
+    except Exception:
+        print("fail to get_tick_size of", symbol)
 
 
+@timeit
 def get_step_size(symbol):
-    for x in symbol_info['symbols']:
-        if x['symbol'] == symbol:
-            for y in x['filters']:
-                if y['filterType'] == 'MARKET_LOT_SIZE':
-                    return y['stepSize']
+    try:
+        for x in symbol_info['symbols']:
+            if x['symbol'] == symbol:
+                for y in x['filters']:
+                    if y['filterType'] == 'MARKET_LOT_SIZE':
+                        return y['stepSize']
+    except Exception:
+        print("fail to get_step_size of", symbol)
 
 
+@timeit
 def get_quantity_precision(symbol):
-    for x in symbol_info['symbols']:
-        if x['symbol'] == symbol:
-            return x["quantityPrecision"]
+    try:
+        for x in symbol_info['symbols']:
+            if x['symbol'] == symbol:
+                return x["quantityPrecision"]
+    except Exception:
+        print("fail to get_quantity_precision of", symbol)
 
 
+@timeit
 def get_futures_tickers_to_short():
     # exclude balance_asset tickers #
     futures_account_balance_asset = []
@@ -134,7 +175,7 @@ def get_futures_tickers_to_short():
             onboardDate.append(x["symbol"])
 
     tickers_after_excluding = set(all_tickers) - set(exist_positions) - set(futures_account_balance_asset) - set(
-        fundingRate) - set(onboardDate)
+        onboardDate) - set(fundingRate)
 
     # klines_params #
     klines_1d = []
@@ -154,87 +195,91 @@ def get_futures_tickers_to_short():
                 client.futures_klines(symbol=symbol, interval="1d")[-2][penult_futures_klines_param]), 3) < 1:
             klines_1d.append(symbol)
 
+    for symbol in klines_1d:
+
         if round(float(client.futures_klines(symbol=symbol, interval="12h")[-1][last_futures_klines_param]) / float(
                 client.futures_klines(symbol=symbol, interval="12h")[-2][penult_futures_klines_param]), 3) < 1:
             klines_12h.append(symbol)
 
-        # if round(float(client.futures_klines(symbol=symbol, interval="8h")[-1][last_futures_klines_param]) / float(
-        #         client.futures_klines(symbol=symbol, interval="8h")[-2][penult_futures_klines_param]), 3) < 1:
-        #     klines_8h.append(symbol)
+    for symbol in klines_12h:
 
         if round(float(client.futures_klines(symbol=symbol, interval="6h")[-1][last_futures_klines_param]) / float(
                 client.futures_klines(symbol=symbol, interval="6h")[-2][penult_futures_klines_param]), 3) < 1:
             klines_6h.append(symbol)
 
-        # if round(float(client.futures_klines(symbol=symbol, interval="4h")[-1][last_futures_klines_param]) / float(
-        #         client.futures_klines(symbol=symbol, interval="4h")[-2][penult_futures_klines_param]), 3) < 1:
-        #     klines_4h.append(symbol)
-
-        # if round(float(client.futures_klines(symbol=symbol, interval="2h")[-1][last_futures_klines_param]) / float(
-        #         client.futures_klines(symbol=symbol, interval="2h")[-2][penult_futures_klines_param]), 3) < 1:
-        #     klines_2h.append(symbol)
+    for symbol in klines_6h:
 
         if round(float(client.futures_klines(symbol=symbol, interval="1h")[-1][last_futures_klines_param]) / float(
                 client.futures_klines(symbol=symbol, interval="1h")[-2][penult_futures_klines_param]), 3) < 1:
             klines_1h.append(symbol)
 
-        # if round(float(client.futures_klines(symbol=symbol, interval="30m")[-1][last_futures_klines_param]) / float(
-        #         client.futures_klines(symbol=symbol, interval="30m")[-2][penult_futures_klines_param]), 3) < 1:
-        #     klines_30m.append(symbol)
+    for symbol in klines_1h:
 
-        # if round(float(client.futures_klines(symbol=symbol, interval="15m")[-1][last_futures_klines_param]) / float(
-        #         client.futures_klines(symbol=symbol, interval="15m")[-2][penult_futures_klines_param]), 3) < 1:
-        #     klines_15m.append(symbol)
+        if round(float(client.futures_klines(symbol=symbol, interval="30m")[-1][last_futures_klines_param]) / float(
+                client.futures_klines(symbol=symbol, interval="30m")[-2][penult_futures_klines_param]), 3) < 1:
+            klines_30m.append(symbol)
 
-        # if round(float(client.futures_klines(symbol=symbol, interval="5m")[-1][last_futures_klines_param]) / float(
-        #         client.futures_klines(symbol=symbol, interval="5m")[-2][penult_futures_klines_param]), 3) < 1:
-        #     klines_5m.append(symbol)
+    for symbol in klines_30m:
 
-    result = set(klines_1h) & set(klines_6h) & set(klines_12h) & set(klines_1d)
+        if round(float(client.futures_klines(symbol=symbol, interval="5m")[-1][last_futures_klines_param]) / float(
+                client.futures_klines(symbol=symbol, interval="5m")[-2][penult_futures_klines_param]), 3) < 1:
+            klines_5m.append(symbol)
+
+    result = klines_5m
 
     return list(result)
 
 
+@timeit
 def set_greed():
-    # set base_greed #
-    base_greed = math.ceil(((float(client.futures_account()['totalWalletBalance']) * min_notional_corrector) / (
-            len(get_futures_tickers_to_short()) * min_notional)))
+    try:
+        # set base_greed #
+        base_greed = math.ceil(((float(client.futures_account()['totalWalletBalance']) * min_notional_corrector) / (
+                len(client.futures_ticker()) * min_notional)))
 
-    # get greed of last trade relative base_greed #
-    income_and_time = {"income": [], "time": []}
+        # get greed of last trade relative base_greed #
+        income_and_time = {"income": [], "time": []}
 
-    for x in client.futures_income_history():
-        if x["incomeType"] == "REALIZED_PNL":
-            income_and_time["income"].append(x["income"])
-            income_and_time["time"].append(x["time"])
+        for x in client.futures_income_history():
+            if x["incomeType"] == "REALIZED_PNL":
+                income_and_time["income"].append(x["income"])
+                income_and_time["time"].append(x["time"])
 
-    income = income_and_time["income"][
-        income_and_time["time"].index(
-            max(income_and_time["time"]))]
+        income = income_and_time["income"][
+            income_and_time["time"].index(
+                max(income_and_time["time"]))]
 
-    greed_of_last_trade = float(income) / (1 - base_percentage_futures_close) / (base_greed)
+        greed_of_last_trade = float(income) / (1 - base_percentage_futures_close) / (base_greed)
 
-    # to increase or not based by last maker trade with realized_pnl #
-    for x in client.futures_income_history():
-        if x["incomeType"] == "REALIZED_PNL" and x["time"] > (serverTime - newest_edge):
-            greed_of_last_trade = greed_of_last_trade + (base_greed * percentage_increase_of_base_greed)
-            increased_base_greed = greed_of_last_trade
-            break
+        # to increase or not based by last maker trade with realized_pnl #
+        for x in client.futures_income_history():
+            if x["incomeType"] == "REALIZED_PNL" and x["time"] > (serverTime - newest_edge):
+                greed_of_last_trade = greed_of_last_trade + (base_greed * percentage_increase_of_base_greed)
+                increased_base_greed = greed_of_last_trade
+                break
 
-        else:
-            increased_base_greed = base_greed
+            else:
+                increased_base_greed = base_greed
+    except Exception:
+        print("fail to set_greed")
 
     return min(round(increased_base_greed, 2), round((base_greed * times_base_greed_can_be_increased), 2))
 
 
+@timeit
 def get_quantity(symbol):
-    return round(
-        (float(get_notional(symbol)) * set_greed())
-        / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
-        get_quantity_precision(symbol)
-    )
+    try:
+        quantity = round(
+            (float(get_notional(symbol)) * set_greed())
+            / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
+            get_quantity_precision(symbol)
+        )
+    except Exception:
+        print("fail to get_quantity of", symbol)
+    return quantity
 
 
+@timeit
 def get_trade_fee(symbol):
     try:
         trade_fee = float(client.get_trade_fee(symbol=symbol)[0]["makerCommission"]) + float(
@@ -416,40 +461,40 @@ def transfer_free_spot_coin_to_futures():
         print("fail transfer_free_spot_coin_to_futures")
 
 
-def get_last_isBuyerMaker_time():
-    last_isBuyerMaker_time_sorting = {"time": []}
-    for x in client.futures_ticker():
-        for y in client.futures_account_trades(symbol=x["symbol"]):
-            if y["side"] == "BUY":
-                last_isBuyerMaker_time_sorting["time"].append(y["time"])
+@timeit
+def get_futures_income_history():
+    futures_income_history = []
+    for x in client.futures_income_history():
+        if x["incomeType"] == 'REALIZED_PNL':
+            futures_income_history.append(x["time"])
 
-    return max(last_isBuyerMaker_time_sorting["time"])
+    return max(futures_income_history)
 
 
 ##### --function open_for_profit #####
+@timeit
 def open_for_profit():
-    last_realized_pnl_trade = get_last_isBuyerMaker_time()
+    last_realized_pnl_trade = get_futures_income_history()
 
-    print(last_realized_pnl_trade)
-
-    if last_realized_pnl_trade + newest_edge > serverTime or last_realized_pnl_trade + oldest_edge < serverTime:
-
+    if last_realized_pnl_trade + newest_edge > serverTime > last_realized_pnl_trade + oldest_edge:
 
         ####
-        symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
-        for symbol in get_futures_tickers_to_short():
-            symbol_and_priceChangePercent["symbol"].append(symbol)
-            symbol_and_priceChangePercent["priceChangePercent"].append(
-                round(float(client.futures_klines(symbol=symbol, interval=klines_interval)[-2][3]) / float(
-                    client.futures_klines(symbol=symbol, interval=klines_interval)[-1][3]), 3)
-            )
+        symbol = random.choice(get_futures_tickers_to_short())
 
-        symbol = symbol_and_priceChangePercent["symbol"][
-            symbol_and_priceChangePercent["priceChangePercent"].index(
-                min(symbol_and_priceChangePercent["priceChangePercent"]))]
+        ####
+        # symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
+        # for symbol in get_futures_tickers_to_short():
+        #     symbol_and_priceChangePercent["symbol"].append(symbol)
+        #     symbol_and_priceChangePercent["priceChangePercent"].append(
+        #         round(float(client.futures_klines(symbol=symbol, interval=klines_interval)[-2][3]) / float(
+        #             client.futures_klines(symbol=symbol, interval=klines_interval)[-1][3]), 3)
+        #     )
+        #
+        # symbol = symbol_and_priceChangePercent["symbol"][
+        #     symbol_and_priceChangePercent["priceChangePercent"].index(
+        #         min(symbol_and_priceChangePercent["priceChangePercent"]))]
 
         try:
-            print(symbol)
             client.futures_create_order(symbol=symbol,
                                         quantity=get_quantity(symbol),
                                         side='SELL',
@@ -457,7 +502,6 @@ def open_for_profit():
                                         type='MARKET')
         except Exception:
             print("fail open_for_profit")
-        ####
 
 
 ##### --function close_with_profit #####
@@ -482,3 +526,4 @@ if parser.parse_args().function == "transfer":
     transfer_profit()
 if parser.parse_args().function == "initialized":
     set_futures_change_multi_assets_mode()
+    set_futures_change_leverage()
