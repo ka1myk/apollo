@@ -475,12 +475,12 @@ def get_futures_income_history():
 def open_for_profit():
     last_realized_pnl_trade = get_futures_income_history()
 
-    if last_realized_pnl_trade + newest_edge > serverTime > last_realized_pnl_trade + oldest_edge:
+    if last_realized_pnl_trade + newest_edge > serverTime or serverTime > last_realized_pnl_trade + oldest_edge:
 
-        ####
-        symbol = random.choice(get_futures_tickers_to_short())
+        ### random ###
+        symbol = secrets.choice(get_futures_tickers_to_short())
 
-        ####
+        ### priceChangePercent ###
         # symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
         # for symbol in get_futures_tickers_to_short():
         #     symbol_and_priceChangePercent["symbol"].append(symbol)
