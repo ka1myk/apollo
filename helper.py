@@ -27,11 +27,11 @@ penult_futures_klines_param = 3
 
 # 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
 klines_interval = "5m"
-base_percentage_futures_close = 0.998
+base_percentage_futures_close = 0.999
 percentage_futures_open = 1.25
 
 # last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.16 - 10 minutes ago #
-newest_edge = 1000 * 60 * 60 * 0.16
+newest_edge = 1000 * 60 * 60 * 0.5
 # cooldown will be reseted after relative_hours. Last digit is for hours  #
 oldest_edge = 1000 * 60 * 60 * 6
 # new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
@@ -489,11 +489,22 @@ def open_for_profit():
                                         side='SELL',
                                         positionSide='SHORT',
                                         type='MARKET')
+
+            # client.futures_create_order(symbol=symbol,
+            #                             quantity=get_quantity(symbol),
+            #                             price=round_step_size(float(client.get_avg_price(symbol=symbol)['price'])
+            #                                                   * 1.005,
+            #                                                   get_tick_size(symbol)),
+            #                             side='SELL',
+            #                             positionSide='SHORT',
+            #                             type='LIMIT',
+            #                             timeInForce="GTC")
         except Exception:
             print("fail open_for_profit")
 
 
 # --function close_with_profit #
+@timeit
 def close_with_profit():
     cancel_close_order_if_filled()
     close_exist_positions()
@@ -501,7 +512,7 @@ def close_with_profit():
 
 
 # --function transfer_profit #
-
+@timeit
 def transfer_profit():
     transfer_free_USD_to_spot()
     buy_coins_on_spot()
