@@ -1,22 +1,4 @@
-# backlog
-# TODO additional ip to ubuntu to run few instances
-# TODO add send profit from another instance - print(client.get_deposit_address(coin='USDT'))
-# TODO add parse keys from external
-# TODO analysis: 23.07.23 - STMXUSDT check funding rate in history, what goes wrong?
-# TODO analysis: 23.07.23 - STMXUSDT binance increase frequency from every eight hours to every two
-# TODO analysis: 23.07.23 - STMXUSDT check funding rate history
-# TODO dev: funding penalties add to profit close limit
-# in progress
-# TODO multiprocessing support
-# TODO futuresboard v2 install
-# TODO add base percentage_futures_close
-# TODO increase percentage_futures_close based on trade frequency (reset if > newest_edge)
-# TODO max open position value based on totalWalletBalance/greed < 3
-# TODO merge all branches to main/dev
-import functools
-import re, math, secrets, argparse
-import time
-from random import random
+import re, math, secrets, argparse, functools, time
 
 from binance.client import Client
 from binance.helpers import round_step_size
@@ -192,37 +174,37 @@ def get_futures_tickers_to_short():
     for symbol in tickers_after_excluding:
 
         if round(float(client.futures_klines(symbol=symbol, interval="1d")[-1][last_futures_klines_param]) / float(
-                client.futures_klines(symbol=symbol, interval="1d")[-2][penult_futures_klines_param]), 3) < 1:
+                client.futures_klines(symbol=symbol, interval="1d")[-2][penult_futures_klines_param]), 3) > 1:
             klines_1d.append(symbol)
 
     for symbol in klines_1d:
 
         if round(float(client.futures_klines(symbol=symbol, interval="12h")[-1][last_futures_klines_param]) / float(
-                client.futures_klines(symbol=symbol, interval="12h")[-2][penult_futures_klines_param]), 3) < 1:
+                client.futures_klines(symbol=symbol, interval="12h")[-2][penult_futures_klines_param]), 3) > 1:
             klines_12h.append(symbol)
 
     for symbol in klines_12h:
 
         if round(float(client.futures_klines(symbol=symbol, interval="6h")[-1][last_futures_klines_param]) / float(
-                client.futures_klines(symbol=symbol, interval="6h")[-2][penult_futures_klines_param]), 3) < 1:
+                client.futures_klines(symbol=symbol, interval="6h")[-2][penult_futures_klines_param]), 3) > 1:
             klines_6h.append(symbol)
 
     for symbol in klines_6h:
 
         if round(float(client.futures_klines(symbol=symbol, interval="1h")[-1][last_futures_klines_param]) / float(
-                client.futures_klines(symbol=symbol, interval="1h")[-2][penult_futures_klines_param]), 3) < 1:
+                client.futures_klines(symbol=symbol, interval="1h")[-2][penult_futures_klines_param]), 3) > 1:
             klines_1h.append(symbol)
 
     for symbol in klines_1h:
 
         if round(float(client.futures_klines(symbol=symbol, interval="30m")[-1][last_futures_klines_param]) / float(
-                client.futures_klines(symbol=symbol, interval="30m")[-2][penult_futures_klines_param]), 3) < 1:
+                client.futures_klines(symbol=symbol, interval="30m")[-2][penult_futures_klines_param]), 3) > 1:
             klines_30m.append(symbol)
 
     for symbol in klines_30m:
 
         if round(float(client.futures_klines(symbol=symbol, interval="5m")[-1][last_futures_klines_param]) / float(
-                client.futures_klines(symbol=symbol, interval="5m")[-2][penult_futures_klines_param]), 3) < 1:
+                client.futures_klines(symbol=symbol, interval="5m")[-2][penult_futures_klines_param]), 3) > 1:
             klines_5m.append(symbol)
 
     result = klines_5m
@@ -290,6 +272,7 @@ def get_trade_fee(symbol):
     return trade_fee
 
 
+@timeit
 def create_open_limit(symbol):
     try:
         client.futures_create_order(symbol=symbol,
@@ -306,6 +289,7 @@ def create_open_limit(symbol):
         print("fail to open limit for", symbol)
 
 
+@timeit
 def create_close_limit(symbol):
     try:
         client.futures_create_order(symbol=symbol,
@@ -325,6 +309,7 @@ def create_close_limit(symbol):
         print("fail to create LIMIT for", symbol)
 
 
+@timeit
 def close_exist_positions():
     try:
         for x in client.futures_position_information():
@@ -350,6 +335,7 @@ def close_exist_positions():
         print("fail to create close exist positions for", symbol)
 
 
+@timeit
 def cancel_close_order_if_filled():
     try:
         for x in client.futures_position_information():
@@ -364,6 +350,7 @@ def cancel_close_order_if_filled():
         print("fail to cancel close order if filled for", symbol)
 
 
+@timeit
 def cancel_open_orders_without_position():
     try:
         open_orders = []
@@ -382,6 +369,7 @@ def cancel_open_orders_without_position():
         print("fail to cancel open orders without position for", open_orders)
 
 
+@timeit
 def transfer_free_USD_to_spot():
     try:
         for x in client.futures_account_balance():
@@ -398,6 +386,7 @@ def transfer_free_USD_to_spot():
         print("fail transfer_free_USD_to_spot")
 
 
+@timeit
 def buy_coins_on_spot():
     symbol = "BTCUSDT"
 
@@ -444,6 +433,7 @@ def buy_coins_on_spot():
         print("fail to dust", asset, "to BNB")
 
 
+@timeit
 def transfer_free_spot_coin_to_futures():
     try:
         for x in client.futures_account_balance():
@@ -470,17 +460,17 @@ def get_futures_income_history():
     return max(futures_income_history)
 
 
-##### --function open_for_profit #####
+# --function open_for_profit #
 @timeit
 def open_for_profit():
     last_realized_pnl_trade = get_futures_income_history()
 
     if last_realized_pnl_trade + newest_edge > serverTime or serverTime > last_realized_pnl_trade + oldest_edge:
 
-        ### random ###
+        # random #
         symbol = secrets.choice(get_futures_tickers_to_short())
 
-        ### priceChangePercent ###
+        # priceChangePercent #
         # symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
         # for symbol in get_futures_tickers_to_short():
         #     symbol_and_priceChangePercent["symbol"].append(symbol)
@@ -503,14 +493,15 @@ def open_for_profit():
             print("fail open_for_profit")
 
 
-##### --function close_with_profit #####
+# --function close_with_profit #
 def close_with_profit():
     cancel_close_order_if_filled()
     close_exist_positions()
     cancel_open_orders_without_position()
 
 
-##### --function transfer_profit #####
+# --function transfer_profit #
+
 def transfer_profit():
     transfer_free_USD_to_spot()
     buy_coins_on_spot()
