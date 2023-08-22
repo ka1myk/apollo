@@ -31,9 +31,9 @@ base_percentage_futures_close = 0.999
 percentage_futures_open = 1.25
 
 # last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.16 - 10 minutes ago #
-newest_edge = 1000 * 60 * 60 * 0.5
-# cooldown will be reseted after relative_hours. Last digit is for hours  #
-oldest_edge = 1000 * 60 * 60 * 6
+newest_edge = 1000 * 60 * 60 * 0.16
+# cooldown will be reset after relative_hours. Last digit is for hours  #
+oldest_edge = 1000 * 60 * 60 * 0.5
 # new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
 to_the_moon_cooldown = 1000 * 60 * 60 * 12
 
@@ -124,6 +124,30 @@ def get_quantity_precision(symbol):
 
 
 @timeit
+def get_quantity(symbol):
+    try:
+        quantity = round(
+            (float(get_notional(symbol)) * set_greed())
+            / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
+            get_quantity_precision(symbol)
+        )
+    except Exception:
+        print("fail to get_quantity of", symbol)
+    return quantity
+
+
+@timeit
+def get_trade_fee(symbol):
+    try:
+        trade_fee = float(client.get_trade_fee(symbol=symbol)[0]["makerCommission"]) + float(
+            client.get_trade_fee(symbol=symbol)[0]["takerCommission"])
+    except Exception:
+        trade_fee = float(client.get_trade_fee(symbol="BTCUSDT")[0]["makerCommission"]) + float(
+            client.get_trade_fee(symbol="BTCUSDT")[0]["takerCommission"])
+    return trade_fee
+
+
+@timeit
 def get_futures_tickers_to_short():
     # exclude balance_asset tickers #
     futures_account_balance_asset = []
@@ -145,6 +169,7 @@ def get_futures_tickers_to_short():
             exist_positions.append(x["symbol"])
 
     # exclude negative fundingRate tickers #
+    # 21.08.23 - remove to check PnL #
     fundingRate = []
     for x in client.futures_funding_rate():
         if float(x["fundingRate"]) < 0:
@@ -246,30 +271,6 @@ def set_greed():
         print("fail to set_greed")
 
     return min(round(increased_base_greed, 2), round((base_greed * times_base_greed_can_be_increased), 2))
-
-
-@timeit
-def get_quantity(symbol):
-    try:
-        quantity = round(
-            (float(get_notional(symbol)) * set_greed())
-            / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
-            get_quantity_precision(symbol)
-        )
-    except Exception:
-        print("fail to get_quantity of", symbol)
-    return quantity
-
-
-@timeit
-def get_trade_fee(symbol):
-    try:
-        trade_fee = float(client.get_trade_fee(symbol=symbol)[0]["makerCommission"]) + float(
-            client.get_trade_fee(symbol=symbol)[0]["takerCommission"])
-    except Exception:
-        trade_fee = float(client.get_trade_fee(symbol="BTCUSDT")[0]["makerCommission"]) + float(
-            client.get_trade_fee(symbol="BTCUSDT")[0]["takerCommission"])
-    return trade_fee
 
 
 @timeit
@@ -468,20 +469,20 @@ def open_for_profit():
     if last_realized_pnl_trade + newest_edge > serverTime or serverTime > last_realized_pnl_trade + oldest_edge:
 
         # random #
-        symbol = secrets.choice(get_futures_tickers_to_short())
+        # symbol = secrets.choice(get_futures_tickers_to_short())
 
         # priceChangePercent #
-        # symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
-        # for symbol in get_futures_tickers_to_short():
-        #     symbol_and_priceChangePercent["symbol"].append(symbol)
-        #     symbol_and_priceChangePercent["priceChangePercent"].append(
-        #         round(float(client.futures_klines(symbol=symbol, interval=klines_interval)[-2][3]) / float(
-        #             client.futures_klines(symbol=symbol, interval=klines_interval)[-1][3]), 3)
-        #     )
-        #
-        # symbol = symbol_and_priceChangePercent["symbol"][
-        #     symbol_and_priceChangePercent["priceChangePercent"].index(
-        #         min(symbol_and_priceChangePercent["priceChangePercent"]))]
+        symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
+        for symbol in get_futures_tickers_to_short():
+            symbol_and_priceChangePercent["symbol"].append(symbol)
+            symbol_and_priceChangePercent["priceChangePercent"].append(
+                round(float(client.futures_klines(symbol=symbol, interval=klines_interval)[-2][3]) / float(
+                    client.futures_klines(symbol=symbol, interval=klines_interval)[-1][3]), 3)
+            )
+
+        symbol = symbol_and_priceChangePercent["symbol"][
+            symbol_and_priceChangePercent["priceChangePercent"].index(
+                min(symbol_and_priceChangePercent["priceChangePercent"]))]
 
         try:
             client.futures_create_order(symbol=symbol,
