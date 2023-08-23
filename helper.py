@@ -494,7 +494,7 @@ def open_for_profit():
 
         symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
 
-        for symbol in client.futures_ticker():
+        for symbol in get_futures_tickers_to_short():
             symbol_and_priceChangePercent["symbol"].append(symbol["symbol"])
             symbol_and_priceChangePercent["priceChangePercent"].append(float(symbol["priceChangePercent"]))
 
