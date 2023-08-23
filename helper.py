@@ -6,8 +6,8 @@ from binance.helpers import round_step_size
 parser = argparse.ArgumentParser()
 parser.add_argument('--function', type=str, required=True)
 
-client = Client("Ny8b20OD7T3dXm96SVKmpbtJQA9rxmeh26BclnXGYYV3GDjktrVTAsJcLOqRIp2V",
-                "Nu4UemnKHnjwOx05ZFg9oT8NTV8ull95X7n7Oa8jZ9M9bT6e6DZJPD9YJagbAkGe")
+client = Client("",
+                "")
 
 asset = "USDT"
 # default = 6; min_notional can be extended #
