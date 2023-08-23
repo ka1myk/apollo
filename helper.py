@@ -6,8 +6,8 @@ from binance.helpers import round_step_size
 parser = argparse.ArgumentParser()
 parser.add_argument('--function', type=str, required=True)
 
-client = Client("",
-                "")
+client = Client("Ny8b20OD7T3dXm96SVKmpbtJQA9rxmeh26BclnXGYYV3GDjktrVTAsJcLOqRIp2V",
+                "Nu4UemnKHnjwOx05ZFg9oT8NTV8ull95X7n7Oa8jZ9M9bT6e6DZJPD9YJagbAkGe")
 
 asset = "USDT"
 # default = 6; min_notional can be extended #
@@ -33,9 +33,11 @@ percentage_futures_open = 1.25
 # last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.16 - 10 minutes ago #
 newest_edge = 1000 * 60 * 60 * 0.35
 # cooldown will be reset after relative_hours. Last digit is for hours  #
-oldest_edge = 1000 * 60 * 60 * 2
+oldest_edge = 1000 * 60 * 60 * 1
 # new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
 to_the_moon_cooldown = 1000 * 60 * 60 * 12
+# new short order will be canceled only after to_the_moon_cooldown. Last digit is for hours  #
+cooldown_to_cancel_order_without_position = 1000 * 60 * 60 * 1
 
 # last digit is for days to cancel not filled limit orders #
 deltaTime = 1000 * 60 * 60 * 24 * 7
@@ -190,7 +192,7 @@ def get_futures_tickers_to_short():
             onboardDate.append(x["symbol"])
 
     tickers_after_excluding = set(all_tickers) - set(exist_positions) - set(futures_account_balance_asset) - set(
-        onboardDate)
+        onboardDate) - set(fundingRate) - set(get_open_orders_without_position())
 
     # klines_params #
     # klines_1d = []
@@ -360,7 +362,7 @@ def cancel_close_order_if_filled():
 
 
 @timeit
-def cancel_open_orders_without_position():
+def get_open_orders_without_position():
     try:
         open_orders = []
         for x in client.futures_get_open_orders():
@@ -371,11 +373,23 @@ def cancel_open_orders_without_position():
             if float(x["positionAmt"]) < 0:
                 positions.append(x["symbol"])
 
-        for x in list(set(open_orders) - set(positions)):
-            client.futures_cancel_all_open_orders(symbol=x)
+    except Exception:
+        print("fail to get open orders without position for", open_orders)
+
+    return list(set(open_orders) - set(positions))
+
+
+@timeit
+def cancel_open_orders_without_position():
+    try:
+
+        for x in get_open_orders_without_position():
+            if serverTime > float(client.futures_get_open_orders(symbol=x)[0][
+                                      "updateTime"]) + cooldown_to_cancel_order_without_position:
+                client.futures_cancel_all_open_orders(symbol=x)
 
     except Exception:
-        print("fail to cancel open orders without position for", open_orders)
+        print("fail to cancel open orders without position for", x)
 
 
 @timeit
@@ -495,8 +509,9 @@ def open_for_profit():
         symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
 
         for symbol in get_futures_tickers_to_short():
-            symbol_and_priceChangePercent["symbol"].append(symbol["symbol"])
-            symbol_and_priceChangePercent["priceChangePercent"].append(float(symbol["priceChangePercent"]))
+            symbol_and_priceChangePercent["symbol"].append(client.futures_ticker(symbol=symbol)["symbol"])
+            symbol_and_priceChangePercent["priceChangePercent"].append(
+                float(client.futures_ticker(symbol=symbol)["priceChangePercent"]))
 
         symbol = symbol_and_priceChangePercent["symbol"][
             symbol_and_priceChangePercent["priceChangePercent"].index(
