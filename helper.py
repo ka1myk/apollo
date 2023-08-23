@@ -31,9 +31,9 @@ base_percentage_futures_close = 0.999
 percentage_futures_open = 1.25
 
 # last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.16 - 10 minutes ago #
-newest_edge = 1000 * 60 * 60 * 0.16
+newest_edge = 1000 * 60 * 60 * 0.35
 # cooldown will be reset after relative_hours. Last digit is for hours  #
-oldest_edge = 1000 * 60 * 60 * 0.5
+oldest_edge = 1000 * 60 * 60 * 2
 # new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
 to_the_moon_cooldown = 1000 * 60 * 60 * 12
 
@@ -64,7 +64,7 @@ def timeit(func):
 def set_futures_change_leverage():
     for x in client.futures_ticker():
         try:
-            client.futures_change_leverage(symbol=x["symbol"], leverage=1)
+            print(client.futures_change_leverage(symbol=x["symbol"], leverage=1))
         except Exception:
             print("fail to set_futures_change_leverage of", x["symbol"])
 
@@ -126,11 +126,19 @@ def get_quantity_precision(symbol):
 @timeit
 def get_quantity(symbol):
     try:
+        # quantity = round(
+        #     (float(get_notional(symbol)) * set_greed())
+        #     / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
+        #     get_quantity_precision(symbol)
+        # )
+
+        # temp #
         quantity = round(
-            (float(get_notional(symbol)) * set_greed())
+            (float(get_notional(symbol)) * 1.2)
             / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
             get_quantity_precision(symbol)
         )
+
     except Exception:
         print("fail to get_quantity of", symbol)
     return quantity
@@ -182,59 +190,59 @@ def get_futures_tickers_to_short():
             onboardDate.append(x["symbol"])
 
     tickers_after_excluding = set(all_tickers) - set(exist_positions) - set(futures_account_balance_asset) - set(
-        onboardDate) - set(fundingRate)
+        onboardDate)
 
     # klines_params #
-    klines_1d = []
-    klines_12h = []
-    klines_8h = []
-    klines_6h = []
-    klines_4h = []
-    klines_2h = []
-    klines_1h = []
-    klines_30m = []
-    klines_15m = []
-    klines_5m = []
+    # klines_1d = []
+    # klines_12h = []
+    # klines_8h = []
+    # klines_6h = []
+    # klines_4h = []
+    # klines_2h = []
+    # klines_1h = []
+    # klines_30m = []
+    # klines_15m = []
+    # klines_5m = []
+    #
+    # for symbol in tickers_after_excluding:
+    #
+    #     if round(float(client.futures_klines(symbol=symbol, interval="1d")[-1][last_futures_klines_param]) / float(
+    #             client.futures_klines(symbol=symbol, interval="1d")[-2][penult_futures_klines_param]), 3) > 1:
+    #         klines_1d.append(symbol)
+    #
+    # for symbol in klines_1d:
+    #
+    #     if round(float(client.futures_klines(symbol=symbol, interval="12h")[-1][last_futures_klines_param]) / float(
+    #             client.futures_klines(symbol=symbol, interval="12h")[-2][penult_futures_klines_param]), 3) > 1:
+    #         klines_12h.append(symbol)
+    #
+    # for symbol in klines_12h:
+    #
+    #     if round(float(client.futures_klines(symbol=symbol, interval="6h")[-1][last_futures_klines_param]) / float(
+    #             client.futures_klines(symbol=symbol, interval="6h")[-2][penult_futures_klines_param]), 3) > 1:
+    #         klines_6h.append(symbol)
+    #
+    # for symbol in klines_6h:
+    #
+    #     if round(float(client.futures_klines(symbol=symbol, interval="1h")[-1][last_futures_klines_param]) / float(
+    #             client.futures_klines(symbol=symbol, interval="1h")[-2][penult_futures_klines_param]), 3) > 1:
+    #         klines_1h.append(symbol)
+    #
+    # for symbol in klines_1h:
+    #
+    #     if round(float(client.futures_klines(symbol=symbol, interval="30m")[-1][last_futures_klines_param]) / float(
+    #             client.futures_klines(symbol=symbol, interval="30m")[-2][penult_futures_klines_param]), 3) > 1:
+    #         klines_30m.append(symbol)
+    #
+    # for symbol in klines_30m:
+    #
+    #     if round(float(client.futures_klines(symbol=symbol, interval="5m")[-1][last_futures_klines_param]) / float(
+    #             client.futures_klines(symbol=symbol, interval="5m")[-2][penult_futures_klines_param]), 3) > 1:
+    #         klines_5m.append(symbol)
+    #
+    # result = klines_5m
 
-    for symbol in tickers_after_excluding:
-
-        if round(float(client.futures_klines(symbol=symbol, interval="1d")[-1][last_futures_klines_param]) / float(
-                client.futures_klines(symbol=symbol, interval="1d")[-2][penult_futures_klines_param]), 3) > 1:
-            klines_1d.append(symbol)
-
-    for symbol in klines_1d:
-
-        if round(float(client.futures_klines(symbol=symbol, interval="12h")[-1][last_futures_klines_param]) / float(
-                client.futures_klines(symbol=symbol, interval="12h")[-2][penult_futures_klines_param]), 3) > 1:
-            klines_12h.append(symbol)
-
-    for symbol in klines_12h:
-
-        if round(float(client.futures_klines(symbol=symbol, interval="6h")[-1][last_futures_klines_param]) / float(
-                client.futures_klines(symbol=symbol, interval="6h")[-2][penult_futures_klines_param]), 3) > 1:
-            klines_6h.append(symbol)
-
-    for symbol in klines_6h:
-
-        if round(float(client.futures_klines(symbol=symbol, interval="1h")[-1][last_futures_klines_param]) / float(
-                client.futures_klines(symbol=symbol, interval="1h")[-2][penult_futures_klines_param]), 3) > 1:
-            klines_1h.append(symbol)
-
-    for symbol in klines_1h:
-
-        if round(float(client.futures_klines(symbol=symbol, interval="30m")[-1][last_futures_klines_param]) / float(
-                client.futures_klines(symbol=symbol, interval="30m")[-2][penult_futures_klines_param]), 3) > 1:
-            klines_30m.append(symbol)
-
-    for symbol in klines_30m:
-
-        if round(float(client.futures_klines(symbol=symbol, interval="5m")[-1][last_futures_klines_param]) / float(
-                client.futures_klines(symbol=symbol, interval="5m")[-2][penult_futures_klines_param]), 3) > 1:
-            klines_5m.append(symbol)
-
-    result = klines_5m
-
-    return list(result)
+    return list(tickers_after_excluding)
 
 
 @timeit
@@ -472,34 +480,46 @@ def open_for_profit():
         # symbol = secrets.choice(get_futures_tickers_to_short())
 
         # priceChangePercent #
+        # symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
+        # for symbol in get_futures_tickers_to_short():
+        #     symbol_and_priceChangePercent["symbol"].append(symbol)
+        #     symbol_and_priceChangePercent["priceChangePercent"].append(
+        #         round(float(client.futures_klines(symbol=symbol, interval=klines_interval)[-2][3]) / float(
+        #             client.futures_klines(symbol=symbol, interval=klines_interval)[-1][3]), 3)
+        #     )
+        #
+        # symbol = symbol_and_priceChangePercent["symbol"][
+        #     symbol_and_priceChangePercent["priceChangePercent"].index(
+        #         min(symbol_and_priceChangePercent["priceChangePercent"]))]
+
         symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
-        for symbol in get_futures_tickers_to_short():
-            symbol_and_priceChangePercent["symbol"].append(symbol)
-            symbol_and_priceChangePercent["priceChangePercent"].append(
-                round(float(client.futures_klines(symbol=symbol, interval=klines_interval)[-2][3]) / float(
-                    client.futures_klines(symbol=symbol, interval=klines_interval)[-1][3]), 3)
-            )
+
+        for symbol in client.futures_ticker():
+            symbol_and_priceChangePercent["symbol"].append(symbol["symbol"])
+            symbol_and_priceChangePercent["priceChangePercent"].append(float(symbol["priceChangePercent"]))
 
         symbol = symbol_and_priceChangePercent["symbol"][
             symbol_and_priceChangePercent["priceChangePercent"].index(
-                min(symbol_and_priceChangePercent["priceChangePercent"]))]
+                max(symbol_and_priceChangePercent["priceChangePercent"]))]
 
         try:
-            client.futures_create_order(symbol=symbol,
-                                        quantity=get_quantity(symbol),
-                                        side='SELL',
-                                        positionSide='SHORT',
-                                        type='MARKET')
-
             # client.futures_create_order(symbol=symbol,
             #                             quantity=get_quantity(symbol),
-            #                             price=round_step_size(float(client.get_avg_price(symbol=symbol)['price'])
-            #                                                   * 1.005,
-            #                                                   get_tick_size(symbol)),
             #                             side='SELL',
             #                             positionSide='SHORT',
-            #                             type='LIMIT',
-            #                             timeInForce="GTC")
+            #                             type='MARKET')
+
+            client.futures_create_order(symbol=symbol,
+                                        quantity=get_quantity(symbol),
+                                        activationPrice=round_step_size(
+                                            float(client.get_avg_price(symbol=symbol)['price'])
+                                            * 1.001,
+                                            get_tick_size(symbol)),
+                                        callbackRate=0.1,
+                                        side='SELL',
+                                        positionSide='SHORT',
+                                        type='TRAILING_STOP_MARKET',
+                                        timeInForce="GTC")
         except Exception:
             print("fail open_for_profit")
 

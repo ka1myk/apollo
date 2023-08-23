@@ -20,4 +20,4 @@ shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bi
 @reboot sleep 10; tmuxp load /root/apollo/session.yaml
 
 #6,11,16,21,26,31,36,41,46,51,56 * * * * cd /root/apollo && python3 helper.py --function open && python3 helper.py --function close && python3 helper.py --function transfer
-31,36,41,46,51,56 * * * * cd /root/apollo && python3 helper.py --function open && python3 helper.py --function close && python3 helper.py --function transfer
+*/10 * * * * cd /root/apollo && python3 helper.py --function open && python3 helper.py --function close && python3 helper.py --function transfer
