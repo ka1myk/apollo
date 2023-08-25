@@ -20,18 +20,11 @@ percentage_increase_of_base_greed = 0.01
 # max greed be increased times #
 times_base_greed_can_be_increased = 2
 
-# https://binance-docs.github.io/apidocs/futures/en/#kline-candlestick-data #
-# [1] - Open, [2] - High, [3] - Low, [4] - Close, [5] - Volume #
-last_futures_klines_param = 3
-penult_futures_klines_param = 3
-
-# 1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M #
-klines_interval = "5m"
 base_percentage_futures_close = 0.999
 percentage_futures_open = 1.25
 
 # last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.16 - 10 minutes ago #
-newest_edge = 1000 * 60 * 60 * 0.35
+newest_edge = 1000 * 60 * 60 * 1
 # cooldown will be reset after relative_hours. Last digit is for hours  #
 oldest_edge = 1000 * 60 * 60 * 1
 # new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
@@ -128,15 +121,8 @@ def get_quantity_precision(symbol):
 @timeit
 def get_quantity(symbol):
     try:
-        # quantity = round(
-        #     (float(get_notional(symbol)) * set_greed())
-        #     / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
-        #     get_quantity_precision(symbol)
-        # )
-
-        # temp #
         quantity = round(
-            (float(get_notional(symbol)) * 1.2)
+            (float(get_notional(symbol)) * set_greed())
             / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
             get_quantity_precision(symbol)
         )
@@ -179,7 +165,6 @@ def get_futures_tickers_to_short():
             exist_positions.append(x["symbol"])
 
     # exclude negative fundingRate tickers #
-    # 21.08.23 - remove to check PnL #
     fundingRate = []
     for x in client.futures_funding_rate():
         if float(x["fundingRate"]) < 0:
@@ -193,56 +178,6 @@ def get_futures_tickers_to_short():
 
     tickers_after_excluding = set(all_tickers) - set(exist_positions) - set(futures_account_balance_asset) - set(
         onboardDate) - set(fundingRate) - set(get_open_orders_without_position())
-
-    # klines_params #
-    # klines_1d = []
-    # klines_12h = []
-    # klines_8h = []
-    # klines_6h = []
-    # klines_4h = []
-    # klines_2h = []
-    # klines_1h = []
-    # klines_30m = []
-    # klines_15m = []
-    # klines_5m = []
-    #
-    # for symbol in tickers_after_excluding:
-    #
-    #     if round(float(client.futures_klines(symbol=symbol, interval="1d")[-1][last_futures_klines_param]) / float(
-    #             client.futures_klines(symbol=symbol, interval="1d")[-2][penult_futures_klines_param]), 3) > 1:
-    #         klines_1d.append(symbol)
-    #
-    # for symbol in klines_1d:
-    #
-    #     if round(float(client.futures_klines(symbol=symbol, interval="12h")[-1][last_futures_klines_param]) / float(
-    #             client.futures_klines(symbol=symbol, interval="12h")[-2][penult_futures_klines_param]), 3) > 1:
-    #         klines_12h.append(symbol)
-    #
-    # for symbol in klines_12h:
-    #
-    #     if round(float(client.futures_klines(symbol=symbol, interval="6h")[-1][last_futures_klines_param]) / float(
-    #             client.futures_klines(symbol=symbol, interval="6h")[-2][penult_futures_klines_param]), 3) > 1:
-    #         klines_6h.append(symbol)
-    #
-    # for symbol in klines_6h:
-    #
-    #     if round(float(client.futures_klines(symbol=symbol, interval="1h")[-1][last_futures_klines_param]) / float(
-    #             client.futures_klines(symbol=symbol, interval="1h")[-2][penult_futures_klines_param]), 3) > 1:
-    #         klines_1h.append(symbol)
-    #
-    # for symbol in klines_1h:
-    #
-    #     if round(float(client.futures_klines(symbol=symbol, interval="30m")[-1][last_futures_klines_param]) / float(
-    #             client.futures_klines(symbol=symbol, interval="30m")[-2][penult_futures_klines_param]), 3) > 1:
-    #         klines_30m.append(symbol)
-    #
-    # for symbol in klines_30m:
-    #
-    #     if round(float(client.futures_klines(symbol=symbol, interval="5m")[-1][last_futures_klines_param]) / float(
-    #             client.futures_klines(symbol=symbol, interval="5m")[-2][penult_futures_klines_param]), 3) > 1:
-    #         klines_5m.append(symbol)
-    #
-    # result = klines_5m
 
     return list(tickers_after_excluding)
 
@@ -494,18 +429,6 @@ def open_for_profit():
         # symbol = secrets.choice(get_futures_tickers_to_short())
 
         # priceChangePercent #
-        # symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
-        # for symbol in get_futures_tickers_to_short():
-        #     symbol_and_priceChangePercent["symbol"].append(symbol)
-        #     symbol_and_priceChangePercent["priceChangePercent"].append(
-        #         round(float(client.futures_klines(symbol=symbol, interval=klines_interval)[-2][3]) / float(
-        #             client.futures_klines(symbol=symbol, interval=klines_interval)[-1][3]), 3)
-        #     )
-        #
-        # symbol = symbol_and_priceChangePercent["symbol"][
-        #     symbol_and_priceChangePercent["priceChangePercent"].index(
-        #         min(symbol_and_priceChangePercent["priceChangePercent"]))]
-
         symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
 
         for symbol in get_futures_tickers_to_short():
@@ -518,22 +441,15 @@ def open_for_profit():
                 max(symbol_and_priceChangePercent["priceChangePercent"]))]
 
         try:
-            # client.futures_create_order(symbol=symbol,
-            #                             quantity=get_quantity(symbol),
-            #                             side='SELL',
-            #                             positionSide='SHORT',
-            #                             type='MARKET')
-
             client.futures_create_order(symbol=symbol,
                                         quantity=get_quantity(symbol),
-                                        activationPrice=round_step_size(
-                                            float(client.get_avg_price(symbol=symbol)['price'])
-                                            * 1.001,
+                                        price=round_step_size(
+                                            float(client.futures_mark_price(symbol=symbol)["markPrice"])
+                                            * 1.0015,
                                             get_tick_size(symbol)),
-                                        callbackRate=0.1,
                                         side='SELL',
                                         positionSide='SHORT',
-                                        type='TRAILING_STOP_MARKET',
+                                        type='LIMIT',
                                         timeInForce="GTC")
         except Exception:
             print("fail open_for_profit")
