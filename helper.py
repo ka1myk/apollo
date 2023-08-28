@@ -474,3 +474,14 @@ def transfer_profit():
     transfer_free_USD_to_spot()
     buy_coins_on_spot()
     transfer_free_spot_coin_to_futures()
+
+
+if parser.parse_args().function == "open":
+    open_for_profit()
+if parser.parse_args().function == "close":
+    close_with_profit()
+if parser.parse_args().function == "transfer":
+    transfer_profit()
+if parser.parse_args().function == "initialized":
+    set_futures_change_multi_assets_mode()
+    set_futures_change_leverage()
