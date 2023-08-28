@@ -16,15 +16,15 @@ min_notional = 10
 min_notional_corrector = 1.2
 
 # amount of greed to add every time new trade is placed #
-percentage_increase_of_base_greed = 0.01
+percentage_increase_of_base_greed = 0.02
 # max greed be increased times #
-times_base_greed_can_be_increased = 2
+times_base_greed_can_be_increased = 3
 
 base_percentage_futures_close = 0.999
 percentage_futures_open = 1.25
 
 # last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.16 - 10 minutes ago #
-newest_edge = 1000 * 60 * 60 * 1
+newest_edge = 1000 * 60 * 60 * 0.5
 # cooldown will be reset after relative_hours. Last digit is for hours  #
 oldest_edge = 1000 * 60 * 60 * 1
 # new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
@@ -138,8 +138,8 @@ def get_trade_fee(symbol):
         trade_fee = float(client.get_trade_fee(symbol=symbol)[0]["makerCommission"]) + float(
             client.get_trade_fee(symbol=symbol)[0]["takerCommission"])
     except Exception:
-        trade_fee = float(client.get_trade_fee(symbol="BTCUSDT")[0]["makerCommission"]) + float(
-            client.get_trade_fee(symbol="BTCUSDT")[0]["takerCommission"])
+        trade_fee = float(client.get_trade_fee(symbol="ETHUSDT")[0]["makerCommission"]) + float(
+            client.get_trade_fee(symbol="ETHUSDT")[0]["takerCommission"])
     return trade_fee
 
 
@@ -188,6 +188,7 @@ def set_greed():
         # set base_greed #
         base_greed = math.ceil(((float(client.futures_account()['totalWalletBalance']) * min_notional_corrector) / (
                 len(client.futures_ticker()) * min_notional)))
+        print("base_greed", base_greed)
 
         # get greed of last trade relative base_greed #
         income_and_time = {"income": [], "time": []}
@@ -201,21 +202,25 @@ def set_greed():
             income_and_time["time"].index(
                 max(income_and_time["time"]))]
 
-        greed_of_last_trade = float(income) / (1 - base_percentage_futures_close) / (base_greed)
+        greed_of_last_trade = round(
+            (float(income) / (1 - (base_percentage_futures_close - get_trade_fee("ETHUSDT")))) / float(
+                get_notional("ETHUSDT")), 2)
 
+        print("greed_of_last_trade", greed_of_last_trade)
+
+        times_base_greed_can_be_increased_in_timeframe = 0
         # to increase or not based by last maker trade with realized_pnl #
         for x in client.futures_income_history():
             if x["incomeType"] == "REALIZED_PNL" and x["time"] > (serverTime - newest_edge):
-                greed_of_last_trade = greed_of_last_trade + (base_greed * percentage_increase_of_base_greed)
-                increased_base_greed = greed_of_last_trade
-                break
+                times_base_greed_can_be_increased_in_timeframe = times_base_greed_can_be_increased_in_timeframe + 1
 
-            else:
-                increased_base_greed = base_greed
+        greed_for_new_trade = greed_of_last_trade + times_base_greed_can_be_increased_in_timeframe * percentage_increase_of_base_greed
+        print(greed_for_new_trade)
+
     except Exception:
         print("fail to set_greed")
 
-    return min(round(increased_base_greed, 2), round((base_greed * times_base_greed_can_be_increased), 2))
+    return min(round(greed_for_new_trade, 2), round((base_greed * times_base_greed_can_be_increased), 2))
 
 
 @timeit
@@ -445,7 +450,7 @@ def open_for_profit():
                                         quantity=get_quantity(symbol),
                                         price=round_step_size(
                                             float(client.futures_mark_price(symbol=symbol)["markPrice"])
-                                            * 1.0015,
+                                            * 1.003,
                                             get_tick_size(symbol)),
                                         side='SELL',
                                         positionSide='SHORT',
@@ -469,14 +474,3 @@ def transfer_profit():
     transfer_free_USD_to_spot()
     buy_coins_on_spot()
     transfer_free_spot_coin_to_futures()
-
-
-if parser.parse_args().function == "open":
-    open_for_profit()
-if parser.parse_args().function == "close":
-    close_with_profit()
-if parser.parse_args().function == "transfer":
-    transfer_profit()
-if parser.parse_args().function == "initialized":
-    set_futures_change_multi_assets_mode()
-    set_futures_change_leverage()
