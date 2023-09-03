@@ -20,6 +20,7 @@ percentage_increase_of_base_greed = 0.02
 # max greed be increased times #
 times_base_greed_can_be_increased = 3
 
+# without fee deduction #
 base_percentage_futures_close = 0.999
 percentage_futures_open = 1.25
 
@@ -28,12 +29,12 @@ newest_edge = 1000 * 60 * 60 * 0.5
 # cooldown will be reset after relative_hours. Last digit is for hours  #
 oldest_edge = 1000 * 60 * 60 * 1
 # new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
-to_the_moon_cooldown = 1000 * 60 * 60 * 12
-# new short order will be canceled only after to_the_moon_cooldown. Last digit is for hours  #
+to_the_moon_cooldown = 1000 * 60 * 60 * 48
+# new short order will be canceled only after cooldown_to_cancel_order_without_position. Last digit is for hours  #
 cooldown_to_cancel_order_without_position = 1000 * 60 * 60 * 1
 
-# last digit is for days to cancel not filled limit orders #
-deltaTime = 1000 * 60 * 60 * 24 * 7
+# last digit is for days #
+deltaTime = 1000 * 60 * 60 * 24 * 14
 # most likely, it will not fall less than 0.79, so lower limit orders will be cancelled after deltaTime #
 percentage_spot_open = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
 
@@ -133,17 +134,6 @@ def get_quantity(symbol):
 
 
 @timeit
-def get_trade_fee(symbol):
-    try:
-        trade_fee = float(client.get_trade_fee(symbol=symbol)[0]["makerCommission"]) + float(
-            client.get_trade_fee(symbol=symbol)[0]["takerCommission"])
-    except Exception:
-        trade_fee = float(client.get_trade_fee(symbol="ETHUSDT")[0]["makerCommission"]) + float(
-            client.get_trade_fee(symbol="ETHUSDT")[0]["takerCommission"])
-    return trade_fee
-
-
-@timeit
 def get_futures_tickers_to_short():
     # exclude balance_asset tickers #
     futures_account_balance_asset = []
@@ -203,7 +193,7 @@ def set_greed():
                 max(income_and_time["time"]))]
 
         greed_of_last_trade = round(
-            (float(income) / (1 - (base_percentage_futures_close - get_trade_fee("ETHUSDT")))) / float(
+            (float(income) / (1 - base_percentage_futures_close)) / float(
                 get_notional("ETHUSDT")), 2)
 
         print("greed_of_last_trade", greed_of_last_trade)
@@ -249,7 +239,7 @@ def create_close_limit(symbol):
                                         get_step_size(symbol)),
                                     price=round_step_size(float(
                                         client.futures_position_information(symbol=symbol)[1]["entryPrice"])
-                                                          * (base_percentage_futures_close - get_trade_fee(symbol)),
+                                                          * base_percentage_futures_close,
                                                           get_tick_size(symbol)),
                                     side='BUY',
                                     positionSide='SHORT',
