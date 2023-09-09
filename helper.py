@@ -18,7 +18,7 @@ min_notional_corrector = 1.2
 # amount of greed to add every time new trade is placed #
 percentage_increase_of_base_greed = 0.01
 # max greed be increased times #
-times_base_greed_can_be_increased = 5
+times_base_greed_can_be_increased = 2
 
 # without fee deduction #
 base_percentage_futures_close = 0.999
@@ -127,6 +127,7 @@ def get_quantity(symbol):
             / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
             get_quantity_precision(symbol)
         )
+        print(quantity)
 
     except Exception:
         print("fail to get_quantity of", symbol)
@@ -197,6 +198,9 @@ def set_greed():
                 get_notional("ETHUSDT")), 2)
 
         print("greed_of_last_trade", greed_of_last_trade)
+
+        if greed_of_last_trade < base_greed:
+            greed_of_last_trade = base_greed
 
         times_base_greed_can_be_increased_in_timeframe = 0
         # to increase or not based by last maker trade with realized_pnl #
