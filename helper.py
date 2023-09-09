@@ -16,9 +16,9 @@ min_notional = 10
 min_notional_corrector = 1.2
 
 # amount of greed to add every time new trade is placed #
-percentage_increase_of_base_greed = 0.02
+percentage_increase_of_base_greed = 0.01
 # max greed be increased times #
-times_base_greed_can_be_increased = 3
+times_base_greed_can_be_increased = 5
 
 # without fee deduction #
 base_percentage_futures_close = 0.999
@@ -27,7 +27,7 @@ percentage_futures_open = 1.25
 # last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.16 - 10 minutes ago #
 newest_edge = 1000 * 60 * 60 * 0.5
 # cooldown will be reset after relative_hours. Last digit is for hours  #
-oldest_edge = 1000 * 60 * 60 * 1
+oldest_edge = 1000 * 60 * 60 * 3
 # new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
 to_the_moon_cooldown = 1000 * 60 * 60 * 48
 # new short order will be canceled only after cooldown_to_cancel_order_without_position. Last digit is for hours  #
@@ -167,7 +167,7 @@ def get_futures_tickers_to_short():
             onboardDate.append(x["symbol"])
 
     tickers_after_excluding = set(all_tickers) - set(exist_positions) - set(futures_account_balance_asset) - set(
-        onboardDate) - set(fundingRate) - set(get_open_orders_without_position())
+        onboardDate) - set(get_open_orders_without_position())
 
     return list(tickers_after_excluding)
 
@@ -421,19 +421,19 @@ def open_for_profit():
     if last_realized_pnl_trade + newest_edge > serverTime or serverTime > last_realized_pnl_trade + oldest_edge:
 
         # random #
-        # symbol = secrets.choice(get_futures_tickers_to_short())
+        symbol = secrets.choice(get_futures_tickers_to_short())
 
         # priceChangePercent #
-        symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
-
-        for symbol in get_futures_tickers_to_short():
-            symbol_and_priceChangePercent["symbol"].append(client.futures_ticker(symbol=symbol)["symbol"])
-            symbol_and_priceChangePercent["priceChangePercent"].append(
-                float(client.futures_ticker(symbol=symbol)["priceChangePercent"]))
-
-        symbol = symbol_and_priceChangePercent["symbol"][
-            symbol_and_priceChangePercent["priceChangePercent"].index(
-                max(symbol_and_priceChangePercent["priceChangePercent"]))]
+        # symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
+        #
+        # for symbol in get_futures_tickers_to_short():
+        #     symbol_and_priceChangePercent["symbol"].append(client.futures_ticker(symbol=symbol)["symbol"])
+        #     symbol_and_priceChangePercent["priceChangePercent"].append(
+        #         float(client.futures_ticker(symbol=symbol)["priceChangePercent"]))
+        #
+        # symbol = symbol_and_priceChangePercent["symbol"][
+        #     symbol_and_priceChangePercent["priceChangePercent"].index(
+        #         max(symbol_and_priceChangePercent["priceChangePercent"]))]
 
         try:
             client.futures_create_order(symbol=symbol,
