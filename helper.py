@@ -209,7 +209,7 @@ def set_greed():
                 times_base_greed_can_be_increased_in_timeframe = times_base_greed_can_be_increased_in_timeframe + 1
 
         greed_for_new_trade = greed_of_last_trade + times_base_greed_can_be_increased_in_timeframe * percentage_increase_of_base_greed
-        print(greed_for_new_trade)
+        print("greed_for_new_trade", greed_for_new_trade)
 
     except Exception:
         print("fail to set_greed")
@@ -420,38 +420,38 @@ def get_futures_income_history():
 # --function open_for_profit #
 @timeit
 def open_for_profit():
-    last_realized_pnl_trade = get_futures_income_history()
+    # last_realized_pnl_trade = get_futures_income_history()
 
-    if last_realized_pnl_trade + newest_edge > serverTime or serverTime > last_realized_pnl_trade + oldest_edge:
+    # if last_realized_pnl_trade + newest_edge > serverTime or serverTime > last_realized_pnl_trade + oldest_edge:
 
-        # random #
-        symbol = secrets.choice(get_futures_tickers_to_short())
+    # random #
+    symbol = secrets.choice(get_futures_tickers_to_short())
 
-        # priceChangePercent #
-        # symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
-        #
-        # for symbol in get_futures_tickers_to_short():
-        #     symbol_and_priceChangePercent["symbol"].append(client.futures_ticker(symbol=symbol)["symbol"])
-        #     symbol_and_priceChangePercent["priceChangePercent"].append(
-        #         float(client.futures_ticker(symbol=symbol)["priceChangePercent"]))
-        #
-        # symbol = symbol_and_priceChangePercent["symbol"][
-        #     symbol_and_priceChangePercent["priceChangePercent"].index(
-        #         max(symbol_and_priceChangePercent["priceChangePercent"]))]
+    # priceChangePercent #
+    # symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
+    #
+    # for symbol in get_futures_tickers_to_short():
+    #     symbol_and_priceChangePercent["symbol"].append(client.futures_ticker(symbol=symbol)["symbol"])
+    #     symbol_and_priceChangePercent["priceChangePercent"].append(
+    #         float(client.futures_ticker(symbol=symbol)["priceChangePercent"]))
+    #
+    # symbol = symbol_and_priceChangePercent["symbol"][
+    #     symbol_and_priceChangePercent["priceChangePercent"].index(
+    #         max(symbol_and_priceChangePercent["priceChangePercent"]))]
 
-        try:
-            client.futures_create_order(symbol=symbol,
-                                        quantity=get_quantity(symbol),
-                                        price=round_step_size(
-                                            float(client.futures_mark_price(symbol=symbol)["markPrice"])
-                                            * 1.003,
-                                            get_tick_size(symbol)),
-                                        side='SELL',
-                                        positionSide='SHORT',
-                                        type='LIMIT',
-                                        timeInForce="GTC")
-        except Exception:
-            print("fail open_for_profit")
+    try:
+        client.futures_create_order(symbol=symbol,
+                                    quantity=get_quantity(symbol),
+                                    price=round_step_size(
+                                        float(client.futures_mark_price(symbol=symbol)["markPrice"])
+                                        * 1.003,
+                                        get_tick_size(symbol)),
+                                    side='SELL',
+                                    positionSide='SHORT',
+                                    type='LIMIT',
+                                    timeInForce="GTC")
+    except Exception:
+        print("fail open_for_profit")
 
 
 # --function close_with_profit #
