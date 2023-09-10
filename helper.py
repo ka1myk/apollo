@@ -15,23 +15,17 @@ min_notional = 10
 # default = 1.2; min_notional_corrector needs to correct error of not creating close orders #
 min_notional_corrector = 1.2
 
-# amount of greed to add every time new trade is placed #
-percentage_increase_of_base_greed = 0.01
-# max greed be increased times #
-times_base_greed_can_be_increased = 2
-
 # without fee deduction #
 base_percentage_futures_close = 0.999
-percentage_futures_open = 1.25
+# if position starts pump #
+percentage_futures_open_exist_position = 1.25
+# if no position and like fishnet #
+percentage_futures_open_new_position = 1.003
 
-# last digit is for hours to cooldown isMarketBuy, 1 - hour ago, 0.16 - 10 minutes ago #
-newest_edge = 1000 * 60 * 60 * 0.5
-# cooldown will be reset after relative_hours. Last digit is for hours  #
-oldest_edge = 1000 * 60 * 60 * 3
 # new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
 to_the_moon_cooldown = 1000 * 60 * 60 * 48
 # new short order will be canceled only after cooldown_to_cancel_order_without_position. Last digit is for hours  #
-cooldown_to_cancel_order_without_position = 1000 * 60 * 60 * 0.16
+cooldown_to_cancel_order_without_position = 1000 * 60 * 60 * 1
 
 # last digit is for days #
 deltaTime = 1000 * 60 * 60 * 24 * 14
@@ -122,14 +116,8 @@ def get_quantity_precision(symbol):
 @timeit
 def get_quantity(symbol):
     try:
-        # quantity = round(
-        #     (float(get_notional(symbol)) * set_greed())
-        #     / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
-        #     get_quantity_precision(symbol)
-        # )
-
         quantity = round(
-            (float(get_notional(symbol)))
+            (float(get_notional(symbol)) * set_greed())
             / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
             get_quantity_precision(symbol)
         )
@@ -161,12 +149,6 @@ def get_futures_tickers_to_short():
         if float(x["positionAmt"]) < 0:
             exist_positions.append(x["symbol"])
 
-    # exclude negative fundingRate tickers #
-    fundingRate = []
-    for x in client.futures_funding_rate():
-        if float(x["fundingRate"]) < 0:
-            fundingRate.append(x["symbol"])
-
     # exclude tickers with onboardDate < deltaTime #
     onboardDate = []
     for x in client.futures_exchange_info()["symbols"]:
@@ -187,40 +169,10 @@ def set_greed():
                 len(client.futures_ticker()) * min_notional)))
         print("base_greed", base_greed)
 
-        # get greed of last trade relative base_greed #
-        income_and_time = {"income": [], "time": []}
-
-        for x in client.futures_income_history():
-            if x["incomeType"] == "REALIZED_PNL":
-                income_and_time["income"].append(x["income"])
-                income_and_time["time"].append(x["time"])
-
-        income = income_and_time["income"][
-            income_and_time["time"].index(
-                max(income_and_time["time"]))]
-
-        greed_of_last_trade = round(
-            (float(income) / (1 - base_percentage_futures_close)) / float(
-                get_notional("ETHUSDT")), 2)
-
-        print("greed_of_last_trade", greed_of_last_trade)
-
-        if greed_of_last_trade < base_greed:
-            greed_of_last_trade = base_greed
-
-        times_base_greed_can_be_increased_in_timeframe = 0
-        # to increase or not based by last maker trade with realized_pnl #
-        for x in client.futures_income_history():
-            if x["incomeType"] == "REALIZED_PNL" and x["time"] > (serverTime - newest_edge):
-                times_base_greed_can_be_increased_in_timeframe = times_base_greed_can_be_increased_in_timeframe + 1
-
-        greed_for_new_trade = greed_of_last_trade + times_base_greed_can_be_increased_in_timeframe * percentage_increase_of_base_greed
-        print("greed_for_new_trade", greed_for_new_trade)
-
     except Exception:
         print("fail to set_greed")
 
-    return min(round(greed_for_new_trade, 2), round((base_greed * times_base_greed_can_be_increased), 2))
+    return base_greed
 
 
 @timeit
@@ -230,7 +182,8 @@ def create_open_limit(symbol):
                                     quantity=get_quantity(symbol),
                                     price=round_step_size(float(
                                         client.futures_position_information(symbol=symbol)[1]["markPrice"])
-                                                          * percentage_futures_open, get_tick_size(symbol)),
+                                                          * percentage_futures_open_exist_position,
+                                                          get_tick_size(symbol)),
                                     side='SELL',
                                     positionSide='SHORT',
                                     type='LIMIT',
@@ -413,45 +366,16 @@ def transfer_free_spot_coin_to_futures():
         print("fail transfer_free_spot_coin_to_futures")
 
 
-@timeit
-def get_futures_income_history():
-    futures_income_history = []
-    for x in client.futures_income_history():
-        if x["incomeType"] == 'REALIZED_PNL':
-            futures_income_history.append(x["time"])
-
-    return max(futures_income_history)
-
-
 # --function open_for_profit #
 @timeit
 def open_for_profit():
-    # last_realized_pnl_trade = get_futures_income_history()
-
-    # if last_realized_pnl_trade + newest_edge > serverTime or serverTime > last_realized_pnl_trade + oldest_edge:
-
-    # random #
-    # symbol = secrets.choice(get_futures_tickers_to_short())
-
-    # priceChangePercent #
-    # symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
-    #
-    # for symbol in get_futures_tickers_to_short():
-    #     symbol_and_priceChangePercent["symbol"].append(client.futures_ticker(symbol=symbol)["symbol"])
-    #     symbol_and_priceChangePercent["priceChangePercent"].append(
-    #         float(client.futures_ticker(symbol=symbol)["priceChangePercent"]))
-    #
-    # symbol = symbol_and_priceChangePercent["symbol"][
-    #     symbol_and_priceChangePercent["priceChangePercent"].index(
-    #         max(symbol_and_priceChangePercent["priceChangePercent"]))]
-
     for symbol in get_futures_tickers_to_short():
         try:
             client.futures_create_order(symbol=symbol,
                                         quantity=get_quantity(symbol),
                                         price=round_step_size(
                                             float(client.futures_mark_price(symbol=symbol)["markPrice"])
-                                            * 1.003,
+                                            * percentage_futures_open_new_position,
                                             get_tick_size(symbol)),
                                         side='SELL',
                                         positionSide='SHORT',
