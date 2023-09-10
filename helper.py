@@ -31,7 +31,7 @@ oldest_edge = 1000 * 60 * 60 * 3
 # new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
 to_the_moon_cooldown = 1000 * 60 * 60 * 48
 # new short order will be canceled only after cooldown_to_cancel_order_without_position. Last digit is for hours  #
-cooldown_to_cancel_order_without_position = 1000 * 60 * 60 * 1
+cooldown_to_cancel_order_without_position = 1000 * 60 * 60 * 0.16
 
 # last digit is for days #
 deltaTime = 1000 * 60 * 60 * 24 * 14
@@ -122,12 +122,18 @@ def get_quantity_precision(symbol):
 @timeit
 def get_quantity(symbol):
     try:
+        # quantity = round(
+        #     (float(get_notional(symbol)) * set_greed())
+        #     / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
+        #     get_quantity_precision(symbol)
+        # )
+
         quantity = round(
-            (float(get_notional(symbol)) * set_greed())
+            (float(get_notional(symbol)))
             / float(client.futures_mark_price(symbol=symbol)["markPrice"]),
             get_quantity_precision(symbol)
         )
-        print(quantity)
+
 
     except Exception:
         print("fail to get_quantity of", symbol)
@@ -425,7 +431,7 @@ def open_for_profit():
     # if last_realized_pnl_trade + newest_edge > serverTime or serverTime > last_realized_pnl_trade + oldest_edge:
 
     # random #
-    symbol = secrets.choice(get_futures_tickers_to_short())
+    # symbol = secrets.choice(get_futures_tickers_to_short())
 
     # priceChangePercent #
     # symbol_and_priceChangePercent = {"symbol": [], "priceChangePercent": []}
@@ -439,19 +445,20 @@ def open_for_profit():
     #     symbol_and_priceChangePercent["priceChangePercent"].index(
     #         max(symbol_and_priceChangePercent["priceChangePercent"]))]
 
-    try:
-        client.futures_create_order(symbol=symbol,
-                                    quantity=get_quantity(symbol),
-                                    price=round_step_size(
-                                        float(client.futures_mark_price(symbol=symbol)["markPrice"])
-                                        * 1.003,
-                                        get_tick_size(symbol)),
-                                    side='SELL',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC")
-    except Exception:
-        print("fail open_for_profit")
+    for symbol in get_futures_tickers_to_short():
+        try:
+            client.futures_create_order(symbol=symbol,
+                                        quantity=get_quantity(symbol),
+                                        price=round_step_size(
+                                            float(client.futures_mark_price(symbol=symbol)["markPrice"])
+                                            * 1.003,
+                                            get_tick_size(symbol)),
+                                        side='SELL',
+                                        positionSide='SHORT',
+                                        type='LIMIT',
+                                        timeInForce="GTC")
+        except Exception:
+            print("fail open_for_profit")
 
 
 # --function close_with_profit #
