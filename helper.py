@@ -3,9 +3,6 @@ import re, math, secrets, argparse, functools, time
 from binance.client import Client
 from binance.helpers import round_step_size
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--function', type=str, required=True)
-
 client = Client("",
                 "")
 
@@ -21,7 +18,7 @@ short_base_percentage_futures_close = 0.999
 # if position starts pump #
 short_percentage_futures_open_exist_position = 1.25
 # if no position and like fishnet #
-short_percentage_futures_open_new_position = 1.003
+short_percentage_futures_open_new_position = 1.004
 
 # for long #
 # without fee deduction #
@@ -29,7 +26,9 @@ long_base_percentage_futures_close = 1.001
 # if position starts pump #
 long_percentage_futures_open_exist_position = 0.75
 # if no position and like fishnet #
-long_percentage_futures_open_new_position = 0.997
+long_percentage_futures_open_new_position = 0.996
+
+percentage_of_open_position = 0.10
 
 # new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
 to_the_moon_cooldown = 1000 * 60 * 60 * 48
@@ -71,7 +70,7 @@ def set_futures_change_leverage():
 @timeit
 def set_futures_change_multi_assets_mode():
     try:
-        client.futures_change_multi_assets_mode(multiAssetsMargin="True")
+        print(client.futures_change_multi_assets_mode(multiAssetsMargin="True"))
     except Exception:
         print("fail to set_futures_change_multi_assets_mode")
 
@@ -85,7 +84,7 @@ def get_notional(symbol):
                     if y['filterType'] == 'MIN_NOTIONAL':
                         return y['notional']
     except Exception:
-        print("fail to get_notional of", symbol)
+        print("fail to get_notional for", symbol)
 
 
 @timeit
@@ -97,7 +96,7 @@ def get_tick_size(symbol):
                     if y['filterType'] == 'PRICE_FILTER':
                         return y['tickSize']
     except Exception:
-        print("fail to get_tick_size of", symbol)
+        print("fail to get_tick_size for", symbol)
 
 
 @timeit
@@ -109,7 +108,7 @@ def get_step_size(symbol):
                     if y['filterType'] == 'MARKET_LOT_SIZE':
                         return y['stepSize']
     except Exception:
-        print("fail to get_step_size of", symbol)
+        print("fail to get_step_size for", symbol)
 
 
 @timeit
@@ -119,7 +118,7 @@ def get_quantity_precision(symbol):
             if x['symbol'] == symbol:
                 return x["quantityPrecision"]
     except Exception:
-        print("fail to get_quantity_precision of", symbol)
+        print("fail to get_quantity_precision for", symbol)
 
 
 @timeit
@@ -131,14 +130,13 @@ def get_quantity(symbol):
             get_quantity_precision(symbol)
         )
 
-
     except Exception:
-        print("fail to get_quantity of", symbol)
+        print("fail to get_quantity for", symbol)
     return quantity
 
 
 @timeit
-def get_futures_tickers_to_short():
+def get_futures_tickers():
     # exclude balance_asset tickers #
     futures_account_balance_asset = []
     for x in client.futures_account_balance():
@@ -152,22 +150,42 @@ def get_futures_tickers_to_short():
         if remove_quarterly_contract and remove_busd_contract:
             all_tickers.append(x["symbol"])
 
-    # exclude exist_positions tickers #
-    exist_positions = []
-    for x in client.futures_position_information():
-        if float(x["positionAmt"]) < 0:
-            exist_positions.append(x["symbol"])
-
     # exclude tickers with onboardDate < deltaTime #
     onboardDate = []
     for x in client.futures_exchange_info()["symbols"]:
         if float(x["onboardDate"]) > serverTime - deltaTime:
             onboardDate.append(x["symbol"])
 
-    tickers_after_excluding = set(all_tickers) - set(exist_positions) - set(futures_account_balance_asset) - set(
-        onboardDate) - set(get_open_orders_without_position())
+    tickers_after_excluding = set(all_tickers) - set(futures_account_balance_asset) - set(onboardDate)
 
     return list(tickers_after_excluding)
+
+
+@timeit
+def short_get_futures_tickers():
+    # exclude short_exist_positions tickers #
+    short_exist_positions = []
+    for x in client.futures_position_information():
+        if float(x["positionAmt"]) < 0:
+            short_exist_positions.append(x["symbol"])
+
+    short_tickers_after_excluding = set(get_futures_tickers()) - set(short_exist_positions) - set(
+        short_get_open_orders_without_position())
+
+    return list(short_tickers_after_excluding)
+
+
+def long_get_futures_tickers():
+    # exclude long_exist_positions tickers #
+    long_exist_positions = []
+    for x in client.futures_position_information():
+        if float(x["positionAmt"]) > 0:
+            long_exist_positions.append(x["symbol"])
+
+    long_tickers_after_excluding = set(get_futures_tickers()) - set(long_exist_positions) - set(
+        long_get_open_orders_without_position())
+
+    return list(long_tickers_after_excluding)
 
 
 @timeit
@@ -176,7 +194,6 @@ def set_greed():
         # set base_greed #
         base_greed = math.ceil(((float(client.futures_account()['totalWalletBalance']) * min_notional_corrector) / (
                 len(client.futures_ticker()) * min_notional)))
-        print("base_greed", base_greed)
 
     except Exception:
         print("fail to set_greed")
@@ -199,7 +216,7 @@ def short_create_open_limit(symbol):
                                     timeInForce="GTC"
                                     )
     except Exception:
-        print("fail to open short limit for", symbol)
+        print("fail to short_create_open_limit", symbol)
 
 
 @timeit
@@ -217,7 +234,7 @@ def long_create_open_limit(symbol):
                                     timeInForce="GTC"
                                     )
     except Exception:
-        print("fail to open long limit for", symbol)
+        print("fail to long_create_open_limit", symbol)
 
 
 @timeit
@@ -237,7 +254,7 @@ def short_create_close_limit(symbol):
                                     timeInForce="GTC"
                                     )
     except Exception:
-        print("fail to create short close LIMIT for", symbol)
+        print("fail to short_create_close_limit for", symbol)
 
 
 @timeit
@@ -257,7 +274,7 @@ def long_create_close_limit(symbol):
                                     timeInForce="GTC"
                                     )
     except Exception:
-        print("fail to create long close limit for", symbol)
+        print("fail to long_create_close_limit", symbol)
 
 
 @timeit
@@ -303,7 +320,7 @@ def close_exist_positions():
                 if count_sell_orders == 0 and x["updateTime"] < serverTime - to_the_moon_cooldown:
                     long_create_open_limit(symbol)
     except Exception:
-        print("fail to create close exist positions for", symbol)
+        print("fail to close_exist_positions", symbol)
 
 
 @timeit
@@ -317,6 +334,7 @@ def cancel_close_order_if_filled():
                     if x["side"] == "BUY" and abs(float(x["positionAmt"])) != float(x["origQty"]):
                         client.futures_cancel_order(symbol=symbol, orderId=x["orderId"])
 
+        for x in client.futures_position_information():
             if float(x["positionAmt"]) > 0:
                 symbol = x["symbol"]
 
@@ -325,38 +343,68 @@ def cancel_close_order_if_filled():
                         client.futures_cancel_order(symbol=symbol, orderId=x["orderId"])
 
     except Exception:
-        print("fail to cancel close order if filled for", symbol)
+        print("fail to cancel_close_order_if_filled", symbol)
 
 
 @timeit
-def get_open_orders_without_position():
+def short_get_open_orders_without_position():
     try:
-        open_orders = []
+        short_open_orders = []
         for x in client.futures_get_open_orders():
-            open_orders.append(x["symbol"])
+            short_open_orders.append(x["symbol"])
 
-        positions = []
+        short_positions = []
         for x in client.futures_position_information():
-            if float(x["positionAmt"]) < 0 or float(x["positionAmt"]) > 0:
-                positions.append(x["symbol"])
+            if float(x["positionAmt"]) < 0:
+                short_positions.append(x["symbol"])
 
     except Exception:
-        print("fail to get open orders without position for", open_orders)
+        print("fail to short_get_open_orders_without_position", short_open_orders)
 
-    return list(set(open_orders) - set(positions))
+    return list(set(short_open_orders) - set(short_positions))
+
+
+def long_get_open_orders_without_position():
+    try:
+        long_open_orders = []
+        for x in client.futures_get_open_orders():
+            long_open_orders.append(x["symbol"])
+
+        long_positions = []
+        for x in client.futures_position_information():
+            if float(x["positionAmt"]) > 0:
+                long_positions.append(x["symbol"])
+
+    except Exception:
+        print("fail to long_get_open_orders_without_position", long_open_orders)
+
+    return list(set(long_open_orders) - set(long_positions))
 
 
 @timeit
-def cancel_open_orders_without_position():
+def short_cancel_open_orders_without_position():
     try:
 
-        for x in get_open_orders_without_position():
+        for x in short_get_open_orders_without_position():
+            if serverTime > float(client.futures_get_open_orders(symbol=x)[1][
+                                      "updateTime"]) + cooldown_to_cancel_order_without_position:
+                client.futures_cancel_order(symbol=x, orderId=x["orderId"])
+
+
+    except Exception:
+        print("fail to cancel_open_orders_without_position", x)
+
+
+def long_cancel_open_orders_without_position():
+    try:
+
+        for x in long_get_open_orders_without_position():
             if serverTime > float(client.futures_get_open_orders(symbol=x)[0][
                                       "updateTime"]) + cooldown_to_cancel_order_without_position:
-                client.futures_cancel_all_open_orders(symbol=x)
+                client.futures_cancel_order(symbol=x, orderId=x["orderId"])
 
     except Exception:
-        print("fail to cancel open orders without position for", x)
+        print("fail to cancel_open_orders_without_position", x)
 
 
 @timeit
@@ -480,7 +528,8 @@ def long_open_for_profit(symbol):
 def close_with_profit():
     cancel_close_order_if_filled()
     close_exist_positions()
-    cancel_open_orders_without_position()
+    long_cancel_open_orders_without_position()
+    short_cancel_open_orders_without_position()
 
 
 # --function transfer_profit #
@@ -491,14 +540,30 @@ def transfer_profit():
     transfer_free_spot_coin_to_futures()
 
 
-def for_the_emperor():
-    for symbol in get_futures_tickers_to_short():
-        long_open_for_profit(symbol)
-        short_open_for_profit(symbol)
+@timeit
+def count_open_positions_and_start():
+    long_positions = 0
+    for x in client.futures_position_information():
+        if float(x["positionAmt"]) > 0:
+            long_positions = long_positions + 1
 
+    short_positions = 0
+    for x in client.futures_position_information():
+        if float(x["positionAmt"]) < 0:
+            short_positions = short_positions + 1
+
+    if (round((long_positions + short_positions) / (len(get_futures_tickers()) * 2), 2)) < percentage_of_open_position:
+        for symbol in long_get_futures_tickers():
+            long_open_for_profit(symbol)
+        for symbol in short_get_futures_tickers():
+            short_open_for_profit(symbol)
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--function', type=str, required=True)
 
 if parser.parse_args().function == "open":
-    for_the_emperor()
+    count_open_positions_and_start()
 if parser.parse_args().function == "close":
     close_with_profit()
 if parser.parse_args().function == "transfer":
