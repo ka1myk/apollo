@@ -30,9 +30,9 @@ long_percentage_futures_open_new_position = 0.996
 
 percentage_of_open_position = 0.10
 
-# new short order will be opened after to_the_moon_cooldown. Last digit is for hours  #
+# new order will be opened after to_the_moon_cooldown. Last digit is for hours  #
 to_the_moon_cooldown = 1000 * 60 * 60 * 48
-# new short order will be canceled only after cooldown_to_cancel_order_without_position. Last digit is for hours  #
+# new order will be canceled only after cooldown_to_cancel_order_without_position. Last digit is for hours  #
 cooldown_to_cancel_order_without_position = 1000 * 60 * 60 * 0.1
 
 # last digit is for days #
@@ -63,16 +63,16 @@ def set_futures_change_leverage():
     for x in client.futures_ticker():
         try:
             print(client.futures_change_leverage(symbol=x["symbol"], leverage=1))
-        except Exception:
-            print("fail to set_futures_change_leverage of", x["symbol"])
+        except Exception as e:
+            print("fail to set_futures_change_leverage of", x["symbol"], e)
 
 
 @timeit
 def set_futures_change_multi_assets_mode():
     try:
         print(client.futures_change_multi_assets_mode(multiAssetsMargin="True"))
-    except Exception:
-        print("fail to set_futures_change_multi_assets_mode")
+    except Exception as e:
+        print("fail to set_futures_change_multi_assets_mode", e)
 
 
 @timeit
@@ -83,8 +83,8 @@ def get_notional(symbol):
                 for y in x['filters']:
                     if y['filterType'] == 'MIN_NOTIONAL':
                         return y['notional']
-    except Exception:
-        print("fail to get_notional for", symbol)
+    except Exception as e:
+        print("fail to get_notional for", symbol, e)
 
 
 @timeit
@@ -95,8 +95,8 @@ def get_tick_size(symbol):
                 for y in x['filters']:
                     if y['filterType'] == 'PRICE_FILTER':
                         return y['tickSize']
-    except Exception:
-        print("fail to get_tick_size for", symbol)
+    except Exception as e:
+        print("fail to get_tick_size for", symbol, e)
 
 
 @timeit
@@ -107,8 +107,8 @@ def get_step_size(symbol):
                 for y in x['filters']:
                     if y['filterType'] == 'MARKET_LOT_SIZE':
                         return y['stepSize']
-    except Exception:
-        print("fail to get_step_size for", symbol)
+    except Exception as e:
+        print("fail to get_step_size for", symbol, e)
 
 
 @timeit
@@ -117,8 +117,8 @@ def get_quantity_precision(symbol):
         for x in symbol_info['symbols']:
             if x['symbol'] == symbol:
                 return x["quantityPrecision"]
-    except Exception:
-        print("fail to get_quantity_precision for", symbol)
+    except Exception as e:
+        print("fail to get_quantity_precision for", symbol, e)
 
 
 @timeit
@@ -130,8 +130,8 @@ def get_quantity(symbol):
             get_quantity_precision(symbol)
         )
 
-    except Exception:
-        print("fail to get_quantity for", symbol)
+    except Exception as e:
+        print("fail to get_quantity for", symbol, e)
     return quantity
 
 
@@ -169,8 +169,7 @@ def short_get_futures_tickers():
         if float(x["positionAmt"]) < 0:
             short_exist_positions.append(x["symbol"])
 
-    short_tickers_after_excluding = set(get_futures_tickers()) - set(short_exist_positions) - set(
-        short_get_open_orders_without_position())
+    short_tickers_after_excluding = set(get_futures_tickers()) - set(short_exist_positions)
 
     return list(short_tickers_after_excluding)
 
@@ -182,8 +181,7 @@ def long_get_futures_tickers():
         if float(x["positionAmt"]) > 0:
             long_exist_positions.append(x["symbol"])
 
-    long_tickers_after_excluding = set(get_futures_tickers()) - set(long_exist_positions) - set(
-        long_get_open_orders_without_position())
+    long_tickers_after_excluding = set(get_futures_tickers()) - set(long_exist_positions)
 
     return list(long_tickers_after_excluding)
 
@@ -195,8 +193,8 @@ def set_greed():
         base_greed = math.ceil(((float(client.futures_account()['totalWalletBalance']) * min_notional_corrector) / (
                 len(client.futures_ticker()) * min_notional)))
 
-    except Exception:
-        print("fail to set_greed")
+    except Exception as e:
+        print("fail to set_greed", e)
 
     return base_greed
 
@@ -215,8 +213,8 @@ def short_create_open_limit(symbol):
                                     type='LIMIT',
                                     timeInForce="GTC"
                                     )
-    except Exception:
-        print("fail to short_create_open_limit", symbol)
+    except Exception as e:
+        print("fail to short_create_open_limit", symbol, e)
 
 
 @timeit
@@ -233,8 +231,8 @@ def long_create_open_limit(symbol):
                                     type='LIMIT',
                                     timeInForce="GTC"
                                     )
-    except Exception:
-        print("fail to long_create_open_limit", symbol)
+    except Exception as e:
+        print("fail to long_create_open_limit", symbol, e)
 
 
 @timeit
@@ -253,8 +251,8 @@ def short_create_close_limit(symbol):
                                     type='LIMIT',
                                     timeInForce="GTC"
                                     )
-    except Exception:
-        print("fail to short_create_close_limit for", symbol)
+    except Exception as e:
+        print("fail to short_create_close_limit for", symbol, e)
 
 
 @timeit
@@ -273,8 +271,8 @@ def long_create_close_limit(symbol):
                                     type='LIMIT',
                                     timeInForce="GTC"
                                     )
-    except Exception:
-        print("fail to long_create_close_limit", symbol)
+    except Exception as e:
+        print("fail to long_create_close_limit", symbol, e)
 
 
 @timeit
@@ -319,8 +317,8 @@ def close_exist_positions():
 
                 if count_sell_orders == 0 and x["updateTime"] < serverTime - to_the_moon_cooldown:
                     long_create_open_limit(symbol)
-    except Exception:
-        print("fail to close_exist_positions", symbol)
+    except Exception as e:
+        print("fail to close_exist_positions", symbol, e)
 
 
 @timeit
@@ -342,70 +340,22 @@ def cancel_close_order_if_filled():
                     if x["side"] == "SELL" and abs(float(x["positionAmt"])) != float(x["origQty"]):
                         client.futures_cancel_order(symbol=symbol, orderId=x["orderId"])
 
-    except Exception:
-        print("fail to cancel_close_order_if_filled", symbol)
+    except Exception as e:
+        print("fail to cancel_close_order_if_filled", symbol, e)
 
 
 @timeit
-def short_get_open_orders_without_position():
+def cancel_open_orders_without_position():
     try:
-        short_open_orders = []
         for x in client.futures_get_open_orders():
-            short_open_orders.append(x["symbol"])
+            if not x["reduceOnly"] and serverTime > float(x["updateTime"]) + cooldown_to_cancel_order_without_position:
+                client.futures_cancel_order(symbol=x["symbol"], orderId=x["orderId"])
 
-        short_positions = []
-        for x in client.futures_position_information():
-            if float(x["positionAmt"]) < 0:
-                short_positions.append(x["symbol"])
-
-    except Exception:
-        print("fail to short_get_open_orders_without_position", short_open_orders)
-
-    return list(set(short_open_orders) - set(short_positions))
+    except Exception as e:
+        print("fail to cancel_open_orders_without_position", x, e)
 
 
-def long_get_open_orders_without_position():
-    try:
-        long_open_orders = []
-        for x in client.futures_get_open_orders():
-            long_open_orders.append(x["symbol"])
-
-        long_positions = []
-        for x in client.futures_position_information():
-            if float(x["positionAmt"]) > 0:
-                long_positions.append(x["symbol"])
-
-    except Exception:
-        print("fail to long_get_open_orders_without_position", long_open_orders)
-
-    return list(set(long_open_orders) - set(long_positions))
-
-
-@timeit
-def short_cancel_open_orders_without_position():
-    try:
-
-        for x in short_get_open_orders_without_position():
-            if serverTime > float(client.futures_get_open_orders(symbol=x)[1][
-                                      "updateTime"]) + cooldown_to_cancel_order_without_position:
-                client.futures_cancel_order(symbol=x, orderId=x["orderId"])
-
-
-    except Exception:
-        print("fail to cancel_open_orders_without_position", x)
-
-
-def long_cancel_open_orders_without_position():
-    try:
-
-        for x in long_get_open_orders_without_position():
-            if serverTime > float(client.futures_get_open_orders(symbol=x)[0][
-                                      "updateTime"]) + cooldown_to_cancel_order_without_position:
-                client.futures_cancel_order(symbol=x, orderId=x["orderId"])
-
-    except Exception:
-        print("fail to cancel_open_orders_without_position", x)
-
+# end try to remove #
 
 @timeit
 def transfer_free_USD_to_spot():
@@ -418,10 +368,10 @@ def transfer_free_USD_to_spot():
                                                     amount=float(x["withdrawAvailable"]),
                                                     type=2,
                                                     timestamp=serverTime)
-                except Exception:
-                    print("fail transfer", x["asset"], "to spot")
-    except Exception:
-        print("fail transfer_free_USD_to_spot")
+                except Exception as e:
+                    print("fail transfer", x["asset"], "to spot", e)
+    except Exception as e:
+        print("fail transfer_free_USD_to_spot", e)
 
 
 @timeit
@@ -432,8 +382,8 @@ def buy_coins_on_spot():
         try:
             if x["time"] < serverTime - deltaTime:
                 client.cancel_order(symbol=symbol, orderId=x["orderId"])
-        except Exception:
-            print("fail to cancel orders older (serverTime - deltaTime)")
+        except Exception as e:
+            print("fail to cancel orders older (serverTime - deltaTime)", e)
 
     if 10 < float(client.get_asset_balance(asset=asset)['free']) < 20:
         try:
@@ -441,8 +391,8 @@ def buy_coins_on_spot():
                                 side='BUY',
                                 type='MARKET',
                                 quoteOrderQty=math.floor(float(client.get_asset_balance(asset=asset)['free'])))
-        except Exception:
-            print("fail to buy market BTC for", asset)
+        except Exception as e:
+            print("fail to buy market BTC for", asset, e)
 
     if float(client.get_asset_balance(asset=asset)['free']) > 20:
         try:
@@ -462,13 +412,13 @@ def buy_coins_on_spot():
                                timeInForce="GTC"
                                )
 
-        except Exception:
-            print("fail to buy limit BTC for", asset)
+        except Exception as e:
+            print("fail to buy limit BTC for", asset, e)
 
     try:
         client.transfer_dust(asset=asset)
-    except Exception:
-        print("fail to dust", asset, "to BNB")
+    except Exception as e:
+        print("fail to dust", asset, "to BNB", e)
 
 
 @timeit
@@ -482,10 +432,10 @@ def transfer_free_spot_coin_to_futures():
                                                     amount=float(client.get_asset_balance(asset=x["asset"])["free"]),
                                                     type=1,
                                                     timestamp=serverTime)
-                except Exception:
-                    print("fail transfer", x["asset"], "to futures")
-    except Exception:
-        print("fail transfer_free_spot_coin_to_futures")
+                except Exception as e:
+                    print("fail transfer", x["asset"], "to futures", e)
+    except Exception as e:
+        print("fail transfer_free_spot_coin_to_futures", e)
 
 
 # --function open_for_profit #
@@ -502,8 +452,8 @@ def short_open_for_profit(symbol):
                                     positionSide='SHORT',
                                     type='LIMIT',
                                     timeInForce="GTC")
-    except Exception:
-        print("fail short_open_for_profit", symbol)
+    except Exception as e:
+        print("fail short_open_for_profit", symbol, e)
 
 
 @timeit
@@ -519,17 +469,16 @@ def long_open_for_profit(symbol):
                                     positionSide='LONG',
                                     type='LIMIT',
                                     timeInForce="GTC")
-    except Exception:
-        print("fail long_open_for_profit", symbol)
+    except Exception as e:
+        print("fail long_open_for_profit", symbol, e)
 
 
 # --function close_with_profit #
 @timeit
 def close_with_profit():
     cancel_close_order_if_filled()
+    cancel_open_orders_without_position()
     close_exist_positions()
-    long_cancel_open_orders_without_position()
-    short_cancel_open_orders_without_position()
 
 
 # --function transfer_profit #
@@ -555,8 +504,11 @@ def count_open_positions_and_start():
     if (round((long_positions + short_positions) / (len(get_futures_tickers()) * 2), 2)) < percentage_of_open_position:
         for symbol in long_get_futures_tickers():
             long_open_for_profit(symbol)
+            time.sleep(1)
+
         for symbol in short_get_futures_tickers():
             short_open_for_profit(symbol)
+            time.sleep(1)
 
 
 parser = argparse.ArgumentParser()
