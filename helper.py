@@ -28,12 +28,12 @@ long_percentage_futures_open_exist_position = 0.75
 # if no position and like fishnet #
 long_percentage_futures_open_new_position = 0.996
 
-percentage_of_open_position = 0.10
+percentage_of_open_position = 0.15
 
 # new order will be opened after to_the_moon_cooldown. Last digit is for hours  #
 to_the_moon_cooldown = 1000 * 60 * 60 * 48
 # new order will be canceled only after cooldown_to_cancel_order_without_position. Last digit is for hours  #
-cooldown_to_cancel_order_without_position = 1000 * 60 * 60 * 0.1
+cooldown_to_cancel_order_without_position = 1000 * 60 * 60 * 0.25
 
 # last digit is for days #
 deltaTime = 1000 * 60 * 60 * 24 * 14
@@ -312,10 +312,10 @@ def close_exist_positions():
                     if x["side"] == "SELL":
                         count_sell_orders = count_sell_orders + 1
 
-                if count_buy_orders == 0:
+                if count_sell_orders == 0:
                     long_create_close_limit(symbol)
 
-                if count_sell_orders == 0 and x["updateTime"] < serverTime - to_the_moon_cooldown:
+                if count_buy_orders == 0 and x["updateTime"] < serverTime - to_the_moon_cooldown:
                     long_create_open_limit(symbol)
     except Exception as e:
         print("fail to close_exist_positions", symbol, e)
@@ -504,11 +504,11 @@ def count_open_positions_and_start():
     if (round((long_positions + short_positions) / (len(get_futures_tickers()) * 2), 2)) < percentage_of_open_position:
         for symbol in long_get_futures_tickers():
             long_open_for_profit(symbol)
-            time.sleep(1)
+            time.sleep(0.5)
 
         for symbol in short_get_futures_tickers():
             short_open_for_profit(symbol)
-            time.sleep(1)
+            time.sleep(0.5)
 
 
 parser = argparse.ArgumentParser()
