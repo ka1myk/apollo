@@ -71,7 +71,7 @@ def set_futures_change_leverage():
 
 def set_futures_change_multi_assets_mode():
     try:
-        print(client.futures_change_multi_assets_mode(multiAssetsMargin="True"))
+        print(client.futures_change_multi_assets_mode(multiAssetsMargin=True))
     except Exception as e:
         print("fail to set_futures_change_multi_assets_mode", e)
 
