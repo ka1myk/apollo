@@ -3,8 +3,8 @@ import re, math, secrets, argparse, functools, time
 from binance.client import Client
 from binance.helpers import round_step_size
 
-client = Client("",
-                "")
+client = Client("Ny8b20OD7T3dXm96SVKmpbtJQA9rxmeh26BclnXGYYV3GDjktrVTAsJcLOqRIp2V",
+                "Nu4UemnKHnjwOx05ZFg9oT8NTV8ull95X7n7Oa8jZ9M9bT6e6DZJPD9YJagbAkGe")
 
 asset = "USDT"
 # default = 6; min_notional can be extended #
@@ -33,16 +33,19 @@ percentage_of_open_position = 0.15
 # new order will be opened after to_the_moon_cooldown. Last digit is for hours  #
 to_the_moon_cooldown = 1000 * 60 * 60 * 48
 # new order will be canceled only after cooldown_to_cancel_order_without_position. Last digit is for hours  #
-cooldown_to_cancel_order_without_position = 1000 * 60 * 60 * 0.25
+cooldown_to_cancel_order_without_position = 1000 * 60 * 60 * 0.5
 
 # last digit is for days #
 deltaTime = 1000 * 60 * 60 * 24 * 14
 # most likely, it will not fall less than 0.79, so lower limit orders will be cancelled after deltaTime #
 percentage_spot_open = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
 
+futures_ticker = client.futures_ticker()
+futures_account = client.futures_account()
 symbol_info = client.futures_exchange_info()
 serverTime = client.get_server_time()['serverTime']
-availableBalance = round(float(client.futures_account()["availableBalance"]))
+futures_account_balance = client.futures_account_balance()
+futures_position_information = client.futures_position_information()
 
 
 def timeit(func):
@@ -58,16 +61,14 @@ def timeit(func):
     return new_func
 
 
-@timeit
 def set_futures_change_leverage():
-    for x in client.futures_ticker():
+    for x in futures_ticker:
         try:
             print(client.futures_change_leverage(symbol=x["symbol"], leverage=1))
         except Exception as e:
             print("fail to set_futures_change_leverage of", x["symbol"], e)
 
 
-@timeit
 def set_futures_change_multi_assets_mode():
     try:
         print(client.futures_change_multi_assets_mode(multiAssetsMargin="True"))
@@ -75,7 +76,6 @@ def set_futures_change_multi_assets_mode():
         print("fail to set_futures_change_multi_assets_mode", e)
 
 
-@timeit
 def get_notional(symbol):
     try:
         for x in symbol_info['symbols']:
@@ -87,7 +87,6 @@ def get_notional(symbol):
         print("fail to get_notional for", symbol, e)
 
 
-@timeit
 def get_tick_size(symbol):
     try:
         for x in symbol_info['symbols']:
@@ -99,7 +98,6 @@ def get_tick_size(symbol):
         print("fail to get_tick_size for", symbol, e)
 
 
-@timeit
 def get_step_size(symbol):
     try:
         for x in symbol_info['symbols']:
@@ -111,7 +109,6 @@ def get_step_size(symbol):
         print("fail to get_step_size for", symbol, e)
 
 
-@timeit
 def get_quantity_precision(symbol):
     try:
         for x in symbol_info['symbols']:
@@ -121,7 +118,6 @@ def get_quantity_precision(symbol):
         print("fail to get_quantity_precision for", symbol, e)
 
 
-@timeit
 def get_quantity(symbol):
     try:
         quantity = round(
@@ -139,12 +135,12 @@ def get_quantity(symbol):
 def get_futures_tickers():
     # exclude balance_asset tickers #
     futures_account_balance_asset = []
-    for x in client.futures_account_balance():
+    for x in futures_account_balance:
         futures_account_balance_asset.append(x["asset"] + asset)
 
     # exclude BUSD and quarterly tickers #
     all_tickers = []
-    for x in client.futures_ticker():
+    for x in futures_ticker:
         remove_quarterly_contract = re.search('^((?!_).)*$', x["symbol"])
         remove_busd_contract = re.search('^.*USDT$', x["symbol"])
         if remove_quarterly_contract and remove_busd_contract:
@@ -152,7 +148,7 @@ def get_futures_tickers():
 
     # exclude tickers with onboardDate < deltaTime #
     onboardDate = []
-    for x in client.futures_exchange_info()["symbols"]:
+    for x in symbol_info["symbols"]:
         if float(x["onboardDate"]) > serverTime - deltaTime:
             onboardDate.append(x["symbol"])
 
@@ -165,7 +161,7 @@ def get_futures_tickers():
 def short_get_futures_tickers():
     # exclude short_exist_positions tickers #
     short_exist_positions = []
-    for x in client.futures_position_information():
+    for x in futures_position_information:
         if float(x["positionAmt"]) < 0:
             short_exist_positions.append(x["symbol"])
 
@@ -177,7 +173,7 @@ def short_get_futures_tickers():
 def long_get_futures_tickers():
     # exclude long_exist_positions tickers #
     long_exist_positions = []
-    for x in client.futures_position_information():
+    for x in futures_position_information:
         if float(x["positionAmt"]) > 0:
             long_exist_positions.append(x["symbol"])
 
@@ -186,12 +182,11 @@ def long_get_futures_tickers():
     return list(long_tickers_after_excluding)
 
 
-@timeit
 def set_greed():
     try:
         # set base_greed #
-        base_greed = math.ceil(((float(client.futures_account()['totalWalletBalance']) * min_notional_corrector) / (
-                len(client.futures_ticker()) * min_notional)))
+        base_greed = math.ceil(((float(futures_account['totalWalletBalance']) * min_notional_corrector) / (
+                len(futures_ticker) * min_notional)))
 
     except Exception as e:
         print("fail to set_greed", e)
@@ -199,7 +194,6 @@ def set_greed():
     return base_greed
 
 
-@timeit
 def short_create_open_limit(symbol):
     try:
         client.futures_create_order(symbol=symbol,
@@ -217,7 +211,6 @@ def short_create_open_limit(symbol):
         print("fail to short_create_open_limit", symbol, e)
 
 
-@timeit
 def long_create_open_limit(symbol):
     try:
         client.futures_create_order(symbol=symbol,
@@ -235,7 +228,6 @@ def long_create_open_limit(symbol):
         print("fail to long_create_open_limit", symbol, e)
 
 
-@timeit
 def short_create_close_limit(symbol):
     try:
         client.futures_create_order(symbol=symbol,
@@ -255,7 +247,6 @@ def short_create_close_limit(symbol):
         print("fail to short_create_close_limit for", symbol, e)
 
 
-@timeit
 def long_create_close_limit(symbol):
     try:
         client.futures_create_order(symbol=symbol,
@@ -278,7 +269,7 @@ def long_create_close_limit(symbol):
 @timeit
 def close_exist_positions():
     try:
-        for x in client.futures_position_information():
+        for x in futures_position_information:
             if float(x["positionAmt"]) < 0:
                 symbol = x["symbol"]
 
@@ -298,7 +289,7 @@ def close_exist_positions():
                 if count_sell_orders == 0 and x["updateTime"] < serverTime - to_the_moon_cooldown:
                     short_create_open_limit(symbol)
 
-        for x in client.futures_position_information():
+        for x in futures_position_information:
             if float(x["positionAmt"]) > 0:
                 symbol = x["symbol"]
 
@@ -324,7 +315,7 @@ def close_exist_positions():
 @timeit
 def cancel_close_order_if_filled():
     try:
-        for x in client.futures_position_information():
+        for x in futures_position_information:
             if float(x["positionAmt"]) < 0:
                 symbol = x["symbol"]
 
@@ -332,7 +323,7 @@ def cancel_close_order_if_filled():
                     if x["side"] == "BUY" and abs(float(x["positionAmt"])) != float(x["origQty"]):
                         client.futures_cancel_order(symbol=symbol, orderId=x["orderId"])
 
-        for x in client.futures_position_information():
+        for x in futures_position_information:
             if float(x["positionAmt"]) > 0:
                 symbol = x["symbol"]
 
@@ -357,10 +348,10 @@ def cancel_open_orders_without_position():
 
 # end try to remove #
 
-@timeit
+
 def transfer_free_USD_to_spot():
     try:
-        for x in client.futures_account_balance():
+        for x in futures_account_balance:
             select_USD_asset = re.search('^((?!USD).)*$', x["asset"])
             if not select_USD_asset and float(x["withdrawAvailable"]) > 0:
                 try:
@@ -374,7 +365,6 @@ def transfer_free_USD_to_spot():
         print("fail transfer_free_USD_to_spot", e)
 
 
-@timeit
 def buy_coins_on_spot():
     symbol = "BTCUSDT"
 
@@ -421,10 +411,9 @@ def buy_coins_on_spot():
         print("fail to dust", asset, "to BNB", e)
 
 
-@timeit
 def transfer_free_spot_coin_to_futures():
     try:
-        for x in client.futures_account_balance():
+        for x in futures_account_balance:
             select_USD_asset = re.search('^((?!USD).)*$', x["asset"])
             if select_USD_asset and float(client.get_asset_balance(asset=x["asset"])["free"]) > 0:
                 try:
@@ -439,7 +428,7 @@ def transfer_free_spot_coin_to_futures():
 
 
 # --function open_for_profit #
-@timeit
+
 def short_open_for_profit(symbol):
     try:
         client.futures_create_order(symbol=symbol,
@@ -456,7 +445,6 @@ def short_open_for_profit(symbol):
         print("fail short_open_for_profit", symbol, e)
 
 
-@timeit
 def long_open_for_profit(symbol):
     try:
         client.futures_create_order(symbol=symbol,
@@ -492,23 +480,23 @@ def transfer_profit():
 @timeit
 def count_open_positions_and_start():
     long_positions = 0
-    for x in client.futures_position_information():
+    for x in futures_position_information:
         if float(x["positionAmt"]) > 0:
             long_positions = long_positions + 1
 
     short_positions = 0
-    for x in client.futures_position_information():
+    for x in futures_position_information:
         if float(x["positionAmt"]) < 0:
             short_positions = short_positions + 1
 
     if (round((long_positions + short_positions) / (len(get_futures_tickers()) * 2), 2)) < percentage_of_open_position:
         for symbol in long_get_futures_tickers():
             long_open_for_profit(symbol)
-            time.sleep(0.5)
+            time.sleep(0.1)
 
         for symbol in short_get_futures_tickers():
             short_open_for_profit(symbol)
-            time.sleep(0.5)
+            time.sleep(0.1)
 
 
 parser = argparse.ArgumentParser()
