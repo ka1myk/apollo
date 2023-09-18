@@ -3,8 +3,8 @@ import re, math, secrets, argparse, functools, time
 from binance.client import Client
 from binance.helpers import round_step_size
 
-client = Client("Ny8b20OD7T3dXm96SVKmpbtJQA9rxmeh26BclnXGYYV3GDjktrVTAsJcLOqRIp2V",
-                "Nu4UemnKHnjwOx05ZFg9oT8NTV8ull95X7n7Oa8jZ9M9bT6e6DZJPD9YJagbAkGe")
+client = Client("",
+                "")
 
 asset = "USDT"
 # default = 6; min_notional can be extended #
