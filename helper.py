@@ -1,3 +1,4 @@
+import random
 import re, math, secrets, argparse, functools, time
 
 from binance.client import Client
@@ -14,7 +15,7 @@ min_notional_corrector = 1.2
 
 # for short #
 # without fee deduction #
-short_base_percentage_futures_close = 0.999
+short_base_percentage_futures_close = 0.9995
 # if position starts pump #
 short_percentage_futures_open_exist_position = 1.25
 # if no position and like fishnet #
@@ -22,7 +23,7 @@ short_percentage_futures_open_new_position = 1.004
 
 # for long #
 # without fee deduction #
-long_base_percentage_futures_close = 1.001
+long_base_percentage_futures_close = 1.0005
 # if position starts pump #
 long_percentage_futures_open_exist_position = 0.75
 # if no position and like fishnet #
@@ -46,6 +47,13 @@ symbol_info = client.futures_exchange_info()
 serverTime = client.get_server_time()['serverTime']
 futures_account_balance = client.futures_account_balance()
 futures_position_information = client.futures_position_information()
+
+
+check_symbol = "BTCUSDT"
+binance_spot = float(client.get_symbol_ticker(symbol=check_symbol)["price"])
+binance_spot_5_min = float(client.get_avg_price(symbol=check_symbol)["price"])
+binance_spot_24_h = float(client.get_ticker(symbol=check_symbol)["weightedAvgPrice"])
+binance_futures = float(client.futures_mark_price(symbol=check_symbol)["markPrice"])
 
 
 def timeit(func):
@@ -131,7 +139,6 @@ def get_quantity(symbol):
     return quantity
 
 
-@timeit
 def get_futures_tickers():
     # exclude balance_asset tickers #
     futures_account_balance_asset = []
@@ -157,7 +164,6 @@ def get_futures_tickers():
     return list(tickers_after_excluding)
 
 
-@timeit
 def short_get_futures_tickers():
     # exclude short_exist_positions tickers #
     short_exist_positions = []
@@ -185,8 +191,10 @@ def long_get_futures_tickers():
 def set_greed():
     try:
         # set base_greed #
-        base_greed = math.ceil(((float(futures_account['totalWalletBalance']) * min_notional_corrector) / (
-                len(futures_ticker) * min_notional)))
+        # base_greed = math.ceil(((float(futures_account['totalWalletBalance']) * min_notional_corrector) / (
+        #         len(futures_ticker) * min_notional)))
+
+        base_greed = min_notional_corrector
 
     except Exception as e:
         print("fail to set_greed", e)
@@ -266,7 +274,6 @@ def long_create_close_limit(symbol):
         print("fail to long_create_close_limit", symbol, e)
 
 
-@timeit
 def close_exist_positions():
     try:
         for x in futures_position_information:
@@ -312,7 +319,6 @@ def close_exist_positions():
         print("fail to close_exist_positions", symbol, e)
 
 
-@timeit
 def cancel_close_order_if_filled():
     try:
         for x in futures_position_information:
@@ -335,7 +341,6 @@ def cancel_close_order_if_filled():
         print("fail to cancel_close_order_if_filled", symbol, e)
 
 
-@timeit
 def cancel_open_orders_without_position():
     try:
         for x in client.futures_get_open_orders():
@@ -462,7 +467,6 @@ def long_open_for_profit(symbol):
 
 
 # --function close_with_profit #
-@timeit
 def close_with_profit():
     cancel_close_order_if_filled()
     cancel_open_orders_without_position()
@@ -470,14 +474,13 @@ def close_with_profit():
 
 
 # --function transfer_profit #
-@timeit
+
 def transfer_profit():
     transfer_free_USD_to_spot()
     buy_coins_on_spot()
     transfer_free_spot_coin_to_futures()
 
 
-@timeit
 def count_open_positions_and_start():
     long_positions = 0
     for x in futures_position_information:
@@ -490,13 +493,72 @@ def count_open_positions_and_start():
             short_positions = short_positions + 1
 
     if (round((long_positions + short_positions) / (len(get_futures_tickers()) * 2), 2)) < percentage_of_open_position:
-        for symbol in long_get_futures_tickers():
-            long_open_for_profit(symbol)
-            time.sleep(0.1)
+        if binance_spot < binance_spot_5_min:
+            print("open short")
+            for i in range(5):
+                try:
+                    short(random.choice(get_futures_tickers()))
+                except Exception as e:
+                    print(e)
+        else:
+            print("open long")
+            for i in range(5):
+                try:
+                    long(random.choice(get_futures_tickers()))
+                except Exception as e:
+                    print(e)
 
-        for symbol in short_get_futures_tickers():
-            short_open_for_profit(symbol)
-            time.sleep(0.1)
+
+
+
+
+def long(trade_symbol):
+    client.futures_create_order(symbol=trade_symbol,
+                                quantity=get_quantity(trade_symbol),
+                                side='BUY',
+                                positionSide='LONG',
+                                type='MARKET'
+                                )
+
+    client.futures_create_order(symbol=trade_symbol,
+                                quantity=round_step_size(abs((float(
+                                    client.futures_position_information(symbol=trade_symbol)[0]["positionAmt"]))),
+                                    get_step_size(trade_symbol)),
+                                price=round_step_size(float(
+                                    client.futures_position_information(symbol=trade_symbol)[0]["entryPrice"])
+                                                      * long_base_percentage_futures_close,
+                                                      get_tick_size(trade_symbol)),
+                                side='SELL',
+                                positionSide='LONG',
+                                type='LIMIT',
+                                timeInForce="GTC"
+                                )
+
+
+def short(trade_symbol):
+    client.futures_create_order(symbol=trade_symbol,
+                                quantity=get_quantity(trade_symbol),
+                                side='SELL',
+                                positionSide='SHORT',
+                                type='MARKET'
+                                )
+
+    client.futures_create_order(symbol=trade_symbol,
+                                quantity=round_step_size(abs((float(
+                                    client.futures_position_information(symbol=trade_symbol)[1]["positionAmt"]))),
+                                    get_step_size(trade_symbol)),
+                                price=round_step_size(float(
+                                    client.futures_position_information(symbol=trade_symbol)[1]["entryPrice"])
+                                                      * short_base_percentage_futures_close,
+                                                      get_tick_size(trade_symbol)),
+                                side='BUY',
+                                positionSide='SHORT',
+                                type='LIMIT',
+                                timeInForce="GTC"
+                                )
+
+
+count_open_positions_and_start()
 
 
 parser = argparse.ArgumentParser()
