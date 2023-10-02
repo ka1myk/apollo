@@ -5,3 +5,5 @@ windows:
     panes:
       - shell_command:
           - cd /root/futuresboard && futuresboard
+      - shell_command:
+          - cd /root/apollo && python3 odoo_memo.py

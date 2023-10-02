@@ -16,25 +16,20 @@ min_notional_corrector = 1.2
 # for short #
 # without fee deduction #
 short_base_percentage_futures_close = 0.9995
-# if position starts pump #
-short_percentage_futures_open_exist_position = 1.25
 # if no position and like fishnet #
 short_percentage_futures_open_new_position = 1.004
 
 # for long #
 # without fee deduction #
 long_base_percentage_futures_close = 1.0005
-# if position starts pump #
-long_percentage_futures_open_exist_position = 0.75
 # if no position and like fishnet #
 long_percentage_futures_open_new_position = 0.996
 
-percentage_of_open_position = 0.15
+# all tickers ~ 200, 200 for long and 200 for short, so percentage_of_open_position is for x * 200 * 2  #
+percentage_of_open_position = 0.3
 
-# new order will be opened after to_the_moon_cooldown. Last digit is for hours  #
-to_the_moon_cooldown = 1000 * 60 * 60 * 48
-# new order will be canceled only after cooldown_to_cancel_order_without_position. Last digit is for hours  #
-cooldown_to_cancel_order_without_position = 1000 * 60 * 60 * 0.5
+# tickers in one deal #
+quantity_at_a_time = 15
 
 # last digit is for days #
 deltaTime = 1000 * 60 * 60 * 24 * 14
@@ -42,12 +37,10 @@ deltaTime = 1000 * 60 * 60 * 24 * 14
 percentage_spot_open = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
 
 futures_ticker = client.futures_ticker()
-futures_account = client.futures_account()
 symbol_info = client.futures_exchange_info()
 serverTime = client.get_server_time()['serverTime']
 futures_account_balance = client.futures_account_balance()
 futures_position_information = client.futures_position_information()
-
 
 check_symbol = "BTCUSDT"
 binance_spot = float(client.get_symbol_ticker(symbol=check_symbol)["price"])
@@ -140,11 +133,6 @@ def get_quantity(symbol):
 
 
 def get_futures_tickers():
-    # exclude balance_asset tickers #
-    futures_account_balance_asset = []
-    for x in futures_account_balance:
-        futures_account_balance_asset.append(x["asset"] + asset)
-
     # exclude BUSD and quarterly tickers #
     all_tickers = []
     for x in futures_ticker:
@@ -152,6 +140,11 @@ def get_futures_tickers():
         remove_busd_contract = re.search('^.*USDT$', x["symbol"])
         if remove_quarterly_contract and remove_busd_contract:
             all_tickers.append(x["symbol"])
+
+    # exclude balance_asset tickers #
+    futures_account_balance_asset = []
+    for x in futures_account_balance:
+        futures_account_balance_asset.append(x["asset"] + asset)
 
     # exclude tickers with onboardDate < deltaTime #
     onboardDate = []
@@ -171,7 +164,7 @@ def short_get_futures_tickers():
         if float(x["positionAmt"]) < 0:
             short_exist_positions.append(x["symbol"])
 
-    short_tickers_after_excluding = set(get_futures_tickers()) - set(short_exist_positions)
+    short_tickers_after_excluding = set(get_futures_tickers) - set(short_exist_positions)
 
     return list(short_tickers_after_excluding)
 
@@ -183,9 +176,14 @@ def long_get_futures_tickers():
         if float(x["positionAmt"]) > 0:
             long_exist_positions.append(x["symbol"])
 
-    long_tickers_after_excluding = set(get_futures_tickers()) - set(long_exist_positions)
+    long_tickers_after_excluding = set(get_futures_tickers) - set(long_exist_positions)
 
     return list(long_tickers_after_excluding)
+
+
+get_futures_tickers = get_futures_tickers()
+short_get_futures_tickers = short_get_futures_tickers()
+long_get_futures_tickers = long_get_futures_tickers()
 
 
 def set_greed():
@@ -200,158 +198,6 @@ def set_greed():
         print("fail to set_greed", e)
 
     return base_greed
-
-
-def short_create_open_limit(symbol):
-    try:
-        client.futures_create_order(symbol=symbol,
-                                    quantity=get_quantity(symbol),
-                                    price=round_step_size(float(
-                                        client.futures_position_information(symbol=symbol)[1]["markPrice"])
-                                                          * short_percentage_futures_open_exist_position,
-                                                          get_tick_size(symbol)),
-                                    side='SELL',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
-    except Exception as e:
-        print("fail to short_create_open_limit", symbol, e)
-
-
-def long_create_open_limit(symbol):
-    try:
-        client.futures_create_order(symbol=symbol,
-                                    quantity=get_quantity(symbol),
-                                    price=round_step_size(float(
-                                        client.futures_position_information(symbol=symbol)[0]["markPrice"])
-                                                          * long_percentage_futures_open_exist_position,
-                                                          get_tick_size(symbol)),
-                                    side='BUY',
-                                    positionSide='LONG',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
-    except Exception as e:
-        print("fail to long_create_open_limit", symbol, e)
-
-
-def short_create_close_limit(symbol):
-    try:
-        client.futures_create_order(symbol=symbol,
-                                    quantity=round_step_size(abs((float(
-                                        client.futures_position_information(symbol=symbol)[1]["positionAmt"]))),
-                                        get_step_size(symbol)),
-                                    price=round_step_size(float(
-                                        client.futures_position_information(symbol=symbol)[1]["entryPrice"])
-                                                          * short_base_percentage_futures_close,
-                                                          get_tick_size(symbol)),
-                                    side='BUY',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
-    except Exception as e:
-        print("fail to short_create_close_limit for", symbol, e)
-
-
-def long_create_close_limit(symbol):
-    try:
-        client.futures_create_order(symbol=symbol,
-                                    quantity=round_step_size(abs((float(
-                                        client.futures_position_information(symbol=symbol)[0]["positionAmt"]))),
-                                        get_step_size(symbol)),
-                                    price=round_step_size(float(
-                                        client.futures_position_information(symbol=symbol)[0]["entryPrice"])
-                                                          * long_base_percentage_futures_close,
-                                                          get_tick_size(symbol)),
-                                    side='SELL',
-                                    positionSide='LONG',
-                                    type='LIMIT',
-                                    timeInForce="GTC"
-                                    )
-    except Exception as e:
-        print("fail to long_create_close_limit", symbol, e)
-
-
-def close_exist_positions():
-    try:
-        for x in futures_position_information:
-            if float(x["positionAmt"]) < 0:
-                symbol = x["symbol"]
-
-                count_buy_orders = 0
-                count_sell_orders = 0
-
-                for x in client.futures_get_open_orders(symbol=symbol):
-                    if x["side"] == "BUY":
-                        count_buy_orders = count_buy_orders + 1
-
-                    if x["side"] == "SELL":
-                        count_sell_orders = count_sell_orders + 1
-
-                if count_buy_orders == 0:
-                    short_create_close_limit(symbol)
-
-                if count_sell_orders == 0 and x["updateTime"] < serverTime - to_the_moon_cooldown:
-                    short_create_open_limit(symbol)
-
-        for x in futures_position_information:
-            if float(x["positionAmt"]) > 0:
-                symbol = x["symbol"]
-
-                count_buy_orders = 0
-                count_sell_orders = 0
-
-                for x in client.futures_get_open_orders(symbol=symbol):
-                    if x["side"] == "BUY":
-                        count_buy_orders = count_buy_orders + 1
-
-                    if x["side"] == "SELL":
-                        count_sell_orders = count_sell_orders + 1
-
-                if count_sell_orders == 0:
-                    long_create_close_limit(symbol)
-
-                if count_buy_orders == 0 and x["updateTime"] < serverTime - to_the_moon_cooldown:
-                    long_create_open_limit(symbol)
-    except Exception as e:
-        print("fail to close_exist_positions", symbol, e)
-
-
-def cancel_close_order_if_filled():
-    try:
-        for x in futures_position_information:
-            if float(x["positionAmt"]) < 0:
-                symbol = x["symbol"]
-
-                for x in client.futures_get_open_orders(symbol=symbol):
-                    if x["side"] == "BUY" and abs(float(x["positionAmt"])) != float(x["origQty"]):
-                        client.futures_cancel_order(symbol=symbol, orderId=x["orderId"])
-
-        for x in futures_position_information:
-            if float(x["positionAmt"]) > 0:
-                symbol = x["symbol"]
-
-                for x in client.futures_get_open_orders(symbol=symbol):
-                    if x["side"] == "SELL" and abs(float(x["positionAmt"])) != float(x["origQty"]):
-                        client.futures_cancel_order(symbol=symbol, orderId=x["orderId"])
-
-    except Exception as e:
-        print("fail to cancel_close_order_if_filled", symbol, e)
-
-
-def cancel_open_orders_without_position():
-    try:
-        for x in client.futures_get_open_orders():
-            if not x["reduceOnly"] and serverTime > float(x["updateTime"]) + cooldown_to_cancel_order_without_position:
-                client.futures_cancel_order(symbol=x["symbol"], orderId=x["orderId"])
-
-    except Exception as e:
-        print("fail to cancel_open_orders_without_position", x, e)
-
-
-# end try to remove #
 
 
 def transfer_free_USD_to_spot():
@@ -432,47 +278,6 @@ def transfer_free_spot_coin_to_futures():
         print("fail transfer_free_spot_coin_to_futures", e)
 
 
-# --function open_for_profit #
-
-def short_open_for_profit(symbol):
-    try:
-        client.futures_create_order(symbol=symbol,
-                                    quantity=get_quantity(symbol),
-                                    price=round_step_size(
-                                        float(client.futures_mark_price(symbol=symbol)["markPrice"])
-                                        * short_percentage_futures_open_new_position,
-                                        get_tick_size(symbol)),
-                                    side='SELL',
-                                    positionSide='SHORT',
-                                    type='LIMIT',
-                                    timeInForce="GTC")
-    except Exception as e:
-        print("fail short_open_for_profit", symbol, e)
-
-
-def long_open_for_profit(symbol):
-    try:
-        client.futures_create_order(symbol=symbol,
-                                    quantity=get_quantity(symbol),
-                                    price=round_step_size(
-                                        float(client.futures_mark_price(symbol=symbol)["markPrice"])
-                                        * long_percentage_futures_open_new_position,
-                                        get_tick_size(symbol)),
-                                    side='BUY',
-                                    positionSide='LONG',
-                                    type='LIMIT',
-                                    timeInForce="GTC")
-    except Exception as e:
-        print("fail long_open_for_profit", symbol, e)
-
-
-# --function close_with_profit #
-def close_with_profit():
-    cancel_close_order_if_filled()
-    cancel_open_orders_without_position()
-    close_exist_positions()
-
-
 # --function transfer_profit #
 
 def transfer_profit():
@@ -492,24 +297,26 @@ def count_open_positions_and_start():
         if float(x["positionAmt"]) < 0:
             short_positions = short_positions + 1
 
-    if (round((long_positions + short_positions) / (len(get_futures_tickers()) * 2), 2)) < percentage_of_open_position:
+    if (round((long_positions + short_positions) / (len(get_futures_tickers) * 2), 2)) < percentage_of_open_position:
         if binance_spot < binance_spot_5_min:
-            print("open short")
-            for i in range(5):
+            for i in range(quantity_at_a_time):
                 try:
-                    short(random.choice(get_futures_tickers()))
+                    symbol = random.choice(short_get_futures_tickers)
+                    short(symbol)
+                    # print(symbol, "for short")
+                    short_get_futures_tickers.remove(symbol)
                 except Exception as e:
                     print(e)
+
         else:
-            print("open long")
-            for i in range(5):
+            for i in range(quantity_at_a_time):
                 try:
-                    long(random.choice(get_futures_tickers()))
+                    symbol = random.choice(long_get_futures_tickers)
+                    long(symbol)
+                    # print(symbol, "for long")
+                    long_get_futures_tickers.remove(symbol)
                 except Exception as e:
                     print(e)
-
-
-
 
 
 def long(trade_symbol):
@@ -558,16 +365,11 @@ def short(trade_symbol):
                                 )
 
 
-count_open_positions_and_start()
-
-
 parser = argparse.ArgumentParser()
 parser.add_argument('--function', type=str, required=True)
 
 if parser.parse_args().function == "open":
     count_open_positions_and_start()
-if parser.parse_args().function == "close":
-    close_with_profit()
 if parser.parse_args().function == "transfer":
     transfer_profit()
 if parser.parse_args().function == "initialized":

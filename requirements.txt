@@ -1,1 +1,2 @@
 python-binance==1.0.19
+telebot
