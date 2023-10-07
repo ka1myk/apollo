@@ -6,4 +6,4 @@ windows:
       - shell_command:
           - cd /root/futuresboard && futuresboard
       - shell_command:
-          - cd /root/apollo && python3 odoo_memo.py
+          - cd /root/odoo && python3 odoo_memo.py
