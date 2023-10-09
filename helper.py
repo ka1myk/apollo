@@ -13,9 +13,9 @@ min_notional = 10
 min_notional_corrector = 1.2
 
 # for short without fee deduction #
-short_base_percentage_futures_close = 0.999
+short_base_percentage_futures_close = 0.995
 # for long without fee deduction#
-long_base_percentage_futures_close = 1.001
+long_base_percentage_futures_close = 1.005
 
 # all tickers ~ 200, 200 for long and 200 for short, so percentage_of_open_position is for x * 200 * 2  #
 percentage_of_open_position = 1
@@ -281,7 +281,9 @@ def count_open_positions_and_start():
         for i in range(quantity_at_a_time):
             try:
                 symbol = random.choice(short_get_futures_tickers)
-                short(symbol)
+                if float(get_quantity(symbol)) * float(client.futures_mark_price(symbol=symbol)["markPrice"]) <= float(
+                        min_notional):
+                    short(symbol)
                 short_get_futures_tickers.remove(symbol)
             except Exception as e:
                 print(e)
@@ -290,7 +292,9 @@ def count_open_positions_and_start():
         for i in range(quantity_at_a_time):
             try:
                 symbol = random.choice(long_get_futures_tickers)
-                long(symbol)
+                if float(get_quantity(symbol)) * float(client.futures_mark_price(symbol=symbol)["markPrice"]) <= float(
+                        min_notional):
+                    long(symbol)
                 long_get_futures_tickers.remove(symbol)
             except Exception as e:
                 print(e)
