@@ -20,10 +20,10 @@ long_base_percentage_futures_close = 1.001
 # all tickers ~ 200, 200 for long and 200 for short, so percentage_of_open_position is for x * 200 * 2  #
 percentage_of_open_position = 1
 # tickers in one deal #
-quantity_at_a_time = 25
+quantity_at_a_time = 5
 
 # last digit is for min #
-last_timeframe_in_min = 1000 * 60 * 8
+last_timeframe_in_min = 1000 * 60 * 120
 
 # last digit is for days #
 deltaTime = 1000 * 60 * 60 * 24 * 14
@@ -295,36 +295,36 @@ def count_open_positions_and_start():
             except Exception as e:
                 print(e)
 
-    if long_trades_in_last_timeframe == short_trades_in_last_timeframe:
-
-        long_positions = 0
-        for x in futures_position_information:
-            if float(x["positionAmt"]) > 0:
-                long_positions = long_positions + 1
-
-        short_positions = 0
-        for x in futures_position_information:
-            if float(x["positionAmt"]) < 0:
-                short_positions = short_positions + 1
-
-        if (round((long_positions + short_positions) / (len(get_futures_tickers) * 2), 2)) < percentage_of_open_position:
-            if binance_spot < binance_spot_5_min:
-                for i in range(quantity_at_a_time):
-                    try:
-                        symbol = random.choice(short_get_futures_tickers)
-                        short(symbol)
-                        short_get_futures_tickers.remove(symbol)
-                    except Exception as e:
-                        print(e)
-
-            else:
-                for i in range(quantity_at_a_time):
-                    try:
-                        symbol = random.choice(long_get_futures_tickers)
-                        long(symbol)
-                        long_get_futures_tickers.remove(symbol)
-                    except Exception as e:
-                        print(e)
+    # if long_trades_in_last_timeframe == short_trades_in_last_timeframe:
+    #
+    #     long_positions = 0
+    #     for x in futures_position_information:
+    #         if float(x["positionAmt"]) > 0:
+    #             long_positions = long_positions + 1
+    #
+    #     short_positions = 0
+    #     for x in futures_position_information:
+    #         if float(x["positionAmt"]) < 0:
+    #             short_positions = short_positions + 1
+    #
+    #     if (round((long_positions + short_positions) / (len(get_futures_tickers) * 2), 2)) < percentage_of_open_position:
+    #         if binance_spot < binance_spot_5_min:
+    #             for i in range(quantity_at_a_time):
+    #                 try:
+    #                     symbol = random.choice(short_get_futures_tickers)
+    #                     short(symbol)
+    #                     short_get_futures_tickers.remove(symbol)
+    #                 except Exception as e:
+    #                     print(e)
+    #
+    #         else:
+    #             for i in range(quantity_at_a_time):
+    #                 try:
+    #                     symbol = random.choice(long_get_futures_tickers)
+    #                     long(symbol)
+    #                     long_get_futures_tickers.remove(symbol)
+    #                 except Exception as e:
+    #                     print(e)
 
 
 def long(trade_symbol):
