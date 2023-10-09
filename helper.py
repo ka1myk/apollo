@@ -20,7 +20,7 @@ long_base_percentage_futures_close = 1.001
 # all tickers ~ 200, 200 for long and 200 for short, so percentage_of_open_position is for x * 200 * 2  #
 percentage_of_open_position = 1
 # tickers in one deal #
-quantity_at_a_time = 5
+quantity_at_a_time = 10
 
 # last digit is for min #
 last_timeframe_in_min = 1000 * 60 * 120
