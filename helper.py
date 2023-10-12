@@ -13,7 +13,7 @@ min_notional = 10
 min_notional_corrector = 1.2
 
 # if you know - you can extend #
-leverage = 1
+leverage = 2
 
 # for short without fee deduction #
 short_base_percentage_futures_close = 0.995
@@ -173,7 +173,7 @@ long_get_futures_tickers = long_get_futures_tickers()
 def set_greed():
     try:
         # set base_greed #
-        base_greed = math.ceil(((float(futures_account['totalWalletBalance']) * min_notional_corrector) / (
+        base_greed = math.ceil(((float(futures_account['totalWalletBalance']) * min_notional_corrector * leverage) / (
                 len(futures_ticker) * min_notional)))
 
     except Exception as e:
