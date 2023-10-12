@@ -6,6 +6,13 @@ from binance.helpers import round_step_size
 client = Client("",
                 "")
 
+futures_ticker = client.futures_ticker()
+futures_account = client.futures_account()
+symbol_info = client.futures_exchange_info()
+serverTime = client.get_server_time()['serverTime']
+futures_account_balance = client.futures_account_balance()
+futures_position_information = client.futures_position_information()
+
 asset = "USDT"
 # default = 6; min_notional can be extended #
 min_notional = 10
@@ -23,27 +30,17 @@ short_base_percentage_futures_open = 1.25
 long_base_percentage_futures_close = 1.005
 long_base_percentage_futures_open = 0.75
 
-# all tickers ~ 200, 200 for long and 200 for short, so percentage_of_open_position is for x * 200 * 2  #
-percentage_of_open_position = 1
-
 # tickers in one deal #
-quantity_at_a_time = 10
+quantity_at_a_time = round(len(futures_ticker) * 0.05)
 
 # last digit is for min #
 last_timeframe_in_min = 1000 * 60 * 120
 
 # last digit is for days #
-deltaTime = 1000 * 60 * 60 * 24 * 14
+deltaTime = 1000 * 60 * 60 * 24 * 1
 
 # most likely, it will not fall less than 0.79, so lower limit orders will be cancelled after deltaTime #
 percentage_spot_open = [0.97, 0.94, 0.91, 0.85, 0.79, 0.73]
-
-futures_ticker = client.futures_ticker()
-futures_account = client.futures_account()
-symbol_info = client.futures_exchange_info()
-serverTime = client.get_server_time()['serverTime']
-futures_account_balance = client.futures_account_balance()
-futures_position_information = client.futures_position_information()
 
 
 def set_futures_change_leverage():
@@ -133,7 +130,7 @@ def get_futures_tickers():
     # exclude tickers with onboardDate < deltaTime #
     onboardDate = []
     for x in symbol_info["symbols"]:
-        if float(x["onboardDate"]) > serverTime - deltaTime:
+        if float(x["onboardDate"]) > serverTime - (deltaTime * 14):
             onboardDate.append(x["symbol"])
 
     tickers_after_excluding = set(all_tickers) - set(futures_account_balance_asset) - set(onboardDate)
@@ -203,7 +200,7 @@ def buy_coins_on_spot():
 
     for x in client.get_open_orders(symbol=symbol):
         try:
-            if x["time"] < serverTime - deltaTime:
+            if x["time"] < serverTime - (deltaTime * 7):
                 client.cancel_order(symbol=symbol, orderId=x["orderId"])
         except Exception as e:
             print("fail to cancel orders older (serverTime - deltaTime)", e)
@@ -476,6 +473,15 @@ def count_open_positions_and_start():
                 long_get_futures_tickers.remove(symbol)
             except Exception as e:
                 print(e)
+
+    if short_trades_in_last_timeframe == long_trades_in_last_timeframe:
+        side = random.choice(["long", "short"])
+        if side == "long":
+            symbol = random.choice(long_get_futures_tickers)
+            long(symbol)
+        else:
+            symbol = random.choice(short_get_futures_tickers)
+            short(symbol)
 
 
 def long(trade_symbol):
