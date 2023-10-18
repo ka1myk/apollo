@@ -1,4 +1,5 @@
 import random, re, math, secrets, argparse
+import time
 
 from binance.client import Client
 from binance.helpers import round_step_size
@@ -425,91 +426,14 @@ def close_exist_positions():
         print("fail to close_exist_positions", symbol, e)
 
 
-# --function transfer #
-
-def transfer_profit():
-    transfer_free_USD_to_spot()
-    buy_coins_on_spot()
-    transfer_free_spot_coin_to_futures()
-
-
-# --function close #
-
-def close_with_profit():
-    cancel_close_order_if_filled()
-    cancel_open_orders_without_position()
-    close_exist_positions()
-
-
-# --function open #
-
-def count_open_positions_and_start():
-    # long_trades_in_last_timeframe = 0
-    # short_trades_in_last_timeframe = 0
-    #
-    # for x in client.futures_account_trades():
-    #     if float(x["time"]) > serverTime - last_timeframe_in_min and float(x["realizedPnl"]) > 0 and x[
-    #         "side"] == "SELL":
-    #         long_trades_in_last_timeframe = long_trades_in_last_timeframe + 1
-    #     if float(x["time"]) > serverTime - last_timeframe_in_min and float(x["realizedPnl"]) > 0 and x["side"] == "BUY":
-    #         short_trades_in_last_timeframe = short_trades_in_last_timeframe + 1
-    #
-    # if long_trades_in_last_timeframe > short_trades_in_last_timeframe:
-    #     for i in range(quantity_at_a_time):
-    #         try:
-    #             symbol = random.choice(short_get_futures_tickers)
-    #             if float(get_quantity(symbol)) * float(client.futures_mark_price(symbol=symbol)["markPrice"]) <= float(
-    #                     min_notional):
-    #                 short(symbol)
-    #             short_get_futures_tickers.remove(symbol)
-    #         except Exception as e:
-    #             print(e)
-    #
-    # if short_trades_in_last_timeframe > long_trades_in_last_timeframe:
-    #     for i in range(quantity_at_a_time):
-    #         try:
-    #             symbol = random.choice(long_get_futures_tickers)
-    #             if float(get_quantity(symbol)) * float(client.futures_mark_price(symbol=symbol)["markPrice"]) <= float(
-    #                     min_notional):
-    #                 long(symbol)
-    #             long_get_futures_tickers.remove(symbol)
-    #         except Exception as e:
-    #             print(e)
-    #
-    # if short_trades_in_last_timeframe == long_trades_in_last_timeframe:
-    #     side = random.choice(["long", "short"])
-    #     if side == "long":
-    #         symbol = random.choice(long_get_futures_tickers)
-    #         long(symbol)
-    #     else:
-    #         symbol = random.choice(short_get_futures_tickers)
-    #         short(symbol)
-
-    for i in range(quantity_at_a_time):
-        try:
-            symbol = random.choice(long_get_futures_tickers)
-            long(symbol)
-            long_get_futures_tickers.remove(symbol)
-        except Exception as e:
-            print(e)
-
-    for i in range(quantity_at_a_time):
-        try:
-            symbol = random.choice(short_get_futures_tickers)
-            short(symbol)
-            short_get_futures_tickers.remove(symbol)
-        except Exception as e:
-            print(e)
-
-
-def long(trade_symbol):
+def market_long_and_limit_long(trade_symbol):
     client.futures_create_order(symbol=trade_symbol,
                                 quantity=get_quantity(trade_symbol),
                                 side='BUY',
                                 positionSide='LONG',
                                 type='MARKET'
                                 )
-
+    time.sleep(1)
     client.futures_create_order(symbol=trade_symbol,
                                 quantity=round_step_size(abs((float(
                                     client.futures_position_information(symbol=trade_symbol)[0]["positionAmt"]))),
@@ -525,14 +449,14 @@ def long(trade_symbol):
                                 )
 
 
-def short(trade_symbol):
+def market_short_and_limit_short(trade_symbol):
     client.futures_create_order(symbol=trade_symbol,
                                 quantity=get_quantity(trade_symbol),
                                 side='SELL',
                                 positionSide='SHORT',
                                 type='MARKET'
                                 )
-
+    time.sleep(1)
     client.futures_create_order(symbol=trade_symbol,
                                 quantity=round_step_size(abs((float(
                                     client.futures_position_information(symbol=trade_symbol)[1]["positionAmt"]))),
@@ -548,15 +472,47 @@ def short(trade_symbol):
                                 )
 
 
+# --function transfer #
+
+def transfer_and_collect():
+    transfer_free_USD_to_spot()
+    buy_coins_on_spot()
+    transfer_free_spot_coin_to_futures()
+
+
+# --function close #
+
+def cancel_and_close():
+    cancel_close_order_if_filled()
+    cancel_open_orders_without_position()
+    close_exist_positions()
+
+
+# --function open #
+
+def choice_and_open():
+    for i in range(quantity_at_a_time):
+        try:
+            symbol = random.choice(long_get_futures_tickers)
+            market_long_and_limit_long(symbol)
+            long_get_futures_tickers.remove(symbol)
+
+            symbol = random.choice(short_get_futures_tickers)
+            market_short_and_limit_short(symbol)
+            short_get_futures_tickers.remove(symbol)
+        except Exception as e:
+            print(e)
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--function', type=str, required=True)
 
 if parser.parse_args().function == "open":
-    count_open_positions_and_start()
+    choice_and_open()
 if parser.parse_args().function == "close":
-    close_with_profit()
+    cancel_and_close()
 if parser.parse_args().function == "transfer":
-    transfer_profit()
+    transfer_and_collect()
 if parser.parse_args().function == "initialized":
     set_futures_change_multi_assets_mode()
     set_futures_change_leverage()
