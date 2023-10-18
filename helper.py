@@ -489,8 +489,15 @@ def count_open_positions_and_start():
         try:
             symbol = random.choice(long_get_futures_tickers)
             long(symbol)
+            long_get_futures_tickers.remove(symbol)
+        except Exception as e:
+            print(e)
+
+    for i in range(quantity_at_a_time):
+        try:
             symbol = random.choice(short_get_futures_tickers)
             short(symbol)
+            short_get_futures_tickers.remove(symbol)
         except Exception as e:
             print(e)
 
