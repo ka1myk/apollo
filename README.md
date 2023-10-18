@@ -19,6 +19,6 @@ setup crontab (type: crontab -e, ctrl+c, ctrl+v, ctrl+s, ctrl+x):
 shell=/bin/bash path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/bin/futuresboard
 @reboot sleep 10; tmuxp load /root/apollo/session.yaml
 
-   */15 * * * * cd /root/apollo && python3 helper.py --function open 
-5,25,45 * * * * cd /root/apollo && python3 helper.py --function close
+*/15 * * * * cd /root/apollo && python3 helper.py --function open 
+*/7  * * * * cd /root/apollo && python3 helper.py --function close
 

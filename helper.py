@@ -23,15 +23,15 @@ min_notional_corrector = 1.2
 leverage = 2
 
 # for short without fee deduction #
-short_base_percentage_futures_close = 0.995
-short_base_percentage_futures_open = 1.25
+short_base_percentage_futures_close = 0.997
+short_base_percentage_futures_open = 1.10
 
 # for long without fee deduction#
-long_base_percentage_futures_close = 1.005
-long_base_percentage_futures_open = 0.75
+long_base_percentage_futures_close = 1.003
+long_base_percentage_futures_open = 0.90
 
 # tickers in one deal #
-quantity_at_a_time = round(len(futures_ticker) * 0.05)
+quantity_at_a_time = round(len(futures_ticker) * 0.02)
 
 # last digit is for min #
 last_timeframe_in_min = 1000 * 60 * 120
@@ -170,8 +170,10 @@ long_get_futures_tickers = long_get_futures_tickers()
 def set_greed():
     try:
         # set base_greed #
-        base_greed = math.ceil(((float(futures_account['totalWalletBalance']) * min_notional_corrector * leverage) / (
-                len(futures_ticker) * min_notional)))
+        # base_greed = math.ceil(((float(futures_account['totalWalletBalance']) * min_notional_corrector * leverage) / (
+        #         len(futures_ticker) * min_notional)))
+
+        base_greed = min_notional_corrector
 
     except Exception as e:
         print("fail to set_greed", e)
@@ -442,46 +444,55 @@ def close_with_profit():
 # --function open #
 
 def count_open_positions_and_start():
-    long_trades_in_last_timeframe = 0
-    short_trades_in_last_timeframe = 0
+    # long_trades_in_last_timeframe = 0
+    # short_trades_in_last_timeframe = 0
+    #
+    # for x in client.futures_account_trades():
+    #     if float(x["time"]) > serverTime - last_timeframe_in_min and float(x["realizedPnl"]) > 0 and x[
+    #         "side"] == "SELL":
+    #         long_trades_in_last_timeframe = long_trades_in_last_timeframe + 1
+    #     if float(x["time"]) > serverTime - last_timeframe_in_min and float(x["realizedPnl"]) > 0 and x["side"] == "BUY":
+    #         short_trades_in_last_timeframe = short_trades_in_last_timeframe + 1
+    #
+    # if long_trades_in_last_timeframe > short_trades_in_last_timeframe:
+    #     for i in range(quantity_at_a_time):
+    #         try:
+    #             symbol = random.choice(short_get_futures_tickers)
+    #             if float(get_quantity(symbol)) * float(client.futures_mark_price(symbol=symbol)["markPrice"]) <= float(
+    #                     min_notional):
+    #                 short(symbol)
+    #             short_get_futures_tickers.remove(symbol)
+    #         except Exception as e:
+    #             print(e)
+    #
+    # if short_trades_in_last_timeframe > long_trades_in_last_timeframe:
+    #     for i in range(quantity_at_a_time):
+    #         try:
+    #             symbol = random.choice(long_get_futures_tickers)
+    #             if float(get_quantity(symbol)) * float(client.futures_mark_price(symbol=symbol)["markPrice"]) <= float(
+    #                     min_notional):
+    #                 long(symbol)
+    #             long_get_futures_tickers.remove(symbol)
+    #         except Exception as e:
+    #             print(e)
+    #
+    # if short_trades_in_last_timeframe == long_trades_in_last_timeframe:
+    #     side = random.choice(["long", "short"])
+    #     if side == "long":
+    #         symbol = random.choice(long_get_futures_tickers)
+    #         long(symbol)
+    #     else:
+    #         symbol = random.choice(short_get_futures_tickers)
+    #         short(symbol)
 
-    for x in client.futures_account_trades():
-        if float(x["time"]) > serverTime - last_timeframe_in_min and float(x["realizedPnl"]) > 0 and x[
-            "side"] == "SELL":
-            long_trades_in_last_timeframe = long_trades_in_last_timeframe + 1
-        if float(x["time"]) > serverTime - last_timeframe_in_min and float(x["realizedPnl"]) > 0 and x["side"] == "BUY":
-            short_trades_in_last_timeframe = short_trades_in_last_timeframe + 1
-
-    if long_trades_in_last_timeframe > short_trades_in_last_timeframe:
-        for i in range(quantity_at_a_time):
-            try:
-                symbol = random.choice(short_get_futures_tickers)
-                if float(get_quantity(symbol)) * float(client.futures_mark_price(symbol=symbol)["markPrice"]) <= float(
-                        min_notional):
-                    short(symbol)
-                short_get_futures_tickers.remove(symbol)
-            except Exception as e:
-                print(e)
-
-    if short_trades_in_last_timeframe > long_trades_in_last_timeframe:
-        for i in range(quantity_at_a_time):
-            try:
-                symbol = random.choice(long_get_futures_tickers)
-                if float(get_quantity(symbol)) * float(client.futures_mark_price(symbol=symbol)["markPrice"]) <= float(
-                        min_notional):
-                    long(symbol)
-                long_get_futures_tickers.remove(symbol)
-            except Exception as e:
-                print(e)
-
-    if short_trades_in_last_timeframe == long_trades_in_last_timeframe:
-        side = random.choice(["long", "short"])
-        if side == "long":
+    for i in range(quantity_at_a_time):
+        try:
             symbol = random.choice(long_get_futures_tickers)
             long(symbol)
-        else:
             symbol = random.choice(short_get_futures_tickers)
             short(symbol)
+        except Exception as e:
+            print(e)
 
 
 def long(trade_symbol):
