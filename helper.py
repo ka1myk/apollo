@@ -34,9 +34,6 @@ long_base_percentage_futures_open = 0.90
 # tickers in one deal #
 quantity_at_a_time = round(len(futures_ticker) * 0.02)
 
-# last digit is for min #
-last_timeframe_in_min = 1000 * 60 * 120
-
 # last digit is for days #
 deltaTime = 1000 * 60 * 60 * 24 * 1
 
@@ -170,11 +167,8 @@ long_get_futures_tickers = long_get_futures_tickers()
 
 def set_greed():
     try:
-        # set base_greed #
-        # base_greed = math.ceil(((float(futures_account['totalWalletBalance']) * min_notional_corrector * leverage) / (
-        #         len(futures_ticker) * min_notional)))
-
-        base_greed = min_notional_corrector
+        base_greed = math.ceil(((float(futures_account['totalWalletBalance']) * min_notional_corrector * leverage) / (
+                len(futures_ticker) * min_notional)))
 
     except Exception as e:
         print("fail to set_greed", e)
