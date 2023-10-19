@@ -1,5 +1,4 @@
-import random, re, math, secrets, argparse
-import time
+import random, re, math, secrets, argparse, time
 
 from binance.client import Client
 from binance.helpers import round_step_size
