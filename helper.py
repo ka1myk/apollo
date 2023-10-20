@@ -426,20 +426,8 @@ def market_long_and_limit_long(trade_symbol):
                                 positionSide='LONG',
                                 type='MARKET'
                                 )
-    time.sleep(1)
-    client.futures_create_order(symbol=trade_symbol,
-                                quantity=round_step_size(abs((float(
-                                    client.futures_position_information(symbol=trade_symbol)[0]["positionAmt"]))),
-                                    get_step_size(trade_symbol)),
-                                price=round_step_size(float(
-                                    client.futures_position_information(symbol=trade_symbol)[0]["entryPrice"])
-                                                      * long_base_percentage_futures_close,
-                                                      get_tick_size(trade_symbol)),
-                                side='SELL',
-                                positionSide='LONG',
-                                type='LIMIT',
-                                timeInForce="GTC"
-                                )
+
+    long_create_close_limit(trade_symbol)
 
 
 def market_short_and_limit_short(trade_symbol):
@@ -449,20 +437,8 @@ def market_short_and_limit_short(trade_symbol):
                                 positionSide='SHORT',
                                 type='MARKET'
                                 )
-    time.sleep(1)
-    client.futures_create_order(symbol=trade_symbol,
-                                quantity=round_step_size(abs((float(
-                                    client.futures_position_information(symbol=trade_symbol)[1]["positionAmt"]))),
-                                    get_step_size(trade_symbol)),
-                                price=round_step_size(float(
-                                    client.futures_position_information(symbol=trade_symbol)[1]["entryPrice"])
-                                                      * short_base_percentage_futures_close,
-                                                      get_tick_size(trade_symbol)),
-                                side='BUY',
-                                positionSide='SHORT',
-                                type='LIMIT',
-                                timeInForce="GTC"
-                                )
+
+    short_create_close_limit(trade_symbol)
 
 
 # --function transfer #
